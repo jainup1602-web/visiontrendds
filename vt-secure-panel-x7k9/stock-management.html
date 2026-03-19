@@ -320,7 +320,7 @@
             const tbody = document.getElementById('stock-tbody');
             tbody.innerHTML = products.map(product => {
                 // Handle image display
-                let imageSrc = '../Frontend/product/color_logo.png';
+                let imageSrc = `${FRONTEND_BASE}/product/color_logo.png`;
                 if (product.images && product.images.length > 0 && product.images[0]) {
                     const imagePath = product.images[0];
                     if (imagePath.startsWith('data:')) {
@@ -328,13 +328,13 @@
                     } else if (imagePath.startsWith('/uploads')) {
                         imageSrc = `${BACKEND_URL}${imagePath}`;
                     } else {
-                        imageSrc = `../Frontend/${imagePath}`;
+                        imageSrc = `${FRONTEND_BASE}/${imagePath}`;
                     }
                 }
                 
                 return `
                 <tr>
-                    <td><img src="${imageSrc}" class="product-img" alt="${product.name}" onerror="this.src='../Frontend/product/color_logo.png'"></td>
+                    <td><img src="${imageSrc}" class="product-img" alt="${product.name}" onerror="this.src='${FRONTEND_BASE}/product/color_logo.png'"></td>
                     <td>${product.productId}</td>
                     <td>${product.name}</td>
                     <td>${product.category}</td>
