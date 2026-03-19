@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Vision Trennds Fashion</title>
+    <meta name="description" content="View detailed information about Vision Trennds premium fashion products.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="">
+    <meta property="og:title" content="Product Details - Vision Trennds Fashion">
+    <meta property="og:description" content="Premium ethnic and contemporary fashion">
+    <meta property="og:image" content="">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="">
+    <meta property="twitter:title" content="Product Details - Vision Trennds Fashion">
+    <meta property="twitter:description" content="Premium ethnic and contemporary fashion">
+    <meta property="twitter:image" content="">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="product/color_logo.png">
+    <link rel="shortcut icon" type="image/png" href="product/color_logo.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'vision-red': '#8B1538',
+                        'vision-burgundy': '#6B1229',
+                        'vision-gold': '#D4AF37',
+                        'vision-cream': '#F8F6F0',
+                        'vision-dark': '#2C1810'
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif']
+                    },
+                    backgroundImage: {
+                        'vision-gradient': 'linear-gradient(135deg, #8B1538 0%, #6B1229 50%, #4A0E1C 100%)',
+                        'vision-light': 'linear-gradient(135deg, #F8F6F0 0%, #FFFFFF 100%)'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css?v=11">
+</head>
+<body class="overflow-x-hidden">
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <!-- Logo with Image and Text -->
+                <a href="index.html" class="logo">
+                    <div class="logo-image-container">
+                        <img src="product/white_logo.png" alt="Vision Trennds Logo">
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">VISION TRENNDS</span>
+                        <span class="logo-tagline">Fashion with a Touch of Class</span>
+                    </div>
+                </a>
+                
+                <!-- Search Bar (Center) -->
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-input" placeholder="Search products...">
+                    <button class="search-btn" id="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                
+                <!-- Desktop Navigation (Right) -->
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="dropdown">
+                        <a href="products.html" class="nav-link">
+                            Products <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="products.html#mens">Men's Collection</a>
+                            <a href="products.html#womens">Women's Collection</a>
+                            <a href="products.html#kids">Kids Collection</a>
+                            <a href="products.html#bags">Bags & Accessories</a>
+                            <a href="products.html#bedsheets">Bed Sheets</a>
+                        </div>
+                    </li>
+                    <li><a href="about.html" class="nav-link">About Us</a></li>
+                    <li><a href="why-vision-trennds.html" class="nav-link">Why Vision Trennds</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+                
+                <!-- Mobile Menu Button -->
+                <button class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <button class="mobile-menu-close" id="mobile-menu-close">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="mobile-menu-content">
+                <!-- Logo Section -->
+                <div class="mobile-logo">
+                    <div class="logo-image-container">
+                        <img src="product/white_logo.png" alt="Vision Trennds Logo">
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">VISION TRENNDS</span>
+                        <span class="logo-tagline">Fashion with a Touch of Class</span>
+                    </div>
+                </div>                
+                <!-- Mobile Search Bar -->
+                <div class="mobile-search-container">
+                    <input type="text" id="mobile-search-input" class="mobile-search-input" placeholder="Search products...">
+                    <button class="mobile-search-btn" id="mobile-search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="mobile-search-results" id="mobile-search-results"></div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <ul class="mobile-nav-links">
+                    <li>
+                        <a href="index.html" class="mobile-nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products.html" class="mobile-nav-link">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Products</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="about.html" class="mobile-nav-link">
+                            <i class="fas fa-info-circle"></i>
+                            <span>About Us</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="why-vision-trennds.html" class="mobile-nav-link">
+                            <i class="fas fa-star"></i>
+                            <span>Why Vision Trennds</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="contact.html" class="mobile-nav-link">
+                            <i class="fas fa-phone"></i>
+                            <span>Contact</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Product Categories -->
+                <div class="mobile-categories">
+                    <h3>Shop Categories</h3>
+                    <ul>
+                        <li><a href="products.html#mens">Men's Collection</a></li>
+                        <li><a href="products.html#womens">Women's Collection</a></li>
+                        <li><a href="products.html#kids">Kids Collection</a></li>
+                        <li><a href="products.html#bags">Bags & Accessories</a></li>
+                        <li><a href="products.html#bedsheets">Bed Sheets</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="mobile-contact">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>9829639639</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>hello@visiontrennds.com</span>
+                    </div>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="mobile-social">
+                    <a href="https://www.facebook.com/p/Vision-100063741198016/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.instagram.com/visiontrennds/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/919829639639" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Product Details Section -->
+    <section class="pt-24 pb-16 bg-white min-h-screen">
+        <div class="container mx-auto px-4">
+            <!-- Loading State -->
+            <div id="loading" class="text-center py-16">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-vision-red"></div>
+                <p class="mt-4 text-gray-600">Loading product details...</p>
+            </div>
+            
+            <!-- Product Not Found -->
+            <div id="product-not-found" class="text-center py-16 hidden">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-search text-gray-400 text-3xl"></i>
+                </div>
+                <h2 class="text-3xl font-serif font-bold text-gray-600 mb-4">Product Not Found</h2>
+                <p class="text-gray-500 mb-6">The product you're looking for doesn't exist or has been removed.</p>
+                <a href="products.html" class="inline-flex items-center bg-vision-red text-white px-6 py-3 rounded-full font-semibold hover:bg-vision-burgundy transition-all duration-300">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Back to Products
+                </a>
+            </div>
+            
+            <!-- Product Details Content -->
+            <div id="product-details" class="opacity-0 transition-opacity duration-300">
+                <!-- Breadcrumb -->
+                <nav class="mb-8">
+                    <ol class="flex items-center space-x-2 text-sm text-gray-500">
+                        <li><a href="index.html" class="hover:text-vision-red transition-colors">Home</a></li>
+                        <li><i class="fas fa-chevron-right text-xs"></i></li>
+                        <li><a href="products.html" class="hover:text-vision-red transition-colors">Products</a></li>
+                        <li><i class="fas fa-chevron-right text-xs"></i></li>
+                        <li id="breadcrumb-category" class="capitalize"></li>
+                        <li><i class="fas fa-chevron-right text-xs"></i></li>
+                        <li id="breadcrumb-title" class="text-vision-dark font-medium"></li>
+                    </ol>
+                </nav>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Product Image -->
+                    <div class="space-y-4">
+                        <div id="image-container" class="relative bg-vision-cream rounded-2xl overflow-hidden cursor-zoom-in">
+                            <img id="product-image" 
+                                 src="" 
+                                 alt="" 
+                                 class="w-full h-96 md:h-[500px] object-contain transition-transform duration-200 ease-out"
+                                 loading="eager">
+                            <div id="product-badge" class="absolute top-4 left-4 z-10">
+                                <!-- Badge will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="space-y-6">
+                        <div>
+                            <h1 id="product-title" class="text-3xl md:text-4xl font-serif font-bold text-vision-dark mb-4"></h1>
+                            <p id="product-description" class="text-gray-600 text-lg leading-relaxed"></p>
+                        </div>
+
+                        <!-- Price -->
+                        <div id="product-pricing" class="flex items-center space-x-4">
+                            <!-- Pricing will be inserted here -->
+                        </div>
+
+                        <!-- Product Details -->
+                        <div class="space-y-6">
+                            <!-- Age Selector (for kids products) -->
+                            <div id="product-age" class="hidden">
+                                <h3 class="text-lg font-semibold text-vision-dark mb-3">Select Age <span class="text-vision-red">*</span></h3>
+                                <div class="flex flex-wrap gap-3" id="age-container">
+                                    <!-- Ages will be inserted here -->
+                                </div>
+                                <p id="age-error" class="text-red-500 text-sm mt-2 hidden">Please select an age</p>
+                            </div>
+
+                            <div id="product-sizes" class="hidden">
+                                <h3 class="text-lg font-semibold text-vision-dark mb-3">Select Size <span class="text-vision-red">*</span></h3>
+                                <div class="flex flex-wrap gap-3" id="sizes-container">
+                                    <!-- Sizes will be inserted here -->
+                                </div>
+                                <p id="size-error" class="text-red-500 text-sm mt-2 hidden">Please select a size</p>
+                            </div>
+
+                            <div id="product-colors" class="hidden">
+                                <h3 class="text-lg font-semibold text-vision-dark mb-3">Select Color <span class="text-vision-red">*</span></h3>
+                                <div class="flex flex-wrap gap-3" id="colors-container">
+                                    <!-- Colors will be inserted here -->
+                                </div>
+                                <p id="color-error" class="text-red-500 text-sm mt-2 hidden">Please select a color</p>
+                            </div>
+
+                            <!-- Selected Options Display -->
+                            <div id="selected-options" class="bg-vision-cream p-4 rounded-xl hidden">
+                                <h4 class="font-semibold text-vision-dark mb-2">Your Selection:</h4>
+                                <div class="flex flex-wrap gap-4 text-sm">
+                                    <div id="selected-age-display" class="hidden">
+                                        <span class="text-gray-600">Age:</span> 
+                                        <span class="font-semibold text-vision-red" id="selected-age-text"></span>
+                                    </div>
+                                    <div id="selected-size-display" class="hidden">
+                                        <span class="text-gray-600">Size:</span> 
+                                        <span class="font-semibold text-vision-red" id="selected-size-text"></span>
+                                    </div>
+                                    <div id="selected-color-display" class="hidden">
+                                        <span class="text-gray-600">Color:</span> 
+                                        <span class="font-semibold text-vision-red" id="selected-color-text"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stock Status -->
+                        <div id="stock-status" class="flex items-center space-x-2">
+                            <!-- Stock status will be inserted here -->
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="space-y-4">
+                            <button id="whatsapp-btn" 
+                                    onclick="handleWhatsAppOrder()"
+                                    class="w-full inline-flex items-center justify-center bg-gradient-to-r from-vision-red to-vision-burgundy hover:from-vision-burgundy hover:to-vision-red text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-lg relative overflow-hidden">
+                                <div class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full hover:translate-x-full transition-transform duration-700"></div>
+                                <i class="fab fa-whatsapp mr-3 text-xl"></i>
+                                <span class="relative z-10">Order via WhatsApp</span>
+                            </button>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <button onclick="goBack()" class="flex items-center justify-center bg-white border-2 border-vision-red text-vision-red px-6 py-3 rounded-xl font-semibold hover:bg-vision-red hover:text-white transition-all duration-300">
+                                    <i class="fas fa-arrow-left mr-2"></i>
+                                    Back to Products
+                                </button>
+                                <button onclick="shareProduct()" class="flex items-center justify-center bg-vision-gold text-white px-6 py-3 rounded-xl font-semibold hover:bg-yellow-600 transition-all duration-300">
+                                    <i class="fas fa-share mr-2"></i>
+                                    Share
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products Section -->
+    <section id="related-products" class="py-16 bg-vision-light hidden">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-vision-dark mb-4">Related Products</h2>
+                <div class="w-24 h-0.5 bg-vision-gold mx-auto"></div>
+            </div>
+            
+            <div id="related-products-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Related products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Left Side - Brand Section -->
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-image-container">
+                            <img src="product/white_logo.png" alt="Vision Trennds">
+                        </div>
+                        <div class="logo-text">
+                            <span class="logo-title">VISION TRENNDS</span>
+                            <span class="logo-tagline">Fashion with a Touch of Class</span>
+                        </div>
+                    </div>
+                    <p class="footer-description">
+                        Your trusted destination for premium ethnic and contemporary fashion. We celebrate style, quality, and the rich heritage of Indian craftsmanship.
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://www.facebook.com/p/Vision-100063741198016/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://www.instagram.com/visiontrennds/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/919829639639" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Categories - Hidden on Mobile -->
+                <div class="footer-links footer-categories">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="products.html#mens">Men's Collection</a></li>
+                        <li><a href="products.html#womens">Women's Collection</a></li>
+                        <li><a href="products.html#kids">Kids Collection</a></li>
+                        <li><a href="products.html#bags">Bags & Accessories</a></li>
+                        <li><a href="products.html#bedsheets">Bed Sheets</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Right Side - Categories, Quick Links and Contact (Mobile Only) -->
+                <div class="footer-right-section">
+                    <!-- Categories -->
+                    <div class="footer-links footer-categories-mobile">
+                        <h4>Categories</h4>
+                        <ul>
+                            <li><a href="products.html#mens">Men's Collection</a></li>
+                            <li><a href="products.html#womens">Women's Collection</a></li>
+                            <li><a href="products.html#kids">Kids Collection</a></li>
+                            <li><a href="products.html#bags">Bags & Accessories</a></li>
+                            <li><a href="products.html#bedsheets">Bed Sheets</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="footer-links">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="products.html">Products</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="footer-contact">
+                        <h4>Contact Info</h4>
+                        <div class="contact-items">
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <p>Call Us</p>
+                                    <span>9829639639</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <p>Email Us</p>
+                                    <span>hello@visiontrennds.com</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <p>Visit Us</p>
+                                    <span>394, Block A, Brijlalpura, Near Chhabra Restaurant, Jan Path, Nirman Nagar, Jaipur-302019, Rajasthan</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Info (Desktop Only) -->
+                <div class="footer-contact footer-contact-desktop">
+                    <h4>Contact Info</h4>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <p>Call Us</p>
+                            <span>9829639639</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <p>Email Us</p>
+                            <span>hello@visiontrennds.com</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <p>Visit Us</p>
+                            <span>394, Block A, Brijlalpura, Near Chhabra Restaurant, Jan Path, Nirman Nagar, Jaipur-302019, Rajasthan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <!-- Desktop Version -->
+                <p class="copyright-desktop">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+                <!-- Mobile Version -->
+                <p class="copyright-mobile">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="script.js?v=5"></script>
+    <script>
+        // Product Details Page Functionality
+        let selectedAge = null;
+        let selectedSize = null;
+        let selectedColor = null;
+        let currentProduct = null;
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Product details page loaded');
+            
+            // Initialize products data from API
+            await initializeProductsData();
+            
+            // Initialize product details page
+            if (typeof productUtils !== 'undefined') {
+                initializeProductDetailsPage();
+            } else {
+                console.error('Products data not loaded');
+                showProductNotFound();
+            }
+        });
+
+        function initializeProductDetailsPage() {
+            // Get product ID from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (!productId) {
+                showProductNotFound();
+                return;
+            }
+            
+            // Find product by ID
+            const product = productUtils.getProductById(productId);
+            
+            if (!product) {
+                showProductNotFound();
+                return;
+            }
+            
+            // Display product details
+            displayProductDetails(product);
+            
+            // Store current product for later use
+            currentProduct = product;
+            
+            // Load related products
+            loadRelatedProducts(product);
+            
+            // Hide loading
+            hideLoading();
+        }
+
+        function displayProductDetails(product) {
+            // Debug: Log product to check agePricing
+            console.log('Product data:', product);
+            console.log('Has agePricing:', !!product.agePricing);
+            
+            // Update page title
+            document.title = `${product.title} - Vision Trennds Fashion`;
+            
+            // Update Open Graph meta tags for WhatsApp preview
+            const currentURL = window.location.href;
+            const imageURL = window.location.origin + '/' + product.image;
+            
+            // Update or create Open Graph tags
+            document.querySelector('meta[property="og:url"]').setAttribute('content', currentURL);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', product.title);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', product.description || 'Premium fashion from Vision Trennds');
+            document.querySelector('meta[property="og:image"]').setAttribute('content', imageURL);
+            
+            document.querySelector('meta[property="twitter:url"]').setAttribute('content', currentURL);
+            document.querySelector('meta[property="twitter:title"]').setAttribute('content', product.title);
+            document.querySelector('meta[property="twitter:description"]').setAttribute('content', product.description || 'Premium fashion from Vision Trennds');
+            document.querySelector('meta[property="twitter:image"]').setAttribute('content', imageURL);
+            
+            // Update breadcrumb
+            document.getElementById('breadcrumb-category').textContent = product.category;
+            document.getElementById('breadcrumb-title').textContent = product.title;
+            
+            // Update product image
+            const productImage = document.getElementById('product-image');
+            productImage.src = product.image;
+            productImage.alt = product.title;
+            productImage.onerror = function() {
+                this.src = product.fallbackImage || 'product/white_logo.png';
+                this.onerror = null;
+            };
+            
+            // Initialize zoom effect after image loads
+            productImage.onload = function() {
+                initImageZoom();
+            };
+            
+            // Update product badge
+            const badgeColors = {
+                sale: 'bg-gradient-to-r from-vision-red to-vision-burgundy',
+                limited: 'bg-gradient-to-r from-vision-burgundy to-vision-dark',
+                new: 'bg-gradient-to-r from-vision-gold to-yellow-600',
+                bestseller: 'bg-gradient-to-r from-vision-red to-vision-gold',
+                premium: 'bg-gradient-to-r from-vision-gold to-vision-burgundy'
+            };
+            
+            const badgeContainer = document.getElementById('product-badge');
+            badgeContainer.innerHTML = `
+                <span class="${badgeColors[product.badgeType] || 'bg-gradient-to-r from-vision-burgundy to-vision-dark'} text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg backdrop-blur-sm">
+                    ${product.badge}
+                </span>
+            `;
+            
+            // Update product title and description
+            document.getElementById('product-title').textContent = product.title;
+            document.getElementById('product-description').textContent = product.description;
+            
+            // Update pricing
+            const pricingContainer = document.getElementById('product-pricing');
+            if (product.price) {
+                pricingContainer.innerHTML = `
+                    <span class="text-3xl font-bold text-vision-red" id="dynamic-price">${product.price}</span>
+                    ${product.originalPrice ? `<span class="text-xl text-gray-500 line-through" id="dynamic-original-price">${product.originalPrice}</span>` : ''}
+                    ${product.originalPrice ? `<span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold" id="dynamic-discount">Save ${calculateDiscount(product.price, product.originalPrice)}</span>` : ''}
+                `;
+            }
+            
+            // Update age selector (for kids products)
+            if (product.category === 'kids' && product.agePricing) {
+                console.log('Age selector should be visible now!');
+                console.log('Age ranges:', Object.keys(product.agePricing));
+                
+                const ageContainer = document.getElementById('age-container');
+                const ageSection = document.getElementById('product-age');
+                
+                const ageRanges = Object.keys(product.agePricing);
+                ageContainer.innerHTML = ageRanges.map(age => `
+                    <button class="age-option px-4 py-3 border-2 border-vision-red text-vision-red rounded-lg font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-vision-red focus:ring-offset-2" 
+                            data-age="${age}" 
+                            onclick="selectAge('${age}')">
+                        ${age} yrs
+                    </button>
+                `).join('');
+                
+                ageSection.classList.remove('hidden');
+                console.log('Age section hidden class removed');
+            } else {
+                console.log('Age selector NOT shown. Category:', product.category, 'Has agePricing:', !!product.agePricing);
+            }
+            
+            // Update sizes
+            if (product.sizes && product.sizes.length > 0) {
+                const sizesContainer = document.getElementById('sizes-container');
+                const sizesSection = document.getElementById('product-sizes');
+                
+                sizesContainer.innerHTML = product.sizes.map(size => `
+                    <button class="size-option px-4 py-3 border-2 border-vision-red text-vision-red rounded-lg font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-vision-red focus:ring-offset-2" 
+                            data-size="${size}" 
+                            onclick="selectSize('${size}')">
+                        ${size}
+                    </button>
+                `).join('');
+                
+                sizesSection.classList.remove('hidden');
+            }
+            
+            // Update colors
+            if (product.colors && product.colors.length > 0) {
+                const colorsContainer = document.getElementById('colors-container');
+                const colorsSection = document.getElementById('product-colors');
+                
+                colorsContainer.innerHTML = product.colors.map(color => `
+                    <button class="color-option px-4 py-3 border-2 border-vision-red text-vision-red rounded-lg font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-vision-red focus:ring-offset-2" 
+                            data-color="${color}" 
+                            onclick="selectColor('${color}')">
+                        ${color}
+                    </button>
+                `).join('');
+                
+                colorsSection.classList.remove('hidden');
+            }
+            
+            // Update stock status
+            const stockContainer = document.getElementById('stock-status');
+            if (product.inStock) {
+                stockContainer.innerHTML = `
+                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span class="text-green-600 font-semibold">In Stock</span>
+                `;
+            } else {
+                stockContainer.innerHTML = `
+                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                    <span class="text-red-600 font-semibold">Out of Stock</span>
+                `;
+            }
+            
+            // Update WhatsApp button
+            const whatsappBtn = document.getElementById('whatsapp-btn');
+            // Button onclick is already set in HTML
+            
+            // Show product details with fade in
+            const detailsDiv = document.getElementById('product-details');
+            detailsDiv.classList.remove('opacity-0');
+            detailsDiv.classList.add('opacity-100');
+        }
+
+        function loadRelatedProducts(currentProduct) {
+            try {
+                // Get products from same category
+                const categoryProducts = productUtils.getProductsByCategory(currentProduct.category);
+                
+                // Filter out current product and get random 4 products
+                const relatedProducts = categoryProducts
+                    .filter(p => p.id !== currentProduct.id)
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 4);
+                
+                if (relatedProducts.length > 0) {
+                    displayRelatedProducts(relatedProducts);
+                    document.getElementById('related-products').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error loading related products:', error);
+            }
+        }
+
+        function displayRelatedProducts(products) {
+            const container = document.getElementById('related-products-grid');
+            
+            console.log('Related products:', products);
+            console.log('First product image:', products[0]?.image);
+            
+            container.innerHTML = products.map((product, index) => {
+                // Generate WhatsApp URL for Buy button
+                const message = `Hi! I'm interested in ${product.title} - ${product.price}`;
+                const whatsappURL = `https://wa.me/${PRODUCTS_CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+                return `
+                    <div class="product-card-responsive cursor-pointer bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100" 
+                         onclick="viewProductDetails('${product.id}')"
+                         style="animation-delay: ${index * 0.1}s">
+                        <div class="product-image-container relative overflow-hidden rounded-t-lg">
+                            <!-- Offer Badge -->
+                            ${product.badge ? `
+                            <div class="product-badge absolute top-2 left-2 z-10">
+                                <span class="bg-vision-red text-white px-2 py-1 rounded-full text-xs font-semibold">
+                                    ${product.badge}
+                                </span>
+                            </div>
+                            ` : ''}
+                            
+                            <!-- Product Image -->
+                            <img src="${product.image}" 
+                                 alt="${product.title}" 
+                                 class="product-image w-full object-cover hover:scale-105 transition-transform duration-300" 
+                                 loading="lazy" 
+                                 onerror="this.src='${product.fallbackImage || PRODUCTS_CONFIG.fallbackImage}'; this.onerror=null;"
+                                 onload="this.style.opacity='1';"
+                                 style="opacity: 0; transition: opacity 0.3s ease;">
+                        </div>
+                        
+                        <!-- Card Content -->
+                        <div class="product-content">
+                            <!-- Product Title -->
+                            <h3 class="product-title font-serif font-semibold text-vision-dark hover:text-vision-red transition-colors duration-300">
+                                ${product.title}
+                            </h3>
+                            
+                            <!-- Price and Buy Button -->
+                            <div class="product-footer flex items-center justify-between">
+                                <div class="price-section flex items-center space-x-1">
+                                    <span class="current-price font-bold text-vision-red">${product.price}</span>
+                                    ${product.originalPrice ? `<span class="original-price text-gray-500 line-through">${product.originalPrice}</span>` : ''}
+                                </div>
+                                <a href="${whatsappURL}" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   class="buy-button bg-vision-red text-white font-semibold hover:bg-vision-burgundy transition-colors duration-300 flex items-center gap-1 no-underline"
+                                   onclick="event.stopPropagation()"
+                                   aria-label="Buy ${product.title}"
+                                   style="text-decoration: none !important; color: white !important;">
+                                    <i class="fab fa-whatsapp buy-icon" style="color: white !important;"></i>
+                                    <span class="buy-text" style="color: white !important;">Buy</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function calculateDiscount(currentPrice, originalPrice) {
+            if (!originalPrice) return '';
+            
+            const current = parseInt(currentPrice.replace('₹', '').replace(',', ''));
+            const original = parseInt(originalPrice.replace('₹', '').replace(',', ''));
+            const discount = Math.round(((original - current) / original) * 100);
+            
+            return `${discount}%`;
+        }
+
+        function showProductNotFound() {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('product-not-found').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+            // Show product details
+            const detailsDiv = document.getElementById('product-details');
+            if (detailsDiv) {
+                detailsDiv.classList.remove('opacity-0');
+                detailsDiv.classList.add('opacity-100');
+            }
+        }
+
+        function goBack() {
+            if (document.referrer && document.referrer.includes(window.location.hostname)) {
+                window.history.back();
+            } else {
+                window.location.href = 'products.html';
+            }
+        }
+
+        function shareProduct() {
+            if (navigator.share) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const productId = urlParams.get('id');
+                const product = productUtils.getProductById(productId);
+                
+                if (product) {
+                    navigator.share({
+                        title: product.title,
+                        text: product.description,
+                        url: window.location.href
+                    }).catch(console.error);
+                }
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('Product link copied to clipboard!');
+                }).catch(() => {
+                    alert('Unable to share. Please copy the URL manually.');
+                });
+            }
+        }
+
+        function viewProductDetails(productId) {
+            window.location.href = `product-details.html?id=${productId}`;
+        }
+
+        // Age selection function (for kids products)
+        function selectAge(age) {
+            selectedAge = age;
+            
+            // Update UI
+            document.querySelectorAll('.age-option').forEach(btn => {
+                btn.classList.remove('bg-vision-red', 'text-white');
+                btn.classList.add('text-vision-red');
+            });
+            
+            document.querySelector(`[data-age="${age}"]`).classList.add('bg-vision-red', 'text-white');
+            document.querySelector(`[data-age="${age}"]`).classList.remove('text-vision-red');
+            
+            // Hide error
+            document.getElementById('age-error').classList.add('hidden');
+            
+            // Update price based on age
+            if (currentProduct && currentProduct.agePricing && currentProduct.agePricing[age]) {
+                const ageData = currentProduct.agePricing[age];
+                const newPrice = `₹${ageData.price}`;
+                const originalPrice = Math.round(ageData.price * 1.35); // Calculate original price
+                const newOriginalPrice = `₹${originalPrice}`;
+                
+                // Update price display
+                document.getElementById('dynamic-price').textContent = newPrice;
+                if (document.getElementById('dynamic-original-price')) {
+                    document.getElementById('dynamic-original-price').textContent = newOriginalPrice;
+                }
+                if (document.getElementById('dynamic-discount')) {
+                    document.getElementById('dynamic-discount').textContent = `Save ${calculateDiscount(newPrice, newOriginalPrice)}`;
+                }
+                
+                // Auto-select size based on age
+                if (ageData.size) {
+                    selectedSize = ageData.size;
+                    document.getElementById('selected-size-text').textContent = ageData.size;
+                    document.getElementById('selected-size-display').classList.remove('hidden');
+                }
+            }
+            
+            updateSelectedOptionsDisplay();
+        }
+
+        // Size selection function
+        function selectSize(size) {
+            selectedSize = size;
+            
+            // Update UI
+            document.querySelectorAll('.size-option').forEach(btn => {
+                btn.classList.remove('bg-vision-red', 'text-white');
+                btn.classList.add('text-vision-red');
+            });
+            
+            document.querySelector(`[data-size="${size}"]`).classList.add('bg-vision-red', 'text-white');
+            document.querySelector(`[data-size="${size}"]`).classList.remove('text-vision-red');
+            
+            // Hide error
+            document.getElementById('size-error').classList.add('hidden');
+            
+            // Update selected options display
+            updateSelectedOptionsDisplay();
+        }
+
+        // Color selection function
+        function selectColor(color) {
+            selectedColor = color;
+            
+            // Update UI
+            document.querySelectorAll('.color-option').forEach(btn => {
+                btn.classList.remove('bg-vision-red', 'text-white');
+                btn.classList.add('text-vision-red');
+            });
+            
+            document.querySelector(`[data-color="${color}"]`).classList.add('bg-vision-red', 'text-white');
+            document.querySelector(`[data-color="${color}"]`).classList.remove('text-vision-red');
+            
+            // Hide error
+            document.getElementById('color-error').classList.add('hidden');
+            
+            // Update selected options display
+            updateSelectedOptionsDisplay();
+        }
+
+        // Update selected options display
+        function updateSelectedOptionsDisplay() {
+            const selectedOptionsDiv = document.getElementById('selected-options');
+            const selectedAgeDisplay = document.getElementById('selected-age-display');
+            const selectedSizeDisplay = document.getElementById('selected-size-display');
+            const selectedColorDisplay = document.getElementById('selected-color-display');
+            const selectedAgeText = document.getElementById('selected-age-text');
+            const selectedSizeText = document.getElementById('selected-size-text');
+            const selectedColorText = document.getElementById('selected-color-text');
+            
+            let hasSelection = false;
+            
+            if (selectedAge) {
+                selectedAgeText.textContent = selectedAge + ' years';
+                selectedAgeDisplay.classList.remove('hidden');
+                hasSelection = true;
+            } else {
+                selectedAgeDisplay.classList.add('hidden');
+            }
+            
+            if (selectedSize) {
+                selectedSizeText.textContent = selectedSize;
+                selectedSizeDisplay.classList.remove('hidden');
+                hasSelection = true;
+            } else {
+                selectedSizeDisplay.classList.add('hidden');
+            }
+            
+            if (selectedColor) {
+                selectedColorText.textContent = selectedColor;
+                selectedColorDisplay.classList.remove('hidden');
+                hasSelection = true;
+            } else {
+                selectedColorDisplay.classList.add('hidden');
+            }
+            
+            if (hasSelection) {
+                selectedOptionsDiv.classList.remove('hidden');
+            } else {
+                selectedOptionsDiv.classList.add('hidden');
+            }
+        }
+
+        // Handle WhatsApp order with selected options
+        function handleWhatsAppOrder() {
+            if (!currentProduct) return;
+            
+            let isValid = true;
+            
+            // Check if age is required and selected (for kids products)
+            if (currentProduct.category === 'kids' && currentProduct.agePricing && !selectedAge) {
+                document.getElementById('age-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Check if size is required and selected
+            if (currentProduct.sizes && currentProduct.sizes.length > 0 && !selectedSize) {
+                document.getElementById('size-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Check if color is required and selected
+            if (currentProduct.colors && currentProduct.colors.length > 0 && !selectedColor) {
+                document.getElementById('color-error').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                // Scroll to first error
+                const firstError = document.querySelector('#age-error:not(.hidden), #size-error:not(.hidden), #color-error:not(.hidden)');
+                if (firstError) {
+                    // Smooth scroll to error
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+            
+            // Create a product object with selected options for WhatsApp message
+            const productForWhatsApp = {
+                ...currentProduct,
+                selectedAge: selectedAge,
+                selectedSize: selectedSize,
+                selectedColor: selectedColor
+            };
+            
+            // Open WhatsApp with product details
+            const whatsappURL = productUtils.generateWhatsAppURL(productForWhatsApp);
+            window.open(whatsappURL, '_blank');
+        }
+
+        // Image Zoom Effect - Simple cursor-based zoom
+        function initImageZoom() {
+            const container = document.getElementById('image-container');
+            const img = document.getElementById('product-image');
+            
+            if (!container || !img) return;
+            
+            container.addEventListener('mousemove', function(e) {
+                const rect = container.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                
+                img.style.transformOrigin = `${x}% ${y}%`;
+                img.style.transform = 'scale(2)';
+            });
+            
+            container.addEventListener('mouseleave', function() {
+                img.style.transform = 'scale(1)';
+                img.style.transformOrigin = 'center center';
+            });
+        }
+    </script>
+    
+    <!-- GSAP Animations Only -->
+    <script>
+        // Native smooth scrolling with GSAP
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Handle anchor links smoothly
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    gsap.to(window, {
+                        duration: 0.8,
+                        scrollTo: { y: target, offsetY: 80 },
+                        ease: "power2.inOut"
+                    });
+                }
+            });
+        });
+
+        // GSAP Animations for Product Details Page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Header Animation
+            gsap.fromTo("header", {
+                y: -100,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.out"
+            });
+
+            // Navigation Links Animation - Top to Bottom
+            gsap.fromTo("header nav ul li", {
+                y: -30,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 0.4,
+                stagger: 0.08,
+                ease: "power2.out",
+                delay: 0.2
+            });
+
+            // Product Details Animation
+            function animateProductDetails() {
+                const tl = gsap.timeline();
+                
+                tl.fromTo("#product-image", {
+                    x: -100,
+                    opacity: 0
+                }, {
+                    x: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power3.out"
+                })
+                .fromTo("#product-title", {
+                    y: 50,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power2.out"
+                }, "-=0.5")
+                .fromTo("#product-description", {
+                    y: 30,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power2.out"
+                }, "-=0.6")
+                .fromTo("#product-pricing", {
+                    y: 30,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power2.out"
+                }, "-=0.4")
+                .fromTo(".size-option, .color-option", {
+                    scale: 0,
+                    opacity: 0
+                }, {
+                    scale: 1,
+                    opacity: 1,
+                    duration: 0.5,
+                    stagger: 0.1,
+                    ease: "back.out(1.7)"
+                }, "-=0.3")
+                .fromTo("#whatsapp-btn", {
+                    y: 50,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power2.out"
+                }, "-=0.2");
+            }
+
+            // Related Products Animation
+            gsap.fromTo("#related-products-grid .premium-card", {
+                y: 80,
+                opacity: 0,
+                scale: 0.8
+            }, {
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 1,
+                stagger: 0.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: "#related-products-grid",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+
+            // Override the original displayProductDetails function
+            const originalDisplayProductDetails = window.displayProductDetails;
+            window.displayProductDetails = function(product) {
+                originalDisplayProductDetails(product);
+                setTimeout(animateProductDetails, 100);
+            };
+
+            console.log('Product details page GSAP animations initialized');
+        });
+
+        // Mobile Menu Animation Control
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            function openMobileMenu() {
+                gsap.to(mobileMenu, {
+                    x: 0,
+                    duration: 0.5,
+                    ease: "power3.out"
+                });
+                
+                gsap.fromTo("#mobile-menu ul li", {
+                    x: -50,
+                    opacity: 0
+                }, {
+                    x: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    stagger: 0.1,
+                    ease: "power2.out",
+                    delay: 0.2
+                });
+            }
+
+            function closeMobileMenu() {
+                gsap.to(mobileMenu, {
+                    x: "-100%",
+                    duration: 0.5,
+                    ease: "power3.in"
+                });
+            }
+
+            if (hamburger) hamburger.addEventListener('click', openMobileMenu);
+            if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeMobileMenu);
+
+            const mobileNavLinks = document.querySelectorAll('#mobile-menu a');
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Vision Trennds</title>
+    <link rel="icon" type="image/png" href="../Frontend/product/color_logo.png">
+    <link rel="shortcut icon" type="image/png" href="../Frontend/product/color_logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <h2>VISION TRENNDS</h2>
+            <p>Admin Panel</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+            <li><a href="categories.html"><i class="fas fa-tags"></i> Categories</a></li>
+            <li><a href="stock-management.html"><i class="fas fa-warehouse"></i> Stock</a></li>
+            <li><a href="add-product.html"><i class="fas fa-plus"></i> Add Product</a></li>
+        </ul>
+        <div id="user-info" style="padding: 20px; border-top: 1px solid rgba(255,255,255,0.2); margin-top: auto;"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Dashboard</h1>
+            <div>
+                <a href="../Frontend/index.html" class="btn btn-secondary" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> View Website
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Products</h3>
+                <div class="number" id="total-products">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Categories</h3>
+                <div class="number" id="total-categories">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>In Stock</h3>
+                <div class="number" id="in-stock">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Out of Stock</h3>
+                <div class="number" id="out-stock">0</div>
+            </div>
+        </div>
+
+        <!-- Recent Products -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Recent Products</h2>
+                <a href="products.html" class="btn btn-primary">View All</a>
+            </div>
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading data...</p>
+            </div>
+            <table id="products-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="products-tbody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="admin-mobile.js"></script>
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                const [productsRes, categoriesRes] = await Promise.all([
+                    fetch(`${API_URL}/products`),
+                    fetch(`${API_URL}/categories`)
+                ]);
+
+                const products = await productsRes.json();
+                const categories = await categoriesRes.json();
+
+                // Update stats
+                document.getElementById('total-products').textContent = products.length;
+                document.getElementById('total-categories').textContent = categories.length;
+                document.getElementById('in-stock').textContent = products.filter(p => p.inStock).length;
+                document.getElementById('out-stock').textContent = products.filter(p => !p.inStock).length;
+
+                // Show recent 10 products
+                const recentProducts = products.slice(0, 10);
+                displayProducts(recentProducts);
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('products-table').style.display = 'table';
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                document.getElementById('loading').innerHTML = '<p style="color: red;">Error loading data. Make sure the backend server is running.</p>';
+            }
+        }
+
+        function displayProducts(products) {
+            const tbody = document.getElementById('products-tbody');
+            tbody.innerHTML = products.map(product => {
+                // Handle image display
+                let imageSrc = '../Frontend/product/color_logo.png'; // default
+                if (product.images && product.images.length > 0 && product.images[0]) {
+                    const imagePath = product.images[0];
+                    
+                    // Check if it's Base64 data URL, file path, or local path
+                    if (imagePath.startsWith('data:')) {
+                        // Base64 image - use directly
+                        imageSrc = imagePath;
+                    } else if (imagePath.startsWith('/uploads')) {
+                        // Old file path format
+                        imageSrc = `http://localhost:5000${imagePath}`;
+                    } else {
+                        // Local frontend path
+                        imageSrc = `../Frontend/${imagePath}`;
+                    }
+                }
+                
+                return `
+                <tr>
+                    <td><img src="${imageSrc}" class="product-img" alt="${product.name}" onerror="this.src='../Frontend/product/color_logo.png'"></td>
+                    <td>${product.name}</td>
+                    <td>${product.category}</td>
+                    <td>₹${product.price}</td>
+                    <td><span class="badge ${product.inStock ? 'badge-success' : 'badge-danger'}">${product.inStock ? 'In Stock' : 'Out of Stock'}</span></td>
+                    <td>
+                        <a href="edit-product.html?id=${product.productId}" class="btn btn-primary" style="padding: 5px 10px; font-size: 0.85rem;">Edit</a>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        // Load on page load
+        loadDashboard();
+    </script>
+</body>
+</html>

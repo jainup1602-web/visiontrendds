@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Vision Trennds</title>
+    <meta name="description" content="The page you're looking for doesn't exist. Return to Vision Trennds homepage.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="product/color_logo.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'vision-red': '#8B1538',
+                        'vision-burgundy': '#6B1229',
+                        'vision-gold': '#D4AF37',
+                        'vision-cream': '#F8F6F0',
+                        'vision-dark': '#2C1810'
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif']
+                    },
+                    backgroundImage: {
+                        'vision-gradient': 'linear-gradient(135deg, #8B1538 0%, #6B1229 50%, #4A0E1C 100%)'
+                    }
+                }
+            }
+        };
+    </script>
+    
+    <style>
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-vision-light min-h-screen flex items-center justify-center">
+    <div class="container mx-auto px-4 text-center fade-in">
+        <div class="max-w-2xl mx-auto">
+            <!-- Logo -->
+            <div class="floating mb-8">
+                <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <img src="product/white_logo.png" alt="Vision Trennds" class="w-20 h-20 object-contain" style="border-radius: 50%;">
+                </div>
+            </div>
+            
+            <!-- 404 Text -->
+            <h1 class="text-8xl md:text-9xl font-bold text-vision-red mb-4">404</h1>
+            
+            <!-- Error Message -->
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-vision-dark mb-4">
+                Page Not Found
+            </h2>
+            
+            <p class="text-lg text-gray-600 mb-8 max-w-md mx-auto">
+                Oops! The page you're looking for seems to have wandered off. Let's get you back to our beautiful collection.
+            </p>
+            
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                <a href="index.html" class="bg-vision-red text-white px-8 py-4 rounded-full font-semibold hover:bg-vision-burgundy transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-home mr-2"></i>
+                    Back to Home
+                </a>
+                <a href="products.html" class="border-2 border-vision-red text-vision-red px-8 py-4 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-shopping-bag mr-2"></i>
+                    Shop Now
+                </a>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="border-t border-gray-200 pt-8">
+                <h3 class="text-lg font-semibold text-vision-dark mb-4">Quick Links</h3>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="products.html#mens" class="text-vision-red hover:text-vision-burgundy transition-colors">Men's Collection</a>
+                    <a href="products.html#womens" class="text-vision-red hover:text-vision-burgundy transition-colors">Women's Collection</a>
+                    <a href="products.html#kids" class="text-vision-red hover:text-vision-burgundy transition-colors">Kids Collection</a>
+                    <a href="products.html#bags" class="text-vision-red hover:text-vision-burgundy transition-colors">Bags & Accessories</a>
+                    <a href="products.html#bedsheets" class="text-vision-red hover:text-vision-burgundy transition-colors">Bed Sheets</a>
+                </div>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="mt-8 pt-8 border-t border-gray-200">
+                <p class="text-gray-600 mb-4">Need help? Contact us:</p>
+                <div class="flex justify-center space-x-6">
+                    <a href="tel:9829639639" class="flex items-center text-vision-red hover:text-vision-burgundy transition-colors">
+                        <i class="fas fa-phone mr-2"></i>
+                        9829639639
+                    </a>
+                    <a href="https://wa.me/919829639639" class="flex items-center text-green-600 hover:text-green-700 transition-colors">
+                        <i class="fab fa-whatsapp mr-2"></i>
+                        WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Background Pattern -->
+    <div class="fixed inset-0 -z-10 opacity-5">
+        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23000000%22 fill-opacity=%220.1%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22/%3E%3C/g%3E%3C/svg%3E');"></div>
+    </div>
+</body>
+</html>
+

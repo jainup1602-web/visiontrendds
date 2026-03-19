@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Vision Trennds</title>
+    <link rel="icon" type="image/png" href="../Frontend/product/color_logo.png">
+    <link rel="shortcut icon" type="image/png" href="../Frontend/product/color_logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #8B1538 0%, #6B1229 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 90%;
+            overflow: hidden;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #8B1538;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        #clerk-signin {
+            margin-top: 20px;
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        /* Hide Clerk branding overflow */
+        #clerk-signin > div {
+            overflow: hidden !important;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #8B1538;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            padding: 15px;
+            border-radius: 8px;
+            color: #c00;
+            margin-top: 20px;
+        }
+
+        .error-message h3 {
+            margin-bottom: 10px;
+        }
+
+        .error-message p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>VISION TRENNDS</h1>
+            <p>Admin Panel Login</p>
+        </div>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading authentication...</p>
+        </div>
+
+        <div id="clerk-signin" style="display: none;"></div>
+    </div>
+
+    <!-- Clerk Configuration -->
+    <script src="config.js"></script>
+
+    <script>
+        console.log('Page loaded, starting Clerk initialization...');
+        
+        // Check config
+        if (!window.CLERK_CONFIG) {
+            console.error('CLERK_CONFIG not found!');
+            document.getElementById('loading').innerHTML = `
+                <div class="error-message">
+                    <h3>Configuration Error</h3>
+                    <p>config.js file not loaded properly.</p>
+                    <p>Make sure config.js exists in the Admin folder.</p>
+                </div>
+            `;
+        } else {
+            console.log('Config loaded:', {
+                publishableKey: CLERK_CONFIG.publishableKey.substring(0, 20) + '...',
+                frontendApi: CLERK_CONFIG.frontendApi
+            });
+
+            // Load Clerk
+            const script = document.createElement('script');
+            const scriptUrl = `https://${CLERK_CONFIG.frontendApi}/npm/@clerk/clerk-js@latest/dist/clerk.browser.js`;
+            
+            console.log('Loading Clerk from:', scriptUrl);
+            
+            script.src = scriptUrl;
+            script.async = true;
+            script.crossOrigin = 'anonymous';
+            script.setAttribute('data-clerk-publishable-key', CLERK_CONFIG.publishableKey);
+            
+            script.onload = function() {
+                console.log('Clerk script loaded successfully');
+                
+                // Wait for Clerk to be available
+                const checkClerk = setInterval(async () => {
+                    if (window.Clerk) {
+                        clearInterval(checkClerk);
+                        console.log('Clerk object found, initializing...');
+                        
+                        try {
+                            await Clerk.load();
+                            console.log('Clerk initialized successfully');
+                            
+                            // Hide loading
+                            document.getElementById('loading').style.display = 'none';
+                            
+                            if (Clerk.user) {
+                                console.log('User already logged in, redirecting...');
+                                window.location.href = '/vt-secure-panel-x7k9/index.html';
+                            } else {
+                                console.log('No user logged in, showing sign-in form...');
+                                const signInDiv = document.getElementById('clerk-signin');
+                                signInDiv.style.display = 'block';
+                                
+                                Clerk.mountSignIn(signInDiv, {
+                                    afterSignInUrl: '/vt-secure-panel-x7k9/index.html',
+                                    signUpUrl: '/vt-secure-panel-x7k9/vt-admin-x9k2p7m4q8.html',
+                                    appearance: {
+                                        elements: {
+                                            formButtonPrimary: {
+                                                backgroundColor: '#8B1538',
+                                                '&:hover': {
+                                                    backgroundColor: '#6B1229'
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                                
+                                console.log('Sign-in form mounted successfully');
+                            }
+                        } catch (error) {
+                            console.error('Error during Clerk initialization:', error);
+                            document.getElementById('loading').innerHTML = `
+                                <div class="error-message">
+                                    <h3>Initialization Error</h3>
+                                    <p>${error.message}</p>
+                                    <p>Check browser console for details.</p>
+                                </div>
+                            `;
+                        }
+                    }
+                }, 100);
+                
+                // Timeout after 10 seconds
+                setTimeout(() => {
+                    clearInterval(checkClerk);
+                    if (!window.Clerk) {
+                        console.error('Clerk object not found after 10 seconds');
+                        document.getElementById('loading').innerHTML = `
+                            <div class="error-message">
+                                <h3>Loading Timeout</h3>
+                                <p>Clerk failed to load within 10 seconds.</p>
+                                <p>Please check your internet connection.</p>
+                            </div>
+                        `;
+                    }
+                }, 10000);
+            };
+            
+            script.onerror = function(error) {
+                console.error('Failed to load Clerk script:', error);
+                document.getElementById('loading').innerHTML = `
+                    <div class="error-message">
+                        <h3>Script Loading Error</h3>
+                        <p>Failed to load Clerk from: ${scriptUrl}</p>
+                        <p>Possible causes:</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Internet connection issue</li>
+                            <li>Incorrect Frontend API domain</li>
+                            <li>Firewall blocking the request</li>
+                        </ul>
+                    </div>
+                `;
+            };
+            
+            document.head.appendChild(script);
+            console.log('Clerk script tag added to page');
+        }
+    </script>
+</body>
+</html>

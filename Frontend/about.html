@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Vision Trennds Fashion</title>
+    <link rel="icon" type="image/png" href="product/color_logo.png">
+    <link rel="shortcut icon" type="image/png" href="product/color_logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'vision-red': '#8B1538',
+                        'vision-burgundy': '#6B1229',
+                        'vision-gold': '#D4AF37',
+                        'vision-cream': '#F8F6F0',
+                        'vision-dark': '#2C1810'
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif']
+                    },
+                    backgroundImage: {
+                        'vision-gradient': 'linear-gradient(135deg, #8B1538 0%, #6B1229 50%, #4A0E1C 100%)',
+                        'vision-light': 'linear-gradient(135deg, #F8F6F0 0%, #FFFFFF 100%)'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css?v=11">
+
+</head>
+<body class="overflow-x-hidden">
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <!-- Logo with Image and Text -->
+                <a href="index.html" class="logo">
+                    <div class="logo-image-container">
+                        <img src="product/white_logo.png" alt="Vision Trennds Logo">
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">VISION TRENNDS</span>
+                        <span class="logo-tagline">Fashion with a Touch of Class</span>
+                    </div>
+                </a>
+                
+                <!-- Search Bar (Center) -->
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-input" placeholder="Search products...">
+                    <button class="search-btn" id="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                
+                <!-- Desktop Navigation (Right) -->
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="dropdown">
+                        <a href="products.html" class="nav-link">
+                            Products <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="products.html#mens">Men's Collection</a>
+                            <a href="products.html#womens">Women's Collection</a>
+                            <a href="products.html#kids">Kids Collection</a>
+                            <a href="products.html#bags">Bags & Accessories</a>
+                            <a href="products.html#bedsheets">Bed Sheets</a>
+                        </div>
+                    </li>
+                    <li><a href="about.html" class="nav-link active">About Us</a></li>
+                    <li><a href="why-vision-trennds.html" class="nav-link">Why Vision Trennds</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+                
+                <!-- Mobile Menu Button -->
+                <button class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <button class="mobile-menu-close" id="mobile-menu-close">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="mobile-menu-content">
+                <!-- Logo Section -->
+                <div class="mobile-logo">
+                    <div class="logo-image-container">
+                        <img src="product/white_logo.png" alt="Vision Trennds Logo">
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">VISION TRENNDS</span>
+                        <span class="logo-tagline">Fashion with a Touch of Class</span>
+                    </div>
+                </div>                
+                <!-- Mobile Search Bar -->
+                <div class="mobile-search-container">
+                    <input type="text" id="mobile-search-input" class="mobile-search-input" placeholder="Search products...">
+                    <button class="mobile-search-btn" id="mobile-search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="mobile-search-results" id="mobile-search-results"></div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <ul class="mobile-nav-links">
+                    <li>
+                        <a href="index.html" class="mobile-nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products.html" class="mobile-nav-link">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Products</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="about.html" class="mobile-nav-link">
+                            <i class="fas fa-info-circle"></i>
+                            <span>About Us</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="why-vision-trennds.html" class="mobile-nav-link">
+                            <i class="fas fa-star"></i>
+                            <span>Why Vision Trennds</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="contact.html" class="mobile-nav-link">
+                            <i class="fas fa-phone"></i>
+                            <span>Contact</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Product Categories -->
+                <div class="mobile-categories">
+                    <h3>Shop Categories</h3>
+                    <ul>
+                        <li><a href="products.html#mens">Men's Collection</a></li>
+                        <li><a href="products.html#womens">Women's Collection</a></li>
+                        <li><a href="products.html#kids">Kids Collection</a></li>
+                        <li><a href="products.html#bags">Bags & Accessories</a></li>
+                        <li><a href="products.html#bedsheets">Bed Sheets</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="mobile-contact">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>9829639639</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>hello@visiontrennds.com</span>
+                    </div>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="mobile-social">
+                    <a href="https://www.facebook.com/p/Vision-100063741198016/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.instagram.com/visiontrennds/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/919829639639" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Hero -->
+    <section class="pt-24 pb-16 bg-white text-center relative overflow-hidden">
+        <!-- Background decorative elements -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-20 left-10 w-32 h-32 bg-vision-red rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-20 w-40 h-40 bg-vision-gold rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 text-vision-red">About Vision Trennds</h1>
+                <p class="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed text-vision-red" style="opacity: 0.9;">
+                    Where Tradition Meets Innovation in Fashion
+                </p>
+                <div class="w-32 h-1 bg-vision-gold mx-auto mt-8 rounded-full"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Company Story -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-serif font-bold text-vision-dark mb-6">Our Story</h2>
+                    <div class="w-24 h-1 bg-vision-gold mx-auto mb-6 rounded-full"></div>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        A journey that began with a passion for preserving Indian heritage through contemporary fashion
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-vision-cream to-white p-8 rounded-3xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-serif font-bold text-vision-dark mb-4">The Beginning</h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                Vision Trennds was founded with a simple yet powerful vision: to make premium ethnic and contemporary fashion accessible to everyone. What started as a small venture has grown into a trusted brand serving customers across India.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-vision-cream to-white p-8 rounded-3xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-serif font-bold text-vision-dark mb-4">Our Mission</h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                To celebrate the rich heritage of Indian craftsmanship while embracing modern fashion trends. We believe that fashion should be a perfect blend of tradition, quality, and affordability.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="bg-vision-gradient rounded-3xl p-8 text-white shadow-2xl">
+                            <div class="text-center">
+                                <div class="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <i class="fas fa-heart text-vision-gold text-3xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-serif font-bold mb-4">Our Vision</h3>
+                                <p class="text-lg leading-relaxed opacity-90">
+                                    "To become India's most loved fashion brand by creating beautiful, affordable, and sustainable clothing that celebrates our cultural diversity."
+                                </p>
+                                <div class="mt-6 flex justify-center space-x-1">
+                                    <i class="fas fa-star text-vision-gold"></i>
+                                    <i class="fas fa-star text-vision-gold"></i>
+                                    <i class="fas fa-star text-vision-gold"></i>
+                                    <i class="fas fa-star text-vision-gold"></i>
+                                    <i class="fas fa-star text-vision-gold"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Our Values -->
+    <section class="py-20 bg-vision-light">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-vision-dark mb-4">Our Values</h2>
+                <div class="w-24 h-0.5 bg-vision-red mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center fade-in">
+                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-gem text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-semibold text-vision-dark mb-3">Quality First</h3>
+                    <p class="text-gray-600 leading-relaxed">We never compromise on quality. Every piece in our collection is carefully selected and inspected to ensure it meets our high standards.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center fade-in">
+                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-handshake text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-semibold text-vision-dark mb-3">Customer Trust</h3>
+                    <p class="text-gray-600 leading-relaxed">Building trust through transparency, honest communication, and reliable service is at the heart of everything we do.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center fade-in">
+                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-leaf text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-semibold text-vision-dark mb-3">Sustainability</h3>
+                    <p class="text-gray-600 leading-relaxed">We are committed to sustainable practices, supporting eco-friendly materials and ethical manufacturing processes.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center fade-in">
+                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-users text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-semibold text-vision-dark mb-3">Community</h3>
+                    <p class="text-gray-600 leading-relaxed">We believe in giving back to our community and supporting local artisans and craftspeople who create our beautiful products.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center fade-in">
+                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-lightbulb text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-semibold text-vision-dark mb-3">Innovation</h3>
+                    <p class="text-gray-600 leading-relaxed">While respecting tradition, we continuously innovate to bring you fresh designs and improved shopping experiences.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center fade-in">
+                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-shipping-fast text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-semibold text-vision-dark mb-3">Reliability</h3>
+                    <p class="text-gray-600 leading-relaxed">From order processing to delivery, we ensure a smooth and reliable experience for every customer.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-20 bg-vision-cream">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-vision-dark mb-4">Our Journey in Numbers</h2>
+                <div class="w-24 h-0.5 bg-vision-red mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white rounded-2xl p-8 shadow-lg text-center fade-in">
+                    <div class="text-5xl font-bold text-vision-red mb-2" data-target="10000">0</div>
+                    <div class="text-gray-600 font-medium">Happy Customers</div>
+                </div>
+                <div class="bg-white rounded-2xl p-8 shadow-lg text-center fade-in">
+                    <div class="text-5xl font-bold text-vision-red mb-2" data-target="2500">0</div>
+                    <div class="text-gray-600 font-medium">Products Sold</div>
+                </div>
+                <div class="bg-white rounded-2xl p-8 shadow-lg text-center fade-in">
+                    <div class="text-5xl font-bold text-vision-red mb-2" data-target="50">0</div>
+                    <div class="text-gray-600 font-medium">Cities Served</div>
+                </div>
+                <div class="bg-white rounded-2xl p-8 shadow-lg text-center fade-in">
+                    <div class="text-5xl font-bold text-vision-red mb-2" data-target="14">0</div>
+                    <div class="text-gray-600 font-medium">Years of Excellence</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-vision-dark mb-4">
+                    Frequently Asked Questions
+                </h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Find answers to common questions about our products and services
+                </p>
+                <div class="w-24 h-0.5 bg-vision-red mx-auto mt-6"></div>
+            </div>
+            
+            <div class="max-w-3xl mx-auto space-y-4">
+                <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                        <h3 class="text-lg font-semibold text-vision-dark">How do I place an order?</h3>
+                        <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0">
+                            <p class="text-gray-600 leading-relaxed">Simply browse our products, click on "Buy Now" and you'll be redirected to WhatsApp where you can complete your order with our dedicated team.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                        <h3 class="text-lg font-semibold text-vision-dark">What are your delivery charges?</h3>
+                        <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0">
+                            <p class="text-gray-600 leading-relaxed">Delivery charges vary based on location. Our team will provide you with complete details including delivery charges when you place your order.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                        <h3 class="text-lg font-semibold text-vision-dark">Do you accept returns?</h3>
+                        <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0">
+                            <p class="text-gray-600 leading-relaxed">Yes, we accept returns within 7 days of delivery. The product should be in original condition with tags intact.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                        <h3 class="text-lg font-semibold text-vision-dark">How can I track my order?</h3>
+                        <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0">
+                            <p class="text-gray-600 leading-relaxed">Once your order is shipped, we'll provide you with tracking details via WhatsApp so you can monitor your order status.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Left Side - Brand Section -->
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-image-container">
+                            <img src="product/white_logo.png" alt="Vision Trennds">
+                        </div>
+                        <div class="logo-text">
+                            <span class="logo-title">VISION TRENNDS</span>
+                            <span class="logo-tagline">Fashion with a Touch of Class</span>
+                        </div>
+                    </div>
+                    <p class="footer-description">
+                        Your trusted destination for premium ethnic and contemporary fashion. We celebrate style, quality, and the rich heritage of Indian craftsmanship.
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://www.facebook.com/p/Vision-100063741198016/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://www.instagram.com/visiontrennds/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/919829639639" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Categories - Hidden on Mobile -->
+                <div class="footer-links footer-categories">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="products.html#mens">Men's Collection</a></li>
+                        <li><a href="products.html#womens">Women's Collection</a></li>
+                        <li><a href="products.html#kids">Kids Collection</a></li>
+                        <li><a href="products.html#bags">Bags & Accessories</a></li>
+                        <li><a href="products.html#bedsheets">Bed Sheets</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Right Side - Categories, Quick Links and Contact (Mobile Only) -->
+                <div class="footer-right-section">
+                    <!-- Categories -->
+                    <div class="footer-links footer-categories-mobile">
+                        <h4>Categories</h4>
+                        <ul>
+                            <li><a href="products.html#mens">Men's Collection</a></li>
+                            <li><a href="products.html#womens">Women's Collection</a></li>
+                            <li><a href="products.html#kids">Kids Collection</a></li>
+                            <li><a href="products.html#bags">Bags & Accessories</a></li>
+                            <li><a href="products.html#bedsheets">Bed Sheets</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="footer-links">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="products.html">Products</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="footer-contact">
+                        <h4>Contact Info</h4>
+                        <div class="contact-items">
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <p>Call Us</p>
+                                    <span>9829639639</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <p>Email Us</p>
+                                    <span>hello@visiontrennds.com</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <p>Visit Us</p>
+                                    <span>394, Block A, Brijlalpura, Near Chhabra Restaurant, Jan Path, Nirman Nagar, Jaipur-302019, Rajasthan</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Info (Desktop Only) -->
+                <div class="footer-contact footer-contact-desktop">
+                    <h4>Contact Info</h4>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <p>Call Us</p>
+                            <span>9829639639</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <p>Email Us</p>
+                            <span>hello@visiontrennds.com</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <p>Visit Us</p>
+                            <span>394, Block A, Brijlalpura, Near Chhabra Restaurant, Jan Path, Nirman Nagar, Jaipur-302019, Rajasthan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <!-- Desktop Version -->
+                <p class="copyright-desktop">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+                <!-- Mobile Version -->
+                <p class="copyright-mobile">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    
+    <script>
+        // Native smooth scrolling with GSAP
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Handle anchor links smoothly
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // GSAP Animations (Mobile Optimized)
+        document.addEventListener('DOMContentLoaded', function() {
+            const isMobile = window.innerWidth <= 768;
+            const moveDistance = isMobile ? 50 : 80;
+
+            // Header Animation
+            gsap.fromTo("header", {
+                y: -100,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+
+            // Navigation Links Animation - Top to Bottom
+            gsap.fromTo("header nav ul li", {
+                y: -30,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power3.out",
+                delay: 0.3
+            });
+
+            // Hero Section Animation
+            const heroTl = gsap.timeline();
+            heroTl.fromTo("section:first-of-type .container > div", {
+                y: isMobile ? 60 : 100,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 1.2,
+                ease: "power3.out",
+                delay: 0.5
+            });
+
+            // Cards Animation with Scroll
+            gsap.utils.toArray(".bg-gradient-to-br, .bg-white").forEach((card, index) => {
+                const isEven = index % 2 === 0;
+                gsap.fromTo(card, {
+                    x: isEven ? -moveDistance : moveDistance,
+                    opacity: 0,
+                    scale: 0.95
+                }, {
+                    x: 0,
+                    opacity: 1,
+                    scale: 1,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 90%",
+                        end: "top 55%",
+                        scrub: 1,
+                        once: false
+                    }
+                });
+            });
+
+            // Section Titles Animation
+            gsap.utils.toArray("h2, h3").forEach(title => {
+                gsap.fromTo(title, {
+                    y: isMobile ? 40 : 60,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: title,
+                        start: "top 90%",
+                        end: "top 65%",
+                        scrub: 0.8,
+                        once: false
+                    }
+                });
+            });
+
+            // Refresh on resize
+            window.addEventListener('resize', () => {
+                ScrollTrigger.refresh();
+            });
+
+            console.log('About page GSAP animations initialized');
+        });
+
+        // Mobile Menu Animation Control
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            function openMobileMenu() {
+                gsap.to(mobileMenu, {
+                    x: 0,
+                    duration: 0.5,
+                    ease: "power3.out"
+                });
+                
+                gsap.fromTo("#mobile-menu ul li", {
+                    x: -50,
+                    opacity: 0
+                }, {
+                    x: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    stagger: 0.1,
+                    ease: "power2.out",
+                    delay: 0.2
+                });
+            }
+
+            function closeMobileMenu() {
+                gsap.to(mobileMenu, {
+                    x: "-100%",
+                    duration: 0.5,
+                    ease: "power3.in"
+                });
+            }
+
+            if (hamburger) hamburger.addEventListener('click', openMobileMenu);
+            if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeMobileMenu);
+
+            const mobileNavLinks = document.querySelectorAll('#mobile-menu a');
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+        });
+
+        // Counter animation for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('[data-target]');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.dataset.target);
+                
+                gsap.to(counter, {
+                    innerHTML: target,
+                    duration: 2,
+                    ease: "power2.out",
+                    snap: { innerHTML: 1 },
+                    onUpdate: function() {
+                        counter.innerHTML = Math.ceil(counter.innerHTML) + '+';
+                    },
+                    scrollTrigger: {
+                        trigger: counter,
+                        start: "top 80%",
+                        toggleActions: "play none none none"
+                    }
+                });
+            });
+        }
+        
+        // Initialize counter animation
+        document.addEventListener('DOMContentLoaded', animateCounters);
+    </script>
+</body>
+</html>
+
+
+

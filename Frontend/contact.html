@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Vision Trennds Fashion</title>
+    <link rel="icon" type="image/png" href="product/color_logo.png">
+    <link rel="shortcut icon" type="image/png" href="product/color_logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'vision-red': '#8B1538',
+                        'vision-burgundy': '#6B1229',
+                        'vision-gold': '#D4AF37',
+                        'vision-cream': '#F8F6F0',
+                        'vision-dark': '#2C1810'
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif']
+                    },
+                    backgroundImage: {
+                        'vision-gradient': 'linear-gradient(135deg, #8B1538 0%, #6B1229 50%, #4A0E1C 100%)',
+                        'vision-light': 'linear-gradient(135deg, #F8F6F0 0%, #FFFFFF 100%)'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css?v=11">
+
+</head>
+<body class="overflow-x-hidden">
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <!-- Logo with Image and Text -->
+                <a href="index.html" class="logo">
+                    <div class="logo-image-container">
+                        <img src="product/white_logo.png" alt="Vision Trennds Logo">
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">VISION TRENNDS</span>
+                        <span class="logo-tagline">Fashion with a Touch of Class</span>
+                    </div>
+                </a>
+                
+                <!-- Search Bar (Center) -->
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-input" placeholder="Search products...">
+                    <button class="search-btn" id="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                
+                <!-- Desktop Navigation (Right) -->
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="dropdown">
+                        <a href="products.html" class="nav-link">
+                            Products <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="products.html#mens">Men's Collection</a>
+                            <a href="products.html#womens">Women's Collection</a>
+                            <a href="products.html#kids">Kids Collection</a>
+                            <a href="products.html#bags">Bags & Accessories</a>
+                            <a href="products.html#bedsheets">Bed Sheets</a>
+                        </div>
+                    </li>
+                    <li><a href="about.html" class="nav-link">About Us</a></li>
+                    <li><a href="why-vision-trennds.html" class="nav-link">Why Vision Trennds</a></li>
+                    <li><a href="contact.html" class="nav-link active">Contact</a></li>
+                </ul>
+                
+                <!-- Mobile Menu Button -->
+                <button class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <button class="mobile-menu-close" id="mobile-menu-close">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="mobile-menu-content">
+                <!-- Logo Section -->
+                <div class="mobile-logo">
+                    <div class="logo-image-container">
+                        <img src="product/white_logo.png" alt="Vision Trennds Logo">
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">VISION TRENNDS</span>
+                        <span class="logo-tagline">Fashion with a Touch of Class</span>
+                    </div>
+                </div>                
+                <!-- Mobile Search Bar -->
+                <div class="mobile-search-container">
+                    <input type="text" id="mobile-search-input" class="mobile-search-input" placeholder="Search products...">
+                    <button class="mobile-search-btn" id="mobile-search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="mobile-search-results" id="mobile-search-results"></div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <ul class="mobile-nav-links">
+                    <li>
+                        <a href="index.html" class="mobile-nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products.html" class="mobile-nav-link">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Products</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="about.html" class="mobile-nav-link">
+                            <i class="fas fa-info-circle"></i>
+                            <span>About Us</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="why-vision-trennds.html" class="mobile-nav-link">
+                            <i class="fas fa-star"></i>
+                            <span>Why Vision Trennds</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="contact.html" class="mobile-nav-link">
+                            <i class="fas fa-phone"></i>
+                            <span>Contact</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Product Categories -->
+                <div class="mobile-categories">
+                    <h3>Shop Categories</h3>
+                    <ul>
+                        <li><a href="products.html#mens">Men's Collection</a></li>
+                        <li><a href="products.html#womens">Women's Collection</a></li>
+                        <li><a href="products.html#kids">Kids Collection</a></li>
+                        <li><a href="products.html#bags">Bags & Accessories</a></li>
+                        <li><a href="products.html#bedsheets">Bed Sheets</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="mobile-contact">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>9829639639</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>hello@visiontrennds.com</span>
+                    </div>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="mobile-social">
+                    <a href="https://www.facebook.com/p/Vision-100063741198016/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.instagram.com/visiontrennds/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/919829639639" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contact Hero -->
+    <section class="pt-24 pb-16 bg-white text-center">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-4xl md:text-6xl font-serif font-bold mb-4 text-vision-red">Contact Us</h1>
+                <p class="text-xl opacity-90 max-w-2xl mx-auto text-vision-red">
+                    We'd love to hear from you. Get in touch with us!
+                </p>
+                <div class="w-24 h-0.5 bg-vision-red mx-auto mt-6"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Content -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Information -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg slide-in-left hover-lift">
+                    <h2 class="text-3xl font-serif font-bold text-vision-dark mb-8 fade-in">Get in Touch</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center p-4 bg-vision-cream rounded-xl hover:bg-white hover:shadow-lg transition-all duration-300 transform hover:translate-x-2">
+                            <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-phone text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-vision-dark mb-1">Phone</h3>
+                                <p class="text-gray-600">9829639639</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center p-4 bg-vision-cream rounded-xl hover:bg-white hover:shadow-lg transition-all duration-300 transform hover:translate-x-2">
+                            <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-envelope text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-vision-dark mb-1">Email</h3>
+                                <p class="text-gray-600">hello@visiontrennds.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center p-4 bg-vision-cream rounded-xl hover:bg-white hover:shadow-lg transition-all duration-300 transform hover:translate-x-2">
+                            <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-map-marker-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-vision-dark mb-1">Address</h3>
+                                <p class="text-gray-600">394, Block A, Brijlalpura<br>Near Chhabra Restaurant, Jan Path<br>Nirman Nagar, Jaipur-302019<br>Rajasthan</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center p-4 bg-vision-cream rounded-xl hover:bg-white hover:shadow-lg transition-all duration-300 transform hover:translate-x-2">
+                            <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-clock text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-vision-dark mb-1">Business Hours</h3>
+                                <p class="text-gray-600">Mon - Sat: 9:00 AM - 8:00 PM<br>Sunday: 10:00 AM - 6:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg slide-in-right hover-lift">
+                    <h2 class="text-3xl font-serif font-bold text-vision-dark mb-8 fade-in">Send us a Message</h2>
+                    
+                    <div class="bg-green-50 border-l-4 border-green-400 text-green-800 px-4 py-3 rounded-lg mb-4 hidden" id="success-message">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            <span>Thank you for your message! We'll get back to you within 24 hours.</span>
+                        </div>
+                    </div>
+                    <div class="bg-red-50 border-l-4 border-red-400 text-red-800 px-4 py-3 rounded-lg mb-4 hidden" id="error-message">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-circle mr-2"></i>
+                            <span>Sorry, there was an error sending your message. Please try again or contact us directly.</span>
+                        </div>
+                    </div>
+                    
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-semibold text-vision-dark mb-2">Full Name *</label>
+                            <input type="text" id="name" name="name" required 
+                                   placeholder="Enter your full name"
+                                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-vision-red focus:outline-none transition-colors duration-300">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-sm font-semibold text-vision-dark mb-2">Email Address *</label>
+                            <input type="email" id="email" name="email" required 
+                                   placeholder="Enter your email address"
+                                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-vision-red focus:outline-none transition-colors duration-300">
+                        </div>
+                        
+                        <div>
+                            <label for="phone" class="block text-sm font-semibold text-vision-dark mb-2">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" 
+                                   placeholder="Enter your phone number"
+                                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-vision-red focus:outline-none transition-colors duration-300">
+                        </div>
+                        
+                        <div>
+                            <label for="subject" class="block text-sm font-semibold text-vision-dark mb-2">Subject *</label>
+                            <select id="subject" name="subject" required 
+                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-vision-red focus:outline-none transition-colors duration-300">
+                                <option value="">Select a subject</option>
+                                <option value="product-inquiry">Product Inquiry</option>
+                                <option value="order-status">Order Status</option>
+                                <option value="return-exchange">Return/Exchange</option>
+                                <option value="bulk-order">Bulk Order</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-sm font-semibold text-vision-dark mb-2">Message *</label>
+                            <textarea id="message" name="message" rows="5" required 
+                                      placeholder="Tell us how we can help you..."
+                                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-vision-red focus:outline-none transition-colors duration-300 resize-vertical"></textarea>
+                        </div>
+                        
+                        <button type="submit" id="submit-btn"
+                                class="w-full bg-vision-gradient text-white px-8 py-4 rounded-full font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                            <span id="btn-text">Send Message</span>
+                            <span id="btn-loading" class="hidden">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>Sending...
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WhatsApp Section -->
+    <section class="py-20 bg-vision-cream">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto bg-white rounded-2xl p-8 shadow-lg text-center fade-in">
+                <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fab fa-whatsapp text-white text-4xl"></i>
+                </div>
+                <h2 class="text-3xl font-serif font-bold text-vision-dark mb-4">Quick Support on WhatsApp</h2>
+                <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                    Need immediate assistance? Chat with us on WhatsApp for instant support and quick responses to your queries.
+                </p>
+                <a href="https://wa.me/919829639639?text=Hi! I need help with Vision Trennds products." target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    <i class="fab fa-whatsapp mr-2 text-xl"></i>
+                    Chat on WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-vision-dark mb-4">
+                    Frequently Asked Questions
+                </h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Find answers to common questions about our products and services
+                </p>
+                <div class="w-24 h-0.5 bg-vision-red mx-auto mt-6"></div>
+            </div>
+            
+            <div class="max-w-3xl mx-auto space-y-4">
+                <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                        <h3 class="text-lg font-semibold text-vision-dark">How do I place an order?</h3>
+                        <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0">
+                            <p class="text-gray-600 leading-relaxed">Simply browse our products, click on "Buy Now" and you'll be redirected to WhatsApp where you can complete your order with our dedicated team.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                        <h3 class="text-lg font-semibold text-vision-dark">What are your delivery charges?</h3>
+                        <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0">
+                            <p class="text-gray-600 leading-relaxed">Delivery charges vary based on location. Our team will provide you with complete details including delivery charges when you place your order.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                        <h3 class="text-lg font-semibold text-vision-dark">Do you accept returns?</h3>
+                        <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0">
+                            <p class="text-gray-600 leading-relaxed">Yes, we accept returns within 7 days of delivery. The product should be in original condition with tags intact.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
+                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                        <h3 class="text-lg font-semibold text-vision-dark">How can I track my order?</h3>
+                        <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0">
+                            <p class="text-gray-600 leading-relaxed">Once your order is shipped, we'll provide you with tracking details via WhatsApp so you can monitor your order status.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Left Side - Brand Section -->
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-image-container">
+                            <img src="product/white_logo.png" alt="Vision Trennds">
+                        </div>
+                        <div class="logo-text">
+                            <span class="logo-title">VISION TRENNDS</span>
+                            <span class="logo-tagline">Fashion with a Touch of Class</span>
+                        </div>
+                    </div>
+                    <p class="footer-description">
+                        Your trusted destination for premium ethnic and contemporary fashion. We celebrate style, quality, and the rich heritage of Indian craftsmanship.
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://www.facebook.com/p/Vision-100063741198016/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://www.instagram.com/visiontrennds/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/919829639639" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Categories - Hidden on Mobile -->
+                <div class="footer-links footer-categories">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="products.html#mens">Men's Collection</a></li>
+                        <li><a href="products.html#womens">Women's Collection</a></li>
+                        <li><a href="products.html#kids">Kids Collection</a></li>
+                        <li><a href="products.html#bags">Bags & Accessories</a></li>
+                        <li><a href="products.html#bedsheets">Bed Sheets</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Right Side - Categories, Quick Links and Contact (Mobile Only) -->
+                <div class="footer-right-section">
+                    <!-- Categories -->
+                    <div class="footer-links footer-categories-mobile">
+                        <h4>Categories</h4>
+                        <ul>
+                            <li><a href="products.html#mens">Men's Collection</a></li>
+                            <li><a href="products.html#womens">Women's Collection</a></li>
+                            <li><a href="products.html#kids">Kids Collection</a></li>
+                            <li><a href="products.html#bags">Bags & Accessories</a></li>
+                            <li><a href="products.html#bedsheets">Bed Sheets</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="footer-links">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="products.html">Products</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="footer-contact">
+                        <h4>Contact Info</h4>
+                        <div class="contact-items">
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <p>Call Us</p>
+                                    <span>9829639639</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <p>Email Us</p>
+                                    <span>hello@visiontrennds.com</span>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <p>Visit Us</p>
+                                    <span>394, Block A, Brijlalpura, Near Chhabra Restaurant, Jan Path, Nirman Nagar, Jaipur-302019, Rajasthan</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Info (Desktop Only) -->
+                <div class="footer-contact footer-contact-desktop">
+                    <h4>Contact Info</h4>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <p>Call Us</p>
+                            <span>9829639639</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <p>Email Us</p>
+                            <span>hello@visiontrennds.com</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <p>Visit Us</p>
+                            <span>394, Block A, Brijlalpura, Near Chhabra Restaurant, Jan Path, Nirman Nagar, Jaipur-302019, Rajasthan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <!-- Desktop Version -->
+                <p class="copyright-desktop">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+                <!-- Mobile Version -->
+                <p class="copyright-mobile">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    
+    <script>
+        // Native smooth scrolling with GSAP
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Handle anchor links smoothly
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // GSAP Animations
+        document.addEventListener('DOMContentLoaded', function() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Header Animation
+            gsap.fromTo("header", {
+                y: -100,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.out"
+            });
+
+            // Navigation Links Animation - Top to Bottom
+            gsap.fromTo("header nav ul li", {
+                y: -30,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 0.4,
+                stagger: 0.08,
+                ease: "power2.out",
+                delay: 0.2
+            });
+
+            // Hero Section Animation
+            gsap.fromTo(".hero-content", {
+                y: 100,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 1.2,
+                ease: "power3.out",
+                delay: 0.3
+            });
+
+            // Contact Form Animation
+            gsap.fromTo("form", {
+                y: 50,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 1,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: "form",
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+
+            // Contact Cards Animation
+            gsap.fromTo(".contact-card", {
+                y: 80,
+                opacity: 0,
+                scale: 0.9
+            }, {
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 1,
+                stagger: 0.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: ".contact-cards",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+
+            console.log('Contact page GSAP animations initialized');
+        });
+
+        // Mobile Menu Animation Control
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+            function openMobileMenu() {
+                gsap.to(mobileMenu, {
+                    x: 0,
+                    duration: 0.5,
+                    ease: "power3.out"
+                });
+                
+                gsap.fromTo("#mobile-menu ul li", {
+                    x: -50,
+                    opacity: 0
+                }, {
+                    x: 0,
+                    opacity: 1,
+                    duration: 0.6,
+                    stagger: 0.1,
+                    ease: "power2.out",
+                    delay: 0.2
+                });
+            }
+
+            function closeMobileMenu() {
+                gsap.to(mobileMenu, {
+                    x: "-100%",
+                    duration: 0.5,
+                    ease: "power3.in"
+                });
+            }
+
+            if (hamburger) hamburger.addEventListener('click', openMobileMenu);
+            if (mobileMenuClose) mobileMenuClose.addEventListener('click', closeMobileMenu);
+
+            const mobileNavLinks = document.querySelectorAll('#mobile-menu a');
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+        });
+    </script>
+    
+    <script>
+        // Initialize EmailJS
+        (function() {
+            // Your actual EmailJS public key
+            emailjs.init("-2k5D90FXWA5KpV9c"); 
+        })();
+
+        // Contact form handling with EmailJS
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnLoading = document.getElementById('btn-loading');
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+            
+            // Hide previous messages
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            
+            // Get form data
+            const formData = {
+                from_name: document.getElementById('name').value,
+                from_email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value,
+                to_email: 'hello@visiontrennds.com' // Your email where you want to receive messages
+            };
+            
+            // Send email using EmailJS with your actual IDs
+            emailjs.send('service_kte7z9q', 'template_e5pdtqq', formData)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    
+                    // Show success message
+                    successMessage.classList.remove('hidden');
+                    
+                    // Reset form
+                    document.getElementById('contact-form').reset();
+                    
+                    // Scroll to success message
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    
+                    // Show error message
+                    errorMessage.classList.remove('hidden');
+                    
+                    // Scroll to error message
+                    errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                })
+                .finally(function() {
+                    // Reset button state
+                    submitBtn.disabled = false;
+                    btnText.classList.remove('hidden');
+                    btnLoading.classList.add('hidden');
+                });
+        });
+        
+        // Form validation enhancement
+        const form = document.getElementById('contact-form');
+        const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+        
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    this.classList.add('border-red-400');
+                    this.classList.remove('border-gray-200');
+                } else {
+                    this.classList.remove('border-red-400');
+                    this.classList.add('border-green-400');
+                }
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    this.classList.remove('border-red-400');
+                    this.classList.add('border-green-400');
+                }
+            });
+        });
+        
+        // Email validation
+        const emailInput = document.getElementById('email');
+        emailInput.addEventListener('blur', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (this.value && !emailRegex.test(this.value)) {
+                this.classList.add('border-red-400');
+                this.classList.remove('border-green-400');
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+

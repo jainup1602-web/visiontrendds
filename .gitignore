@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+Backend/node_modules/
+
+# Environment variables
+.env
+Backend/.env
+
+# Clerk Configuration (Keep your keys secret!)
+Admin/config.js
+
+# Uploads
+Backend/uploads/*
+!Backend/uploads/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*

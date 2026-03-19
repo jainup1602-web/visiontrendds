@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - Vision Trennds Admin</title>
+    <link rel="icon" type="image/png" href="../Frontend/product/color_logo.png">
+    <link rel="shortcut icon" type="image/png" href="../Frontend/product/color_logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(139, 21, 56, 0.3);
+            animation: slideIn 0.4s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #8B1538;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #8B1538;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-btn:hover {
+            background: #f0f0f0;
+            color: #8B1538;
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #8B1538;
+            box-shadow: 0 0 0 3px rgba(139, 21, 56, 0.1);
+        }
+
+        .form-group input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .subcategories-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .subcategories-section label {
+            color: #8B1538;
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .subcategory-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .subcategory-item input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .subcategory-item input:focus {
+            border-color: #8B1538;
+            box-shadow: 0 0 0 3px rgba(139, 21, 56, 0.1);
+        }
+
+        .remove-subcategory {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .remove-subcategory:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+
+        .add-subcategory-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-subcategory-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .form-actions .btn {
+            flex: 1;
+            padding: 14px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .form-actions .btn-primary {
+            background: linear-gradient(135deg, #8B1538 0%, #6B1229 100%);
+        }
+
+        .form-actions .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 21, 56, 0.4);
+        }
+
+        .form-actions .btn-secondary {
+            background: #6c757d;
+        }
+
+        .form-actions .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+            margin-right: 5px;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        table td button {
+            transition: all 0.3s ease;
+        }
+
+        table td button:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <h2>VISION TRENNDS</h2>
+            <p>Admin Panel</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+            <li><a href="categories.html" class="active"><i class="fas fa-tags"></i> Categories</a></li>
+            <li><a href="stock-management.html"><i class="fas fa-warehouse"></i> Stock</a></li>
+            <li><a href="add-product.html"><i class="fas fa-plus"></i> Add Product</a></li>
+        </ul>
+        <div id="user-info" style="padding: 20px; border-top: 1px solid rgba(255,255,255,0.2); margin-top: auto;"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Categories</h1>
+            <button class="btn btn-primary" onclick="openAddModal()">
+                <i class="fas fa-plus"></i> Add Category
+            </button>
+        </div>
+
+        <!-- Categories Table -->
+        <div class="table-container">
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading categories...</p>
+            </div>
+            <table id="categories-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Display Name</th>
+                        <th>Subcategories</th>
+                        <th>Products</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="categories-tbody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add/Edit Category Modal -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Category</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                
+                <div class="form-group">
+                    <label>Category ID *</label>
+                    <input type="text" id="categoryIdInput" required placeholder="e.g., mens-shirts">
+                    <small>Use lowercase with hyphens (e.g., mens-shirts, womens-kurtis)</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Display Name *</label>
+                    <input type="text" id="displayName" required placeholder="e.g., Men's Shirts">
+                </div>
+
+                <div class="subcategories-section">
+                    <label><i class="fas fa-list"></i> Subcategories</label>
+                    <div id="subcategoriesContainer"></div>
+                    <button type="button" class="add-subcategory-btn" onclick="addSubcategoryField()">
+                        <i class="fas fa-plus"></i> Add Subcategory
+                    </button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Category
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div id="successPopup" class="popup success-popup">
+        <div class="popup-content">
+            <i class="fas fa-check-circle"></i>
+            <p id="successMessage"></p>
+        </div>
+    </div>
+
+    <!-- Error Popup -->
+    <div id="errorPopup" class="popup error-popup">
+        <div class="popup-content">
+            <i class="fas fa-times-circle"></i>
+            <p id="errorMessage"></p>
+        </div>
+    </div>
+
+    <!-- Confirm Popup -->
+    <div id="confirmPopup" class="popup confirm-popup">
+        <div class="popup-content">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p id="confirmMessage"></p>
+            <div class="popup-buttons">
+                <button class="btn-yes" onclick="confirmAction()">Yes</button>
+                <button class="btn-no" onclick="closeConfirmPopup()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let currentCategories = [];
+        let currentProducts = [];
+        let editingCategoryId = null;
+        let deleteCallback = null;
+
+        async function loadCategories() {
+            try {
+                const [categoriesRes, productsRes] = await Promise.all([
+                    fetch(`${API_URL}/categories`),
+                    fetch(`${API_URL}/products`)
+                ]);
+
+                currentCategories = await categoriesRes.json();
+                currentProducts = await productsRes.json();
+
+                displayCategories();
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('categories-table').style.display = 'table';
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                document.getElementById('loading').innerHTML = '<p style="color: red;">Error loading categories. Make sure the backend server is running.</p>';
+            }
+        }
+
+        function displayCategories() {
+            const tbody = document.getElementById('categories-tbody');
+            tbody.innerHTML = currentCategories.map(category => {
+                const categoryProducts = currentProducts.filter(p => p.category === category.id);
+                const subcategories = category.subcategories || [];
+                
+                return `
+                    <tr>
+                        <td>${category.id}</td>
+                        <td>${category.displayName}</td>
+                        <td>${subcategories.length} subcategories</td>
+                        <td>${categoryProducts.length} products</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="editCategory('${category.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCategory('${category.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openAddModal() {
+            editingCategoryId = null;
+            document.getElementById('modalTitle').textContent = 'Add Category';
+            document.getElementById('categoryForm').reset();
+            document.getElementById('categoryIdInput').disabled = false;
+            document.getElementById('subcategoriesContainer').innerHTML = '';
+            addSubcategoryField();
+            document.getElementById('categoryModal').classList.add('show');
+        }
+
+        function editCategory(categoryId) {
+            const category = currentCategories.find(c => c.id === categoryId);
+            if (!category) return;
+
+            editingCategoryId = categoryId;
+            document.getElementById('modalTitle').textContent = 'Edit Category';
+            document.getElementById('categoryIdInput').value = category.id;
+            document.getElementById('categoryIdInput').disabled = true;
+            document.getElementById('displayName').value = category.displayName;
+
+            const container = document.getElementById('subcategoriesContainer');
+            container.innerHTML = '';
+            
+            if (category.subcategories && category.subcategories.length > 0) {
+                category.subcategories.forEach(sub => {
+                    addSubcategoryField(sub);
+                });
+            } else {
+                addSubcategoryField();
+            }
+
+            document.getElementById('categoryModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('categoryModal').classList.remove('show');
+        }
+
+        function addSubcategoryField(value = '') {
+            const container = document.getElementById('subcategoriesContainer');
+            const div = document.createElement('div');
+            div.className = 'subcategory-item';
+            div.innerHTML = `
+                <input type="text" placeholder="Subcategory name" value="${value}">
+                <button type="button" class="remove-subcategory" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            container.appendChild(div);
+        }
+
+        document.getElementById('categoryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const categoryId = document.getElementById('categoryIdInput').value.trim();
+            const displayName = document.getElementById('displayName').value.trim();
+            
+            const subcategoryInputs = document.querySelectorAll('#subcategoriesContainer input');
+            const subcategories = Array.from(subcategoryInputs)
+                .map(input => input.value.trim())
+                .filter(val => val !== '');
+
+            const categoryData = {
+                id: categoryId,
+                displayName: displayName,
+                subcategories: subcategories
+            };
+
+            try {
+                let response;
+                if (editingCategoryId) {
+                    response = await fetch(`${API_URL}/categories/${editingCategoryId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(categoryData)
+                    });
+                } else {
+                    response = await fetch(`${API_URL}/categories`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(categoryData)
+                    });
+                }
+
+                if (response.ok) {
+                    showSuccessPopup(editingCategoryId ? 'Category updated successfully!' : 'Category added successfully!');
+                    closeModal();
+                    loadCategories();
+                } else {
+                    const error = await response.json();
+                    showErrorPopup(error.message || 'Failed to save category');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showErrorPopup('Error saving category. Make sure the backend server is running.');
+            }
+        });
+
+        function deleteCategory(categoryId) {
+            const category = currentCategories.find(c => c.id === categoryId);
+            const productCount = currentProducts.filter(p => p.category === categoryId).length;
+            
+            let message = `Are you sure you want to delete "${category.displayName}"?`;
+            if (productCount > 0) {
+                message += `\n\nWarning: This category has ${productCount} products!`;
+            }
+
+            showConfirmPopup(message, async () => {
+                try {
+                    const response = await fetch(`${API_URL}/categories/${categoryId}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        showSuccessPopup('Category deleted successfully!');
+                        loadCategories();
+                    } else {
+                        showErrorPopup('Failed to delete category');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showErrorPopup('Error deleting category');
+                }
+            });
+        }
+
+        function showSuccessPopup(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successPopup').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('successPopup').classList.remove('show');
+            }, 3000);
+        }
+
+        function showErrorPopup(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorPopup').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('errorPopup').classList.remove('show');
+            }, 3000);
+        }
+
+        function showConfirmPopup(message, callback) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmPopup').classList.add('show');
+            deleteCallback = callback;
+        }
+
+        function closeConfirmPopup() {
+            document.getElementById('confirmPopup').classList.remove('show');
+            deleteCallback = null;
+        }
+
+        function confirmAction() {
+            if (deleteCallback) {
+                deleteCallback();
+            }
+            closeConfirmPopup();
+        }
+
+        loadCategories();
+    </script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="admin-mobile.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Selector Test - Vision Trennds</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Age Selector Feature Test</h1>
+        
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 class="text-xl font-semibold mb-4">Test Results:</h2>
+            <div id="test-results" class="space-y-2"></div>
+        </div>
+
+        <div class="bg-blue-50 p-6 rounded-lg">
+            <h3 class="font-semibold mb-2">Instructions:</h3>
+            <ol class="list-decimal list-inside space-y-2">
+                <li>Open browser console (Press F12)</li>
+                <li>Check the test results above</li>
+                <li>If all tests pass, the feature is working</li>
+                <li>If tests fail, clear browser cache and try again</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="products.js?v=5"></script>
+    <script>
+        const results = document.getElementById('test-results');
+        
+        function addResult(test, passed, details) {
+            const div = document.createElement('div');
+            div.className = `p-3 rounded ${passed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+            div.innerHTML = `
+                <strong>${passed ? '✓' : '✗'} ${test}</strong>
+                ${details ? `<br><span class="text-sm">${details}</span>` : ''}
+            `;
+            results.appendChild(div);
+        }
+
+        // Test 1: Check if products.js loaded
+        if (typeof PRODUCTS_DATA !== 'undefined') {
+            addResult('Products.js loaded', true, 'PRODUCTS_DATA is available');
+        } else {
+            addResult('Products.js loaded', false, 'PRODUCTS_DATA is not defined');
+        }
+
+        // Test 2: Check if productUtils exists
+        if (typeof productUtils !== 'undefined') {
+            addResult('ProductUtils loaded', true, 'productUtils is available');
+        } else {
+            addResult('ProductUtils loaded', false, 'productUtils is not defined');
+        }
+
+        // Test 3: Check kids products
+        if (typeof PRODUCTS_DATA !== 'undefined' && PRODUCTS_DATA.kids) {
+            const kidsProducts = [];
+            
+            // Collect all kids products
+            if (PRODUCTS_DATA.kids.boys && PRODUCTS_DATA.kids.boys.night_suits) {
+                kidsProducts.push(...PRODUCTS_DATA.kids.boys.night_suits);
+            }
+            if (PRODUCTS_DATA.kids.girls && PRODUCTS_DATA.kids.girls.frok) {
+                kidsProducts.push(...PRODUCTS_DATA.kids.girls.frok);
+            }
+            if (PRODUCTS_DATA.kids.girls && PRODUCTS_DATA.kids.girls.cordsets) {
+                kidsProducts.push(...PRODUCTS_DATA.kids.girls.cordsets);
+            }
+            if (PRODUCTS_DATA.kids.girls && PRODUCTS_DATA.kids.girls.sharara) {
+                kidsProducts.push(...PRODUCTS_DATA.kids.girls.sharara);
+            }
+            
+            addResult('Kids products found', true, `Total: ${kidsProducts.length} products`);
+            
+            // Test 4: Check agePricing
+            const withAgePricing = kidsProducts.filter(p => p.agePricing);
+            addResult('Products with agePricing', withAgePricing.length > 0, 
+                `${withAgePricing.length} out of ${kidsProducts.length} have agePricing`);
+            
+            // Test 5: Check category field
+            const withCategory = kidsProducts.filter(p => p.category === 'kids');
+            addResult('Products with category="kids"', withCategory.length === kidsProducts.length, 
+                `${withCategory.length} out of ${kidsProducts.length} have correct category`);
+            
+            // Test 6: Sample product details
+            if (withAgePricing.length > 0) {
+                const sample = withAgePricing[0];
+                const ageRanges = Object.keys(sample.agePricing);
+                addResult('Sample product agePricing', true, 
+                    `Product ID: ${sample.id}, Age ranges: ${ageRanges.join(', ')}`);
+            }
+            
+        } else {
+            addResult('Kids products found', false, 'PRODUCTS_DATA.kids not available');
+        }
+
+        console.log('Test completed. Check results above.');
+    </script>
+</body>
+</html>

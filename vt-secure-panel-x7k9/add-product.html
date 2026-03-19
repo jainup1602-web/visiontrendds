@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product - Vision Trennds Admin</title>
+    <link rel="icon" type="image/png" href="../Frontend/product/color_logo.png">
+    <link rel="shortcut icon" type="image/png" href="../Frontend/product/color_logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <h2>VISION TRENNDS</h2>
+            <p>Admin Panel</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+            <li><a href="categories.html"><i class="fas fa-tags"></i> Categories</a></li>
+            <li><a href="stock-management.html"><i class="fas fa-warehouse"></i> Stock</a></li>
+            <li><a href="add-product.html" class="active"><i class="fas fa-plus"></i> Add Product</a></li>
+        </ul>
+        <div id="user-info" style="padding: 20px; border-top: 1px solid rgba(255,255,255,0.2); margin-top: auto;"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Add New Product</h1>
+            <a href="products.html" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Products
+            </a>
+        </div>
+
+        <!-- Product Form -->
+        <div class="form-container">
+            <form id="product-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Product ID *</label>
+                        <input type="text" id="product-id" class="form-control" required placeholder="Auto-generated" readonly>
+                        <div class="id-hint" id="id-hint">Select category and subcategory to generate ID</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Title *</label>
+                        <input type="text" id="title" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description *</label>
+                    <textarea id="description" class="form-control" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="category" class="form-control" required>
+                            <option value="">Select Category</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Subcategory</label>
+                        <select id="subcategory" class="form-control">
+                            <option value="">Select Subcategory</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Product Image *</label>
+                        <input type="file" id="imageFile" class="form-control" accept="image/*" required>
+                        <div id="imagePreview" style="margin-top: 10px;">
+                            <img id="previewImg" src="" alt="Preview" style="max-width: 200px; display: none; border-radius: 8px;">
+                        </div>
+                        <input type="hidden" id="image" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Additional Images (Optional)</label>
+                        <input type="file" id="additionalImages" class="form-control" accept="image/*" multiple>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price *</label>
+                        <input type="text" id="price" class="form-control" required placeholder="₹999">
+                    </div>
+                    <div class="form-group">
+                        <label>Original Price</label>
+                        <input type="text" id="originalPrice" class="form-control" placeholder="₹1499">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Badge</label>
+                        <input type="text" id="badge" class="form-control" placeholder="20% OFF">
+                    </div>
+                    <div class="form-group">
+                        <label>Badge Type</label>
+                        <select id="badgeType" class="form-control">
+                            <option value="">None</option>
+                            <option value="sale">Sale</option>
+                            <option value="new">New</option>
+                            <option value="limited">Limited</option>
+                            <option value="bestseller">Bestseller</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Sizes (comma separated)</label>
+                        <input type="text" id="sizes" class="form-control" placeholder="S, M, L, XL">
+                    </div>
+                    <div class="form-group">
+                        <label>Colors (comma separated)</label>
+                        <input type="text" id="colors" class="form-control" placeholder="Red, Blue, Green">
+                    </div>
+                </div>
+
+                <!-- Kids Age Fields (Show only for kids products) -->
+                <div id="kidsAgeSection" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="gender" class="form-control">
+                                <option value="">Select Gender</option>
+                                <option value="boys">Boys</option>
+                                <option value="girls">Girls</option>
+                                <option value="Unisex">Unisex</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Age Range</label>
+                            <input type="text" id="ageRange" class="form-control" placeholder="e.g., 2-4 years, 5-7 years">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="inStock" checked> In Stock
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="featured"> Featured Product
+                    </label>
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        <i class="fas fa-star"></i> Featured products will appear on homepage
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>WhatsApp Message</label>
+                    <textarea id="whatsappMessage" class="form-control" placeholder="Hi! I'm interested in..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Product
+                    </button>
+                    <a href="products.html" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div class="success-popup" id="successPopup">
+        <div class="success-popup-content">
+            <div class="success-popup-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3>Success!</h3>
+            <p id="successMessage">Product added successfully!</p>
+            <button class="success-popup-btn" onclick="closeSuccessPopup()">OK</button>
+        </div>
+    </div>
+
+    <!-- Error Popup -->
+    <div class="success-popup" id="errorPopup">
+        <div class="success-popup-content">
+            <div class="success-popup-icon" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                <i class="fas fa-times"></i>
+            </div>
+            <h3 style="color: #dc3545;">Error!</h3>
+            <p id="errorMessage">Something went wrong!</p>
+            <button class="success-popup-btn" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);" onclick="closeErrorPopup()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let uploadedImagePath = '';
+
+        // Image preview
+        document.getElementById('imageFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('previewImg').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Upload image function - Convert to Base64
+        async function uploadImage(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch(`${API_URL}/upload/image`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Image uploaded, size:', data.size, 'bytes');
+                    return data.imageData; // Returns Base64 data URL
+                } else {
+                    throw new Error('Image upload failed');
+                }
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                showErrorPopup('Error uploading image');
+                return null;
+            }
+        }
+
+        // ID prefix mapping
+        const ID_PREFIXES = {
+            'mens': {
+                'shirts': 'ms',
+                'cordsets': 'mc',
+                'kurta': 'mk'
+            },
+            'womens': {
+                'kurtis': 'wk',
+                'short_kurtis': 'wsk',
+                'cordsets': 'wc',
+                'dupatta_suits': 'wds',
+                'anarkali': 'wa',
+                'shirts': 'ws'
+            },
+            'kids': {
+                'night_suits': 'bns',
+                'cordsets': 'kc',
+                'sharara': 'gs',
+                'frok': 'gf',
+                'lehnga_choli': 'gd',
+                'lounge_wear': 'gu'
+            },
+            'bags': {
+                'block_print': 'bh'
+            }
+        };
+
+        // Generate Product ID
+        async function generateProductId() {
+            const category = document.getElementById('category').value;
+            const subcategory = document.getElementById('subcategory').value;
+            
+            if (!category || !subcategory) {
+                document.getElementById('product-id').value = '';
+                document.getElementById('id-hint').textContent = 'Select category and subcategory to generate ID';
+                document.getElementById('id-hint').classList.remove('generated');
+                return;
+            }
+
+            const prefix = ID_PREFIXES[category]?.[subcategory] || 'p';
+            
+            try {
+                // Get existing products with this prefix
+                const response = await fetch(`${API_URL}/products?category=${category}&subcategory=${subcategory}`);
+                const products = await response.json();
+                
+                // Find highest number
+                let maxNum = 0;
+                products.forEach(p => {
+                    if (p.productId && p.productId.startsWith(prefix)) {
+                        const num = parseInt(p.productId.replace(prefix, ''));
+                        if (!isNaN(num) && num > maxNum) {
+                            maxNum = num;
+                        }
+                    }
+                });
+                
+                const newId = prefix + (maxNum + 1);
+                document.getElementById('product-id').value = newId;
+                document.getElementById('id-hint').textContent = `✓ Generated ID: ${newId}`;
+                document.getElementById('id-hint').classList.add('generated');
+            } catch (error) {
+                console.error('Error generating ID:', error);
+                document.getElementById('product-id').value = prefix + '1';
+                document.getElementById('id-hint').textContent = `Generated ID: ${prefix}1 (default)`;
+                document.getElementById('id-hint').classList.add('generated');
+            }
+        }
+
+        // Load categories
+        async function loadCategories() {
+            try {
+                const response = await fetch(`${API_URL}/categories`);
+                const categories = await response.json();
+                
+                const select = document.getElementById('category');
+                categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.textContent = cat.displayName;
+                    option.dataset.subcategories = JSON.stringify(cat.subcategories || []);
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        // Update subcategories when category changes
+        document.getElementById('category').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            let subcategories = JSON.parse(selectedOption.dataset.subcategories || '[]');
+            const categoryId = this.value;
+            
+            const subcategorySelect = document.getElementById('subcategory');
+            subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+            
+            // Handle different subcategory formats
+            if (Array.isArray(subcategories)) {
+                // Simple array format (mens, womens, bags, etc.)
+                subcategories.forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub;
+                    option.textContent = sub.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    subcategorySelect.appendChild(option);
+                });
+            } else if (typeof subcategories === 'object' && subcategories !== null) {
+                // Object format (kids with boys/girls)
+                Object.keys(subcategories).forEach(gender => {
+                    const genderGroup = document.createElement('optgroup');
+                    genderGroup.label = gender.charAt(0).toUpperCase() + gender.slice(1);
+                    
+                    subcategories[gender].forEach(sub => {
+                        const option = document.createElement('option');
+                        option.value = sub;
+                        option.textContent = sub.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        genderGroup.appendChild(option);
+                    });
+                    
+                    subcategorySelect.appendChild(genderGroup);
+                });
+            }
+            
+            // Show/hide kids age section
+            const kidsAgeSection = document.getElementById('kidsAgeSection');
+            if (categoryId && categoryId.toLowerCase().includes('kids')) {
+                kidsAgeSection.style.display = 'block';
+            } else {
+                kidsAgeSection.style.display = 'none';
+            }
+            
+            generateProductId();
+        });
+
+        // Generate ID when subcategory changes
+        document.getElementById('subcategory').addEventListener('change', generateProductId);
+
+        // Show success popup
+        function showSuccessPopup(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successPopup').classList.add('show');
+        }
+
+        // Close success popup
+        function closeSuccessPopup() {
+            document.getElementById('successPopup').classList.remove('show');
+            window.location.href = 'products.html';
+        }
+
+        function showErrorPopup(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorPopup').classList.add('show');
+        }
+
+        function closeErrorPopup() {
+            document.getElementById('errorPopup').classList.remove('show');
+        }
+
+        // Handle form submission
+        document.getElementById('product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Upload image first
+            const imageFile = document.getElementById('imageFile').files[0];
+            if (!imageFile) {
+                showErrorPopup('Please select an image');
+                return;
+            }
+
+            uploadedImagePath = await uploadImage(imageFile);
+            if (!uploadedImagePath) {
+                showErrorPopup('Image upload failed');
+                return;
+            }
+
+            const priceValue = parseInt(document.getElementById('price').value.trim());
+            const originalPriceValue = parseInt(document.getElementById('originalPrice').value.trim());
+
+            const productData = {
+                productId: document.getElementById('product-id').value.trim(),
+                name: document.getElementById('title').value.trim(),
+                description: document.getElementById('description').value.trim(),
+                images: [uploadedImagePath],
+                price: priceValue,
+                originalPrice: originalPriceValue,
+                discount: Math.round(((originalPriceValue - priceValue) / originalPriceValue) * 100),
+                sizes: document.getElementById('sizes').value.split(',').map(s => s.trim()).filter(s => s),
+                inStock: document.getElementById('inStock').checked,
+                category: document.getElementById('category').value,
+                subcategory: document.getElementById('subcategory').value,
+                featured: document.getElementById('featured').checked
+            };
+
+            // Add kids-specific fields if category is kids
+            const categoryId = document.getElementById('category').value;
+            if (categoryId && categoryId.toLowerCase().includes('kids')) {
+                productData.gender = document.getElementById('gender').value || null;
+                productData.ageRange = document.getElementById('ageRange').value.trim() || null;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/products`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(productData)
+                });
+
+                if (response.ok) {
+                    showSuccessPopup('Product added successfully!');
+                } else {
+                    const error = await response.json();
+                    showErrorPopup('Error: ' + error.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showErrorPopup('Error adding product. Make sure the backend server is running.');
+            }
+        });
+
+        loadCategories();
+    </script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="admin-mobile.js"></script>
+</body>
+</html>
