@@ -109,7 +109,7 @@ const API = {
         
         // If it's an uploaded image (starts with /uploads) - old format
         if (imagePath.startsWith('/uploads')) {
-            return `http://localhost:5000${imagePath}`;
+            return `${APP_CONFIG.backendURL}${imagePath}`;
         }
         
         // Otherwise it's a local image path

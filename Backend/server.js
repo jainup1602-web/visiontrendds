@@ -10,8 +10,22 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
-app.use(express.json({ limit: '50mb' })); // Increased limit for Base64 images
+const allowedOrigins = process.env.FRONTEND_URL 
+    ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
+    : ['http://localhost:5500', 'http://127.0.0.1:5500'];
+
+app.use(cors({
+    origin: function(origin, callback) {
+        // Allow requests with no origin (mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error('CORS not allowed'), false);
+    },
+    credentials: true
+}));
+app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Routes

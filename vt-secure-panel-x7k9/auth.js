@@ -35,7 +35,7 @@ const AUTH = {
         }
 
         await Clerk.load();
-        
+
         if (!Clerk.user) {
             // Not authenticated, redirect to secure login
             window.location.href = 'vt-admin-x9k2p7m4q8.html';
@@ -59,7 +59,7 @@ const AUTH = {
     // Initialize auth on page load
     async init() {
         const isAuthenticated = await this.checkAuth();
-        
+
         if (isAuthenticated) {
             this.setupUserUI();
         }
@@ -68,14 +68,14 @@ const AUTH = {
     // Setup user UI (show user name, logout button)
     setupUserUI() {
         const user = this.getUser();
-        
+
         // Add user info to header if element exists
         const userInfoEl = document.getElementById('user-info');
         if (userInfoEl && user) {
             const userName = user.firstName || user.username || user.emailAddresses[0].emailAddress.split('@')[0];
             const userEmail = user.emailAddresses[0].emailAddress;
             const userImage = user.imageUrl || user.profileImageUrl || '';
-            
+
             userInfoEl.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 12px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
                     ${userImage ? `<img src="${userImage}" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white;">` : `<div style="width: 40px; height: 40px; border-radius: 50%; background: #D4AF37; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">${userName.charAt(0).toUpperCase()}</div>`}

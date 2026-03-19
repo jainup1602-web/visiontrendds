@@ -1,26 +1,20 @@
-// Configuration for the application
+// ============================================
+// DEPLOYMENT CONFIG - Sirf yahan change karo
+// ============================================
+const BACKEND_URL = 'http://localhost:5000';
+// Production pe yahan apna Render URL dalo:
+// const BACKEND_URL = 'https://your-app.onrender.com';
+// ============================================
+
 const APP_CONFIG = {
-    // Change this to your production domain when deploying
-    // For localhost: 'http://localhost:5500'
-    // For production: 'https://yourdomain.com'
     baseURL: window.location.origin,
-    
-    // API Configuration
-    apiURL: 'http://localhost:5000/api',
-    
-    // WhatsApp Configuration
+    apiURL: `${BACKEND_URL}/api`,
+    backendURL: BACKEND_URL,
     whatsappNumber: '919829639639',
-    
-    // Image Configuration
     fallbackImage: 'product/color_logo.png',
     imageLoadTimeout: 5000,
-    
-    // For production, uncomment and set your domain:
-    // baseURL: 'https://visiontrennds.com',
-    // apiURL: 'https://api.visiontrennds.com/api',
 };
 
-// Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = APP_CONFIG;
 }
