@@ -10,20 +10,10 @@ const app = express();
 connectDB();
 
 // Middleware
-const allowedOrigins = process.env.FRONTEND_URL 
-    ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
-    : ['http://localhost:5500', 'http://127.0.0.1:5500'];
-
 app.use(cors({
-    origin: function(origin, callback) {
-        // Allow requests with no origin (mobile apps, Postman, server-to-server)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) return callback(null, true);
-        // In development, allow all
-        if (process.env.NODE_ENV !== 'production') return callback(null, true);
-        return callback(new Error('CORS not allowed'), false);
-    },
-    credentials: true
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
