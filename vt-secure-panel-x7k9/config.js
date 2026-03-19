@@ -12,9 +12,9 @@ window.CLERK_CONFIG = CLERK_CONFIG;
 // ============================================
 // DEPLOYMENT CONFIG - Sirf yahan change karo
 // ============================================
-const BACKEND_URL = 'http://localhost:5000';
-// Production pe yahan apna Render URL dalo:
-// const BACKEND_URL = 'https://your-app.onrender.com';
+const BACKEND_URL = 'https://api-visiontrendds.onrender.com';
+// Local development ke liye:
+// const BACKEND_URL = 'http://localhost:5000';
 // ============================================
 
 const API_URL = `${BACKEND_URL}/api`;

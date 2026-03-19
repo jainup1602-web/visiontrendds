@@ -16,11 +16,11 @@ const allowedOrigins = process.env.FRONTEND_URL
 
 app.use(cors({
     origin: function(origin, callback) {
-        // Allow requests with no origin (mobile apps, curl, etc.)
+        // Allow requests with no origin (mobile apps, Postman, server-to-server)
         if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
-            return callback(null, true);
-        }
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        // In development, allow all
+        if (process.env.NODE_ENV !== 'production') return callback(null, true);
         return callback(new Error('CORS not allowed'), false);
     },
     credentials: true
