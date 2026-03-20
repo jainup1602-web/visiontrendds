@@ -732,9 +732,11 @@
             <!-- Copyright -->
             <div class="footer-bottom">
                 <!-- Desktop Version -->
-                <p class="copyright-desktop">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+                <p class="copyright-desktop">© 2026 Vision Trennds. All rights reserved.</p>
+                <p class="copyright-desktop" style="margin-top: 4px; font-size: 0.8rem; opacity: 0.7;">Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">JAINUP | Digital Growth System</a></p>
                 <!-- Mobile Version -->
-                <p class="copyright-mobile">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+                <p class="copyright-mobile">© 2026 Vision Trennds. All rights reserved.</p>
+                <p class="copyright-mobile" style="margin-top: 4px; font-size: 0.8rem; opacity: 0.7;">Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">JAINUP | Digital Growth System</a></p>
             </div>
         </div>
     </footer>
@@ -747,24 +749,20 @@
     <script>
         // Load Featured Products from API
         async function loadFeaturedProducts() {
+            const container = document.getElementById('featured-products');
+            if (!container) return;
+
             try {
-                // Get all products from API
-                const products = await API.getProducts();
+                // Use already-loaded products data (no second API call)
+                const products = productUtils.getAllProducts();
                 
-                // Filter featured products or get random 4 products
                 let featuredProducts = products.filter(p => p.featured);
-                
-                // If no featured products, get first 4
                 if (featuredProducts.length === 0) {
                     featuredProducts = products.slice(0, 4);
                 }
-                
-                // Limit to 4 products
                 featuredProducts = featuredProducts.slice(0, 4);
                 
-                // Display products
-                const container = document.getElementById('featured-products');
-                if (container && featuredProducts.length > 0) {
+                if (featuredProducts.length > 0) {
                     container.innerHTML = featuredProducts.map(product => `
                         <div class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
                             <div class="relative overflow-hidden aspect-[3/4]">
@@ -808,13 +806,33 @@
                 }
             } catch (error) {
                 console.error('Error loading featured products:', error);
+                // Keep skeleton or show fallback - don't show "coming soon"
+                container.innerHTML = '';
             }
         }
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', async () => {
-            await initializeProductsData();
-            await loadFeaturedProducts();
+        // Initialize on page load - show skeleton FIRST, then fetch
+        document.addEventListener('DOMContentLoaded', () => {
+            // Show skeleton immediately before any API call
+            const container = document.getElementById('featured-products');
+            if (container) {
+                const skeleton = `
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg animate-pulse">
+                        <div class="bg-gray-200 aspect-[3/4] w-full"></div>
+                        <div class="p-6">
+                            <div class="bg-gray-200 h-5 rounded w-3/4 mb-2"></div>
+                            <div class="bg-gray-200 h-4 rounded w-full mb-1"></div>
+                            <div class="bg-gray-200 h-4 rounded w-2/3 mb-4"></div>
+                            <div class="flex gap-2">
+                                <div class="bg-gray-200 h-10 rounded flex-1"></div>
+                                <div class="bg-gray-200 h-10 rounded w-12"></div>
+                            </div>
+                        </div>
+                    </div>`;
+                container.innerHTML = Array(4).fill(skeleton).join('');
+            }
+            // Then fetch in background
+            initializeProductsData().then(() => loadFeaturedProducts());
         });
     </script>
     
@@ -965,8 +983,8 @@
                 });
             });
 
-            // 8. All White Cards - WITH SCROLL
-            gsap.utils.toArray(".bg-white.rounded-2xl:not(.category-card):not(.review-card)").forEach((card) => {
+            // 8. All White Cards - WITH SCROLL (excluding product cards which use fade-in)
+            gsap.utils.toArray(".bg-white.rounded-2xl:not(.category-card):not(.review-card):not(.fade-in):not(.product-card-responsive)").forEach((card) => {
                 gsap.fromTo(card, {
                     scale: 0.9,
                     opacity: 0

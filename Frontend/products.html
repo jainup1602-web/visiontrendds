@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -395,9 +395,11 @@
             <!-- Copyright -->
             <div class="footer-bottom">
                 <!-- Desktop Version -->
-                <p class="copyright-desktop">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+                <p class="copyright-desktop">� 2026 Vision Trennds. All rights reserved.</p>
+                <p class="copyright-desktop" style="margin-top: 4px; font-size: 0.8rem; opacity: 0.7;">Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">JAINUP | Digital Growth System</a></p>
                 <!-- Mobile Version -->
-                <p class="copyright-mobile">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+                <p class="copyright-mobile">� 2026 Vision Trennds. All rights reserved.</p>
+                <p class="copyright-mobile" style="margin-top: 4px; font-size: 0.8rem; opacity: 0.7;">Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">JAINUP | Digital Growth System</a></p>
             </div>
         </div>
     </footer>
@@ -419,24 +421,45 @@
 
         // Initialize products from API
         async function initProducts() {
-            console.log('🚀 Loading products from API...');
-            productsData = await initializeProductsData();
-            console.log('📦 productsData loaded:', productsData);
-            console.log('👶 Kids data:', productsData.kids);
-            allProducts = await API.getProducts();
-            console.log('✅ Loaded products from API:', allProducts.length);
-            
-            // Display all products initially
+            // Show skeleton loaders immediately - don't wait for API
+            showSkeletonLoaders();
+
+            try {
+                productsData = await initializeProductsData();
+                // Use already-loaded data from initializeProductsData (no second API call)
+                allProducts = productUtils.getAllProducts();
+                console.log('Loaded products from API:', allProducts.length);
+            } catch(e) {
+                console.error('API failed:', e);
+                allProducts = [];
+            }
+
+            // Display products (or coming soon if empty)
             displayProducts(allProducts);
-            
-            // Setup filter buttons
             setupFilterButtons();
-            
-            // Setup category navigation from URL hash
             handleCategoryFromURL();
         }
 
-        // Initialize products page
+        // Show skeleton loading cards
+        function showSkeletonLoaders() {
+            const container = document.getElementById('all-products');
+            if (!container) return;
+            const skeletonCard = `
+                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+                    <div class="bg-gray-200 h-56 w-full"></div>
+                    <div class="p-4">
+                        <div class="bg-gray-200 h-4 rounded w-3/4 mb-2"></div>
+                        <div class="bg-gray-200 h-4 rounded w-1/2 mb-4"></div>
+                        <div class="flex justify-between items-center">
+                            <div class="bg-gray-200 h-6 rounded w-1/4"></div>
+                            <div class="bg-gray-200 h-8 rounded w-1/4"></div>
+                        </div>
+                    </div>
+                </div>`;
+            container.innerHTML = Array(8).fill(skeletonCard).join('');
+        }
+
+        // Initialize products page - single DOMContentLoaded
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Products page initializing...');
             initProducts();
@@ -494,27 +517,9 @@
             }
         };
 
-        // Initialize products page
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Products page initializing...');
-            
-            // Load all products
-            allProducts = productUtils.getAllProducts();
-            console.log('Loaded products:', allProducts.length);
-            
-            // Display all products initially
-            displayProducts(allProducts);
-            
-            // Setup filter buttons
-            setupFilterButtons();
-            
-            // Setup category navigation from URL hash
-            handleCategoryFromURL();
-        });
-
         // Show subcategory filters for selected category
         function showSubcategoryFilters(category) {
-            console.log('🔍 showSubcategoryFilters called with category:', category);
+            console.log('?? showSubcategoryFilters called with category:', category);
             const subcategoryFilter = document.getElementById('subcategory-filter');
             const subcategoryButtons = document.getElementById('subcategory-buttons');
             
@@ -525,7 +530,7 @@
             
             // Get subcategories for the selected category
             const subcategories = getSubcategoriesForCategory(category);
-            console.log('📋 Subcategories found:', subcategories);
+            console.log('?? Subcategories found:', subcategories);
             
             if (subcategories.length === 0) {
                 subcategoryFilter.classList.add('hidden');
@@ -541,7 +546,7 @@
             
             subcategories.forEach(subcat => {
                 const label = subcategoryLabels[category][subcat] || subcat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                console.log(`🏷️ Creating button for ${subcat} with label: ${label}`);
+                console.log(`??? Creating button for ${subcat} with label: ${label}`);
                 buttonsHTML += `
                     <button class="subcategory-btn bg-white text-vision-red border-2 border-vision-red px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow" data-subcategory="${subcat}">
                         ${label}
@@ -549,7 +554,7 @@
                 `;
             });
             
-            console.log('✅ Setting buttons HTML');
+            console.log('? Setting buttons HTML');
             subcategoryButtons.innerHTML = buttonsHTML;
             subcategoryFilter.classList.remove('hidden');
             
@@ -572,15 +577,15 @@
         
         // Get subcategories for a category
         function getSubcategoriesForCategory(category) {
-            console.log('🔎 getSubcategoriesForCategory called with:', category);
+            console.log('?? getSubcategoriesForCategory called with:', category);
             if (!productsData[category]) {
-                console.log('❌ Category not found in productsData');
+                console.log('? Category not found in productsData');
                 return [];
             }
             
             // For all categories (including kids), return subcategories directly
             const result = Object.keys(productsData[category]);
-            console.log('✅ Subcategories:', result);
+            console.log('? Subcategories:', result);
             return result;
         }
         
@@ -612,8 +617,8 @@
                         <div class="w-32 h-32 bg-gradient-to-br from-vision-red to-vision-burgundy rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
                             <i class="fas fa-clock text-white text-4xl"></i>
                         </div>
-                        <h3 class="text-3xl md:text-4xl font-serif font-bold text-vision-dark mb-4">Coming Soon...</h3>
-                        <p class="text-lg text-gray-600 mb-8 max-w-md mx-auto">We're working on bringing you amazing products in this category. Stay tuned!</p>
+                        <h3 class="text-3xl md:text-4xl font-serif font-bold text-vision-dark mb-4">Coming Soon</h3>
+                        <p class="text-lg text-gray-600 mb-8 max-w-md mx-auto">We're working on something special for this category. Stay tuned!</p>
                         <button onclick="showAllProducts()" class="bg-vision-gradient text-white px-8 py-3 rounded-full font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                             <i class="fas fa-arrow-left mr-2"></i>
                             View All Products

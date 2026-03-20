@@ -1,8 +1,31 @@
 // API Configuration
 const API_CONFIG = {
     baseURL: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : 'http://localhost:5000/api',
-    timeout: 10000
+    timeout: 15000  // 15 seconds
 };
+
+// Fetch with timeout helper
+async function fetchWithTimeout(url, timeoutMs = API_CONFIG.timeout) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        const response = await fetch(url, { signal: controller.signal });
+        clearTimeout(timer);
+        return response;
+    } catch (err) {
+        clearTimeout(timer);
+        throw err;
+    }
+}
+
+// Wake up Render backend immediately on page load (prevents cold start delay)
+(function pingBackend() {
+    const base = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : null;
+    if (!base) return;
+    fetch(base + '/health', { method: 'GET', cache: 'no-store' })
+        .then(() => console.log('✅ Backend is warm'))
+        .catch(() => console.log('⏳ Backend waking up...'));
+})();
 
 // API Helper Functions
 const API = {
@@ -19,7 +42,15 @@ const API = {
                 url += '?' + params.toString();
             }
             
-            const response = await fetch(url);
+            let response;
+            try {
+                // First attempt with 15s timeout
+                response = await fetchWithTimeout(url, 15000);
+            } catch (firstErr) {
+                console.warn('⏳ First attempt failed, retrying with longer timeout (Render cold start)...');
+                // Retry once with 45s timeout for cold start
+                response = await fetchWithTimeout(url, 45000);
+            }
             if (!response.ok) throw new Error('Failed to fetch products');
             
             const products = await response.json();
@@ -33,7 +64,7 @@ const API = {
     // Get single product
     async getProduct(productId) {
         try {
-            const response = await fetch(`${API_CONFIG.baseURL}/products/${productId}`);
+            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/products/${productId}`);
             if (!response.ok) throw new Error('Product not found');
             
             const product = await response.json();
@@ -47,7 +78,7 @@ const API = {
     // Get categories
     async getCategories() {
         try {
-            const response = await fetch(`${API_CONFIG.baseURL}/categories`);
+            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/categories`);
             if (!response.ok) throw new Error('Failed to fetch categories');
             
             return await response.json();

@@ -1176,7 +1176,7 @@ body::-webkit-scrollbar-thumb:hover {
     border-radius: var(--border-radius);
     padding: 24px;
     box-shadow: var(--shadow);
-    transition: var(--transition);
+    transition: box-shadow 0.4s ease, transform 0.4s ease;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -1185,8 +1185,6 @@ body::-webkit-scrollbar-thumb:hover {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    opacity: 0;
-    transform: translateX(0);
 }
 
 .category-card::before {
@@ -2371,18 +2369,18 @@ body::-webkit-scrollbar-thumb:hover {
 
 /* ===== ANIMATIONS ===== */
 .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    opacity: 0 !important;
+    transform: translateY(30px) !important;
+    transition: opacity 0.65s ease, transform 0.65s ease !important;
 }
 
 .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1 !important;
+    transform: translateY(0) !important;
 }
 
-/* Smooth transitions for all interactive elements */
-* {
+/* Smooth transitions for interactive elements only */
+a, button, .category-card, .product-card, .nav-link, .footer-social a {
     transition-property: transform, opacity, background-color, color, box-shadow;
     transition-duration: 0.3s;
     transition-timing-function: ease;
@@ -3469,16 +3467,54 @@ a[href*="wa.me"] .fab {
     border: 1px solid #cfc;
 }
 
-/* Fade in animation */
+/* ===== SCROLL ANIMATIONS ===== */
+
+/* Fade In (from bottom) */
 .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.6s ease;
+    opacity: 0 !important;
+    transform: translateY(30px) !important;
+    transition: opacity 0.65s ease, transform 0.65s ease !important;
 }
 
 .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Slide In from Left */
+.slide-in-left {
+    opacity: 0 !important;
+    transform: translateX(-50px) !important;
+    transition: opacity 0.65s ease, transform 0.65s ease !important;
+}
+
+.slide-in-left.visible {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+}
+
+/* Slide In from Right */
+.slide-in-right {
+    opacity: 0 !important;
+    transform: translateX(50px) !important;
+    transition: opacity 0.65s ease, transform 0.65s ease !important;
+}
+
+.slide-in-right.visible {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+}
+
+/* Scale In */
+.scale-in {
+    opacity: 0 !important;
+    transform: scale(0.9) !important;
+    transition: opacity 0.65s ease, transform 0.65s ease !important;
+}
+
+.scale-in.visible {
+    opacity: 1 !important;
+    transform: scale(1) !important;
 }
 
 

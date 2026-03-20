@@ -263,7 +263,7 @@
                             <img id="product-image" 
                                  src="" 
                                  alt="" 
-                                 class="w-full h-96 md:h-[500px] object-contain transition-transform duration-200 ease-out"
+                                 class="w-full h-96 md:h-[500px] object-cover scale-[1.03] transition-transform duration-200 ease-out"
                                  loading="eager">
                             <div id="product-badge" class="absolute top-4 left-4 z-10">
                                 <!-- Badge will be inserted here -->
@@ -525,9 +525,11 @@
             <!-- Copyright -->
             <div class="footer-bottom">
                 <!-- Desktop Version -->
-                <p class="copyright-desktop">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+                <p class="copyright-desktop">� 2026 Vision Trennds. All rights reserved.</p>
+                <p class="copyright-desktop" style="margin-top: 4px; font-size: 0.8rem; opacity: 0.7;">Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">JAINUP | Digital Growth System</a></p>
                 <!-- Mobile Version -->
-                <p class="copyright-mobile">© 2026 Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: pointer;">JAINUP – Digital Growth Systems</a></p>
+                <p class="copyright-mobile">� 2026 Vision Trennds. All rights reserved.</p>
+                <p class="copyright-mobile" style="margin-top: 4px; font-size: 0.8rem; opacity: 0.7;">Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">JAINUP | Digital Growth System</a></p>
             </div>
         </div>
     </footer>
@@ -827,8 +829,8 @@
         function calculateDiscount(currentPrice, originalPrice) {
             if (!originalPrice) return '';
             
-            const current = parseInt(currentPrice.replace('₹', '').replace(',', ''));
-            const original = parseInt(originalPrice.replace('₹', '').replace(',', ''));
+            const current = parseInt(currentPrice.replace('?', '').replace(',', ''));
+            const original = parseInt(originalPrice.replace('?', '').replace(',', ''));
             const discount = Math.round(((original - current) / original) * 100);
             
             return `${discount}%`;
@@ -903,9 +905,9 @@
             // Update price based on age
             if (currentProduct && currentProduct.agePricing && currentProduct.agePricing[age]) {
                 const ageData = currentProduct.agePricing[age];
-                const newPrice = `₹${ageData.price}`;
+                const newPrice = `?${ageData.price}`;
                 const originalPrice = Math.round(ageData.price * 1.35); // Calculate original price
-                const newOriginalPrice = `₹${originalPrice}`;
+                const newOriginalPrice = `?${originalPrice}`;
                 
                 // Update price display
                 document.getElementById('dynamic-price').textContent = newPrice;

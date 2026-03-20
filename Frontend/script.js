@@ -409,15 +409,14 @@ const products = {
     }
 };
 
-// Reviews slider functionality
+// Reviews slider functionality - Infinite loop (no reverse)
 const reviews = {
-    currentIndex: 0,
-    totalReviews: 4,
+    currentIndex: 0,   // tracks position in cloned list
+    realCount: 4,      // actual number of review cards
     autoSlideInterval: null,
-    restartTimeout: null,
-    
+    isTransitioning: false,
+
     init() {
-        console.log('Initializing reviews slider...');
         setTimeout(() => {
             this.setupSlider();
         }, 500);
@@ -425,104 +424,112 @@ const reviews = {
 
     setupSlider() {
         const container = document.getElementById('reviews-container');
-        if (!container) {
-            console.warn('Reviews container not found');
-            return;
-        }
+        if (!container) return;
 
-        console.log('Setting up review slider');
+        const originalCards = Array.from(container.querySelectorAll('.flex-shrink-0'));
+        if (originalCards.length === 0) return;
 
-        // Setup dots click handlers
+        this.realCount = originalCards.length;
+
+        // Clone cards: append clones at end AND prepend clones at start
+        // This gives: [clone of last] [original cards...] [clone of first]
+        const cloneEnd = originalCards[0].cloneNode(true);
+        const cloneStart = originalCards[originalCards.length - 1].cloneNode(true);
+        container.appendChild(cloneEnd);
+        container.insertBefore(cloneStart, originalCards[0]);
+
+        // Start at index 1 (first real card, after the prepended clone)
+        this.currentIndex = 1;
+
+        // Position without animation
+        container.style.transition = 'none';
+        this._applyTransform(container);
+
+        // Dots click handlers
         const dots = document.querySelectorAll('.review-dot');
-        console.log(`Found ${dots.length} dots`);
-        
         dots.forEach((dot, index) => {
             dot.onclick = (e) => {
                 e.preventDefault();
-                console.log(`Dot ${index} clicked`);
-                this.goToSlide(index);
+                // +1 because index 0 is the prepended clone
+                this._goTo(index + 1, container);
             };
         });
 
-        // Setup hover pause
-        container.onmouseenter = () => {
-            console.log('Mouse enter - stopping auto slide');
-            this.stopAutoSlide();
-        };
+        // Hover pause
+        container.onmouseenter = () => this.stopAutoSlide();
+        container.onmouseleave = () => this.startAutoSlide();
 
-        container.onmouseleave = () => {
-            console.log('Mouse leave - starting auto slide');
-            this.startAutoSlide();
-        };
+        // After transition ends - handle infinite jump
+        container.addEventListener('transitionend', () => {
+            const allCards = container.querySelectorAll('.flex-shrink-0');
+            const total = allCards.length; // realCount + 2
 
-        // Handle window resize
+            // If we landed on the clone at the end, jump to real first
+            if (this.currentIndex >= total - 1) {
+                container.style.transition = 'none';
+                this.currentIndex = 1;
+                this._applyTransform(container);
+            }
+            // If we landed on the clone at the start, jump to real last
+            if (this.currentIndex <= 0) {
+                container.style.transition = 'none';
+                this.currentIndex = this.realCount;
+                this._applyTransform(container);
+            }
+
+            this.isTransitioning = false;
+            this.updateDots();
+        });
+
+        // Resize handler
         let resizeTimeout;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
-                console.log('Window resized - recalculating position');
-                this.goToSlide(this.currentIndex);
+                container.style.transition = 'none';
+                this._applyTransform(container);
             }, 250);
         });
 
-        // Initialize first slide centered
-        setTimeout(() => {
-            this.goToSlide(0);
-        }, 100);
-
-        // Start auto slide after initialization
-        setTimeout(() => {
-            this.startAutoSlide();
-        }, 1000);
-        
-        console.log('Review slider setup complete');
+        this.updateDots();
+        setTimeout(() => this.startAutoSlide(), 1000);
     },
 
-    goToSlide(index) {
-        console.log(`Going to slide ${index}`);
-        
-        // Stop auto slide
-        this.stopAutoSlide();
-        
-        // Update current index
-        this.currentIndex = index;
-        
-        // Get container
-        const container = document.getElementById('reviews-container');
-        if (!container) return;
-
-        // Get card width and gap
+    _applyTransform(container) {
         const cards = container.querySelectorAll('.flex-shrink-0');
         if (cards.length === 0) return;
-        
         const cardWidth = cards[0].offsetWidth;
-        const gap = 24; // gap-6 in Tailwind
+        const gap = 24;
         const containerWidth = container.parentElement.offsetWidth;
-        
-        // Always center the selected card
         const centerOffset = (containerWidth - cardWidth) / 2;
-        const translateX = centerOffset - (index * (cardWidth + gap));
-        
-        console.log(`Centering card ${index}, Transform: translateX(${translateX}px)`);
-        
-        // Apply transform
+        const translateX = centerOffset - (this.currentIndex * (cardWidth + gap));
         container.style.transform = `translateX(${translateX}px)`;
-        container.style.transition = 'transform 0.5s ease-in-out';
-        
-        // Update dots
-        this.updateDots(index);
-        
-        // Restart auto slide after 5 seconds
-        clearTimeout(this.restartTimeout);
-        this.restartTimeout = setTimeout(() => {
-            this.startAutoSlide();
-        }, 5000);
     },
 
-    updateDots(activeIndex) {
+    _goTo(index, container) {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+        this.currentIndex = index;
+        const cont = container || document.getElementById('reviews-container');
+        cont.style.transition = 'transform 0.5s ease-in-out';
+        this._applyTransform(cont);
+    },
+
+    nextSlide() {
+        const container = document.getElementById('reviews-container');
+        if (!container) return;
+        this._goTo(this.currentIndex + 1, container);
+    },
+
+    updateDots() {
         const dots = document.querySelectorAll('.review-dot');
+        // currentIndex 1..realCount maps to dot 0..realCount-1
+        let dotIndex = this.currentIndex - 1;
+        if (dotIndex < 0) dotIndex = this.realCount - 1;
+        if (dotIndex >= this.realCount) dotIndex = 0;
+
         dots.forEach((dot, index) => {
-            if (index === activeIndex) {
+            if (index === dotIndex) {
                 dot.classList.add('active', 'bg-vision-red');
                 dot.classList.remove('bg-gray-300');
             } else {
@@ -532,31 +539,17 @@ const reviews = {
         });
     },
 
-    nextSlide() {
-        let nextIndex = this.currentIndex + 1;
-        if (nextIndex >= this.totalReviews) {
-            nextIndex = 0;
-        }
-        this.goToSlide(nextIndex);
-    },
-
     startAutoSlide() {
         this.stopAutoSlide();
-        console.log('Starting auto slide');
         this.autoSlideInterval = setInterval(() => {
             this.nextSlide();
-        }, 5000);
+        }, 1500);
     },
 
     stopAutoSlide() {
         if (this.autoSlideInterval) {
-            console.log('Stopping auto slide');
             clearInterval(this.autoSlideInterval);
             this.autoSlideInterval = null;
-        }
-        if (this.restartTimeout) {
-            clearTimeout(this.restartTimeout);
-            this.restartTimeout = null;
         }
     }
 };
@@ -641,24 +634,37 @@ const scrollEffects = {
     },
 
     setupScrollAnimations() {
+        const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in');
+        if (animatedElements.length === 0) return;
+
         if ('IntersectionObserver' in window) {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        // Stagger animation based on sibling index
+                        const siblings = entry.target.parentElement
+                            ? Array.from(entry.target.parentElement.children).filter(el =>
+                                el.classList.contains('fade-in') ||
+                                el.classList.contains('slide-in-left') ||
+                                el.classList.contains('slide-in-right') ||
+                                el.classList.contains('scale-in')
+                              )
+                            : [];
+                        const idx = siblings.indexOf(entry.target);
+                        const delay = idx >= 0 ? idx * 0.1 : 0;
+                        entry.target.style.transitionDelay = delay + 's';
                         entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
                     }
                 });
             }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+                threshold: 0.12,
+                rootMargin: '0px 0px -40px 0px'
             });
 
-            // Observe elements with animation classes
-            const animatedElements = utils.$$('.fade-in, .slide-in-left, .slide-in-right, .scale-in');
             animatedElements.forEach(el => observer.observe(el));
         } else {
             // Fallback for browsers without IntersectionObserver
-            const animatedElements = utils.$$('.fade-in, .slide-in-left, .slide-in-right, .scale-in');
             animatedElements.forEach(el => el.classList.add('visible'));
         }
     }
