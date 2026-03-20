@@ -829,10 +829,11 @@
         function calculateDiscount(currentPrice, originalPrice) {
             if (!originalPrice) return '';
             
-            const current = parseInt(currentPrice.replace('?', '').replace(',', ''));
-            const original = parseInt(originalPrice.replace('?', '').replace(',', ''));
+            const current = parseInt(String(currentPrice).replace(/[₹?,\s]/g, ''));
+            const original = parseInt(String(originalPrice).replace(/[₹?,\s]/g, ''));
+            if (isNaN(current) || isNaN(original) || original === 0) return '';
             const discount = Math.round(((original - current) / original) * 100);
-            
+            if (discount <= 0) return '';
             return `${discount}%`;
         }
 
