@@ -685,8 +685,8 @@
                 console.log('Age selector NOT shown. Category:', product.category, 'Has agePricing:', !!product.agePricing);
             }
             
-            // Update sizes
-            if (product.sizes && product.sizes.length > 0) {
+            // Update sizes - hide if agePricing exists (size is auto-linked to age)
+            if (product.sizes && product.sizes.length > 0 && !product.agePricing) {
                 const sizesContainer = document.getElementById('sizes-container');
                 const sizesSection = document.getElementById('product-sizes');
                 
@@ -906,9 +906,9 @@
             // Update price based on age
             if (currentProduct && currentProduct.agePricing && currentProduct.agePricing[age]) {
                 const ageData = currentProduct.agePricing[age];
-                const newPrice = `?${ageData.price}`;
-                const originalPrice = Math.round(ageData.price * 1.35); // Calculate original price
-                const newOriginalPrice = `?${originalPrice}`;
+                const newPrice = `₹${ageData.price}`;
+                const originalPrice = Math.round(ageData.price * 1.35);
+                const newOriginalPrice = `₹${originalPrice}`;
                 
                 // Update price display
                 document.getElementById('dynamic-price').textContent = newPrice;
@@ -919,11 +919,9 @@
                     document.getElementById('dynamic-discount').textContent = `Save ${calculateDiscount(newPrice, newOriginalPrice)}`;
                 }
                 
-                // Auto-select size based on age
+                // Auto-set size silently (no separate size selection needed)
                 if (ageData.size) {
                     selectedSize = ageData.size;
-                    document.getElementById('selected-size-text').textContent = ageData.size;
-                    document.getElementById('selected-size-display').classList.remove('hidden');
                 }
             }
             
@@ -1025,8 +1023,8 @@
                 isValid = false;
             }
             
-            // Check if size is required and selected
-            if (currentProduct.sizes && currentProduct.sizes.length > 0 && !selectedSize) {
+            // Check if size is required and selected (skip if agePricing - size is auto-linked)
+            if (currentProduct.sizes && currentProduct.sizes.length > 0 && !currentProduct.agePricing && !selectedSize) {
                 document.getElementById('size-error').classList.remove('hidden');
                 isValid = false;
             }
