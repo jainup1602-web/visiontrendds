@@ -138,6 +138,20 @@
                             <input type="text" id="ageRange" class="form-control" placeholder="e.g., 2-4 years, 5-7 years">
                         </div>
                     </div>
+
+                    <!-- Age-wise Pricing -->
+                    <div class="form-group">
+                        <label style="display:flex; align-items:center; justify-content:space-between;">
+                            <span>Age-wise Pricing <small style="color:#666; font-weight:normal;">(price changes with age)</small></span>
+                            <button type="button" onclick="addAgePricingRow()" class="btn btn-primary" style="padding:5px 12px; font-size:0.85rem;">
+                                <i class="fas fa-plus"></i> Add Age
+                            </button>
+                        </label>
+                        <div id="agePricingRows" style="margin-top:8px;">
+                            <!-- rows added dynamically -->
+                        </div>
+                        <small style="color:#888;"><i class="fas fa-info-circle"></i> Leave empty if price is same for all ages</small>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -271,6 +285,13 @@
                 }
                 if (product.ageRange) {
                     document.getElementById('ageRange').value = product.ageRange;
+                }
+                
+                // Load existing agePricing rows
+                if (product.agePricing && typeof product.agePricing === 'object') {
+                    Object.entries(product.agePricing).forEach(([age, data]) => {
+                        addAgePricingRow(age, data.price || '', data.size || '');
+                    });
                 }
                 
                 // Show existing image if available
@@ -422,6 +443,8 @@
             if (categoryId && categoryId.toLowerCase().includes('kids')) {
                 productData.gender = document.getElementById('gender').value || null;
                 productData.ageRange = document.getElementById('ageRange').value.trim() || null;
+                const agePricing = getAgePricingData();
+                if (agePricing) productData.agePricing = agePricing;
             }
 
             console.log('Updating product:', productData);
@@ -478,6 +501,42 @@
 
         function closeErrorPopup() {
             document.getElementById('errorPopup').classList.remove('show');
+        }
+
+        // Age Pricing rows
+        function addAgePricingRow(age = '', price = '', size = '') {
+            const container = document.getElementById('agePricingRows');
+            const row = document.createElement('div');
+            row.className = 'age-pricing-row';
+            row.style.cssText = 'display:flex; gap:8px; align-items:center; margin-bottom:8px;';
+            row.innerHTML = `
+                <input type="text" placeholder="Age (e.g. 2-3)" value="${age}"
+                    class="form-control age-key" style="flex:1; min-width:90px;">
+                <input type="number" placeholder="Price (₹)" value="${price}"
+                    class="form-control age-price" style="flex:1; min-width:90px;">
+                <input type="text" placeholder="Size (e.g. 2-3Y)" value="${size}"
+                    class="form-control age-size" style="flex:1; min-width:90px;">
+                <button type="button" onclick="this.parentElement.remove()"
+                    style="background:#dc3545;color:white;border:none;border-radius:6px;padding:6px 10px;cursor:pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            container.appendChild(row);
+        }
+
+        function getAgePricingData() {
+            const rows = document.querySelectorAll('.age-pricing-row');
+            if (rows.length === 0) return null;
+            const agePricing = {};
+            rows.forEach(row => {
+                const age = row.querySelector('.age-key').value.trim();
+                const price = parseInt(row.querySelector('.age-price').value);
+                const size = row.querySelector('.age-size').value.trim();
+                if (age && !isNaN(price)) {
+                    agePricing[age] = { price, size: size || age + 'Y' };
+                }
+            });
+            return Object.keys(agePricing).length > 0 ? agePricing : null;
         }
 
         loadProduct();
