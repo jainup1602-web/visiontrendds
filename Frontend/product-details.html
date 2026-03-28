@@ -561,9 +561,10 @@
             displayProductDetails(product);
             hideLoading();
 
-            // Load products data then show related products
-            await initializeProductsData();
-            loadRelatedProducts(product);
+            // Load related products in background - don't block main product display
+            initializeProductsData().then(() => {
+                loadRelatedProducts(product);
+            });
         });
 
         function initializeProductDetailsPage() {

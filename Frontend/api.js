@@ -85,8 +85,9 @@ const API = {
                 url += '?' + params.toString();
             }
 
-            // Use cache for unfiltered requests
-            if (!filters.category && !filters.subcategory && _cache.products) {
+            // Use cache for unfiltered requests - only if images are present
+            if (!filters.category && !filters.subcategory && _cache.products && 
+                _cache.products.length > 0 && _cache.products[0].images && _cache.products[0].images.length > 0) {
                 return _cache.products;
             }
 
