@@ -1,7 +1,7 @@
 // API Configuration
 const API_CONFIG = {
     baseURL: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : 'http://localhost:5000/api',
-    timeout: 15000  // 15 seconds
+    timeout: 60000  // 60 seconds - Render cold start can take 50s
 };
 
 // In-memory cache - avoids repeat API calls within same session
@@ -25,20 +25,56 @@ async function fetchWithTimeout(url, timeoutMs = API_CONFIG.timeout) {
     }
 }
 
-// Wake up Render backend immediately on page load (prevents cold start delay)
-(function pingBackend() {
+// Wake up Render backend - waits until warm before resolving
+let _backendReady = false;
+let _backendReadyPromise = null;
+
+function pingBackend() {
     const base = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : null;
-    if (!base) return;
-    fetch(base + '/health', { method: 'GET', cache: 'no-store' })
-        .then(() => console.log('✅ Backend is warm'))
-        .catch(() => console.log('⏳ Backend waking up...'));
-})();
+    if (!base) { _backendReady = true; return Promise.resolve(); }
+    if (_backendReadyPromise) return _backendReadyPromise;
+
+    _backendReadyPromise = new Promise((resolve) => {
+        const tryPing = (attempt) => {
+            fetch(base + '/health', { method: 'GET', cache: 'no-store' })
+                .then(r => {
+                    if (r.ok) {
+                        console.log('✅ Backend is warm');
+                        _backendReady = true;
+                        resolve();
+                    } else {
+                        retry(attempt);
+                    }
+                })
+                .catch(() => retry(attempt));
+        };
+
+        const retry = (attempt) => {
+            const delay = Math.min(3000 + attempt * 1000, 8000);
+            console.log(`⏳ Backend waking up... retry in ${delay/1000}s`);
+            setTimeout(() => tryPing(attempt + 1), delay);
+        };
+
+        tryPing(0);
+
+        // Max wait 90s then resolve anyway
+        setTimeout(() => { _backendReady = true; resolve(); }, 90000);
+    });
+
+    return _backendReadyPromise;
+}
+
+// Start pinging immediately on page load
+pingBackend();
 
 // API Helper Functions
 const API = {
     // Get all products
     async getProducts(filters = {}) {
         try {
+            // Wait for backend to be warm first
+            await pingBackend();
+
             let url = `${API_CONFIG.baseURL}/products`;
             const params = new URLSearchParams();
             
@@ -50,18 +86,11 @@ const API = {
             }
 
             // Use cache for unfiltered requests
-            const cacheKey = params.toString() || 'all';
             if (!filters.category && !filters.subcategory && _cache.products) {
                 return _cache.products;
             }
 
-            let response;
-            try {
-                response = await fetchWithTimeout(url, 15000);
-            } catch (firstErr) {
-                console.warn('⏳ First attempt failed, retrying with longer timeout (Render cold start)...');
-                response = await fetchWithTimeout(url, 45000);
-            }
+            const response = await fetchWithTimeout(url, 60000);
             if (!response.ok) throw new Error('Failed to fetch products');
             
             const products = await response.json();
@@ -87,7 +116,8 @@ const API = {
                 return _cache.productDetail[productId];
             }
 
-            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/products/${productId}`);
+            await pingBackend();
+            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/products/${productId}`, 60000);
             if (!response.ok) throw new Error('Product not found');
             
             const product = await response.json();
