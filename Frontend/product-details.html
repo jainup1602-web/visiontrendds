@@ -553,16 +553,16 @@
 
             if (!productId) { showProductNotFound(); return; }
 
-            // Fetch full product directly (includes image) - no need for full list
+            // Fetch full product directly (includes image)
             const product = await API.getProduct(productId);
             if (!product) { showProductNotFound(); return; }
-
-            // Also init products data in background for related products & search
-            initializeProductsData();
 
             currentProduct = product;
             displayProductDetails(product);
             hideLoading();
+
+            // Load products data then show related products
+            await initializeProductsData();
             loadRelatedProducts(product);
         });
 

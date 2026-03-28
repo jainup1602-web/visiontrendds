@@ -3,12 +3,7 @@ const { getPool } = require('../config/db');
 class Product {
     static async findAll(filters = {}) {
         const pool = getPool();
-        // Exclude full images from list - Base64 images are huge (each ~500KB)
-        // Frontend uses fallback image for list, full image only on detail page
-        let query = `SELECT productId, name, description, category, subcategory, gender,
-                     price, originalPrice, discount, sizes, inStock, featured,
-                     ageRange, agePricing, createdAt
-                     FROM products`;
+        let query = 'SELECT * FROM products';
         const conditions = [];
         const values = [];
 
@@ -29,7 +24,7 @@ class Product {
         query += ' ORDER BY createdAt DESC';
 
         const [rows] = await pool.query(query, values);
-        return rows.map(row => this.parseJsonFieldsLight(row));
+        return rows.map(row => this.parseJsonFields(row));
     }
 
     static async findByProductId(productId) {
@@ -132,21 +127,6 @@ class Product {
             sizes: typeof row.sizes === 'string' ? JSON.parse(row.sizes) : row.sizes,
             agePricing: row.agePricing && typeof row.agePricing === 'string' 
                 ? JSON.parse(row.agePricing) 
-                : row.agePricing,
-            inStock: Boolean(row.inStock),
-            featured: Boolean(row.featured)
-        };
-    }
-
-    // Light parse for list queries - no images field
-    static parseJsonFieldsLight(row) {
-        if (!row) return null;
-        return {
-            ...row,
-            images: [],  // empty - frontend uses fallback, detail page fetches full
-            sizes: typeof row.sizes === 'string' ? JSON.parse(row.sizes) : (row.sizes || []),
-            agePricing: row.agePricing && typeof row.agePricing === 'string'
-                ? JSON.parse(row.agePricing)
                 : row.agePricing,
             inStock: Boolean(row.inStock),
             featured: Boolean(row.featured)
