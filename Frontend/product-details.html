@@ -548,16 +548,22 @@
         document.addEventListener('DOMContentLoaded', async function() {
             console.log('Product details page loaded');
             
-            // Initialize products data from API
-            await initializeProductsData();
-            
-            // Initialize product details page
-            if (typeof productUtils !== 'undefined') {
-                initializeProductDetailsPage();
-            } else {
-                console.error('Products data not loaded');
-                showProductNotFound();
-            }
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            if (!productId) { showProductNotFound(); return; }
+
+            // Fetch full product directly (includes image) - no need for full list
+            const product = await API.getProduct(productId);
+            if (!product) { showProductNotFound(); return; }
+
+            // Also init products data in background for related products & search
+            initializeProductsData();
+
+            currentProduct = product;
+            displayProductDetails(product);
+            hideLoading();
+            loadRelatedProducts(product);
         });
 
         function initializeProductDetailsPage() {

@@ -9,6 +9,10 @@ const app = express();
 // Connect to MySQL
 connectDB();
 
+// Gzip compression - reduces response size by ~70%
+const compression = require('compression');
+app.use(compression());
+
 // Middleware
 app.use(cors({
     origin: '*',

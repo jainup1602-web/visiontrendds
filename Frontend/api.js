@@ -4,6 +4,13 @@ const API_CONFIG = {
     timeout: 15000  // 15 seconds
 };
 
+// In-memory cache - avoids repeat API calls within same session
+const _cache = {
+    products: null,
+    categories: null,
+    productDetail: {}  // keyed by productId
+};
+
 // Fetch with timeout helper
 async function fetchWithTimeout(url, timeoutMs = API_CONFIG.timeout) {
     const controller = new AbortController();
@@ -41,34 +48,52 @@ const API = {
             if (params.toString()) {
                 url += '?' + params.toString();
             }
-            
+
+            // Use cache for unfiltered requests
+            const cacheKey = params.toString() || 'all';
+            if (!filters.category && !filters.subcategory && _cache.products) {
+                return _cache.products;
+            }
+
             let response;
             try {
-                // First attempt with 15s timeout
                 response = await fetchWithTimeout(url, 15000);
             } catch (firstErr) {
                 console.warn('⏳ First attempt failed, retrying with longer timeout (Render cold start)...');
-                // Retry once with 45s timeout for cold start
                 response = await fetchWithTimeout(url, 45000);
             }
             if (!response.ok) throw new Error('Failed to fetch products');
             
             const products = await response.json();
-            return this.transformProducts(products);
+            const transformed = this.transformProducts(products);
+
+            // Cache unfiltered result
+            if (!filters.category && !filters.subcategory) {
+                _cache.products = transformed;
+            }
+
+            return transformed;
         } catch (error) {
             console.error('Error fetching products:', error);
             return [];
         }
     },
 
-    // Get single product
+    // Get single product - fetches full data including image
     async getProduct(productId) {
         try {
+            // Check detail cache first
+            if (_cache.productDetail[productId]) {
+                return _cache.productDetail[productId];
+            }
+
             const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/products/${productId}`);
             if (!response.ok) throw new Error('Product not found');
             
             const product = await response.json();
-            return this.transformProduct(product);
+            const transformed = this.transformProduct(product);
+            _cache.productDetail[productId] = transformed;
+            return transformed;
         } catch (error) {
             console.error('Error fetching product:', error);
             return null;
@@ -78,10 +103,12 @@ const API = {
     // Get categories
     async getCategories() {
         try {
+            if (_cache.categories) return _cache.categories;
             const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/categories`);
             if (!response.ok) throw new Error('Failed to fetch categories');
-            
-            return await response.json();
+            const data = await response.json();
+            _cache.categories = data;
+            return data;
         } catch (error) {
             console.error('Error fetching categories:', error);
             return [];
@@ -100,7 +127,6 @@ const API = {
         if (!imageURL || imageURL === 'undefined') {
             imageURL = 'product/color_logo.png';
         }
-        
         return {
             id: product.productId,
             title: product.name,

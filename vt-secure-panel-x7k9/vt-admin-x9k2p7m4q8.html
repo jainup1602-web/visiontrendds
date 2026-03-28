@@ -126,8 +126,8 @@
                                 signInDiv.style.display = 'block';
 
                                 Clerk.mountSignIn(signInDiv, {
-                                    afterSignInUrl: window.location.origin + '/vt-secure-panel-x7k9/index.html',
-                                    signUpUrl: window.location.origin + '/vt-secure-panel-x7k9/vt-admin-x9k2p7m4q8.html',
+                                    afterSignInUrl: 'index.html',
+                                    redirectUrl: 'index.html',
                                     appearance: {
                                         elements: {
                                             formButtonPrimary: {
@@ -137,6 +137,14 @@
                                         }
                                     }
                                 });
+
+                                // Fallback: poll for login and redirect manually
+                                const loginPoller = setInterval(() => {
+                                    if (Clerk.user) {
+                                        clearInterval(loginPoller);
+                                        window.location.href = 'index.html';
+                                    }
+                                }, 500);
 
                                 console.log('Sign-in form mounted successfully');
                             }

@@ -179,7 +179,7 @@
                 </div>
 
                 <div style="display: flex; gap: 10px;">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" id="submit-btn" class="btn btn-primary">
                         <i class="fas fa-save"></i> Save Product
                     </button>
                     <a href="products.html" class="btn btn-secondary">Cancel</a>
@@ -453,6 +453,16 @@
         document.getElementById('product-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            const submitBtn = document.getElementById('submit-btn');
+
+            // Show loading state
+            function setLoading(on) {
+                submitBtn.disabled = on;
+                submitBtn.innerHTML = on
+                    ? '<span style="display:inline-flex;align-items:center;gap:8px;"><span style="width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:white;border-radius:50%;display:inline-block;animation:spin 0.7s linear infinite;"></span> Saving...</span>'
+                    : '<i class="fas fa-save"></i> Save Product';
+            }
+
             // Upload image first
             const imageFile = document.getElementById('imageFile').files[0];
             if (!imageFile) {
@@ -460,8 +470,11 @@
                 return;
             }
 
+            setLoading(true);
+
             uploadedImagePath = await uploadImage(imageFile);
             if (!uploadedImagePath) {
+                setLoading(false);
                 showErrorPopup('Image upload failed');
                 return;
             }
@@ -502,6 +515,8 @@
                     body: JSON.stringify(productData)
                 });
 
+                setLoading(false);
+
                 if (response.ok) {
                     showSuccessPopup('Product added successfully!');
                 } else {
@@ -509,6 +524,7 @@
                     showErrorPopup('Error: ' + error.message);
                 }
             } catch (error) {
+                setLoading(false);
                 console.error('Error:', error);
                 showErrorPopup('Error adding product. Make sure the backend server is running.');
             }
