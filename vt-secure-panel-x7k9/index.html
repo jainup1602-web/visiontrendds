@@ -31,7 +31,7 @@
         <div class="header">
             <h1>Dashboard</h1>
             <div>
-                <a href="../Frontend/index.html" class="btn btn-secondary" target="_blank">
+                <a href="https://visiontrennds.com" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
                     <i class="fas fa-external-link-alt"></i> View Website
                 </a>
             </div>
@@ -106,7 +106,7 @@
                 document.getElementById('in-stock').textContent = products.filter(p => p.inStock).length;
                 document.getElementById('out-stock').textContent = products.filter(p => !p.inStock).length;
 
-                // Show recent 10 products
+                // Show recent 10 products 
                 const recentProducts = products.slice(0, 10);
                 displayProducts(recentProducts);
 

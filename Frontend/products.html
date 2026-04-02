@@ -517,9 +517,7 @@
             }
         };
 
-        // Show subcategory filters for selected category
         function showSubcategoryFilters(category) {
-            console.log('?? showSubcategoryFilters called with category:', category);
             const subcategoryFilter = document.getElementById('subcategory-filter');
             const subcategoryButtons = document.getElementById('subcategory-buttons');
             
@@ -528,16 +526,13 @@
                 return;
             }
             
-            // Get subcategories for the selected category
             const subcategories = getSubcategoriesForCategory(category);
-            console.log('?? Subcategories found:', subcategories);
             
             if (subcategories.length === 0) {
                 subcategoryFilter.classList.add('hidden');
                 return;
             }
             
-            // Create subcategory buttons
             let buttonsHTML = `
                 <button class="subcategory-btn bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-all duration-300 shadow active" data-subcategory="all">
                     All ${category.charAt(0).toUpperCase() + category.slice(1)}
@@ -545,8 +540,8 @@
             `;
             
             subcategories.forEach(subcat => {
-                const label = subcategoryLabels[category][subcat] || subcat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                console.log(`??? Creating button for ${subcat} with label: ${label}`);
+                const label = (subcategoryLabels[category] && subcategoryLabels[category][subcat])
+                    || subcat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                 buttonsHTML += `
                     <button class="subcategory-btn bg-white text-vision-red border-2 border-vision-red px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow" data-subcategory="${subcat}">
                         ${label}
@@ -554,17 +549,14 @@
                 `;
             });
             
-            console.log('? Setting buttons HTML');
             subcategoryButtons.innerHTML = buttonsHTML;
             subcategoryFilter.classList.remove('hidden');
             
-            // Add click events to subcategory buttons
             document.querySelectorAll('.subcategory-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const subcategory = this.getAttribute('data-subcategory');
                     filterBySubcategory(subcategory);
                     
-                    // Update active state
                     document.querySelectorAll('.subcategory-btn').forEach(b => {
                         b.classList.remove('active', 'bg-vision-red', 'text-white');
                         b.classList.add('bg-white', 'text-vision-red', 'border-2', 'border-vision-red');
@@ -575,18 +567,15 @@
             });
         }
         
-        // Get subcategories for a category
+        // Get subcategories for a category - always from labels, not just from products
         function getSubcategoriesForCategory(category) {
-            console.log('?? getSubcategoriesForCategory called with:', category);
-            if (!productsData[category]) {
-                console.log('? Category not found in productsData');
-                return [];
+            // Use predefined labels - show all subcategories regardless of products
+            if (subcategoryLabels[category]) {
+                return Object.keys(subcategoryLabels[category]);
             }
-            
-            // For all categories (including kids), return subcategories directly
-            const result = Object.keys(productsData[category]);
-            console.log('? Subcategories:', result);
-            return result;
+            // Fallback: from actual products data
+            if (!productsData[category]) return [];
+            return Object.keys(productsData[category]);
         }
         
         // Filter by subcategory
