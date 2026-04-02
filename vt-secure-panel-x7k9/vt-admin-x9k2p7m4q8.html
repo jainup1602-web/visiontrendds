@@ -119,15 +119,20 @@
 
                             if (Clerk.user) {
                                 console.log('User already logged in, redirecting...');
-                                window.location.href = 'index.html';
+                                window.location.replace('index.html');
                             } else {
                                 console.log('No user logged in, showing sign-in form...');
                                 const signInDiv = document.getElementById('clerk-signin');
                                 signInDiv.style.display = 'block';
 
+                                // Listen for session changes - most reliable redirect method
+                                Clerk.addListener(({ session }) => {
+                                    if (session && session.status === 'active') {
+                                        window.location.replace('index.html');
+                                    }
+                                });
+
                                 Clerk.mountSignIn(signInDiv, {
-                                    afterSignInUrl: 'index.html',
-                                    redirectUrl: 'index.html',
                                     appearance: {
                                         elements: {
                                             formButtonPrimary: {
@@ -137,14 +142,6 @@
                                         }
                                     }
                                 });
-
-                                // Fallback: poll for login and redirect manually
-                                const loginPoller = setInterval(() => {
-                                    if (Clerk.user) {
-                                        clearInterval(loginPoller);
-                                        window.location.href = 'index.html';
-                                    }
-                                }, 500);
 
                                 console.log('Sign-in form mounted successfully');
                             }
