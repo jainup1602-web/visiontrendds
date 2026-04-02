@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vision Trennds - Fashion with a Touch of Class</title>
+    <!-- Clerk admin redirect interceptor -->
+    <script>
+        (function() {
+            // If Clerk redirected here from admin login, send back to admin panel
+            const search = window.location.search;
+            const hash = window.location.hash;
+            if (search.includes('__clerk') || hash.includes('__clerk')) {
+                window.location.replace('/vt-secure-panel-x7k9/index.html' + search + hash);
+                return;
+            }
+            // Check localStorage flag set by admin login page (survives OAuth redirects)
+            if (localStorage.getItem('admin_login_pending') === '1') {
+                localStorage.removeItem('admin_login_pending');
+                window.location.replace('/vt-secure-panel-x7k9/index.html');
+            }
+        })();
+    </script>
     <meta name="description" content="Discover premium ethnic and contemporary fashion at Vision Trennds. Quality clothing for men, women, and kids with authentic craftsmanship.">
     <meta name="keywords" content="fashion, ethnic wear, contemporary clothing, kurta, anarkali, kids wear, bags, bed sheets">
     

@@ -125,9 +125,13 @@
                                 const signInDiv = document.getElementById('clerk-signin');
                                 signInDiv.style.display = 'block';
 
-                                // Listen for session changes - most reliable redirect method
+                                // Set flag BEFORE mounting - survives OAuth redirect
+                                localStorage.setItem('admin_login_pending', '1');
+
+                                // Also listen for direct (non-OAuth) logins
                                 Clerk.addListener(({ session }) => {
                                     if (session && session.status === 'active') {
+                                        localStorage.setItem('admin_login_pending', '1');
                                         window.location.replace('index.html');
                                     }
                                 });
