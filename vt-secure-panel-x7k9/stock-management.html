@@ -334,17 +334,35 @@
 
                 const outOfStockSizes = product.outOfStockSizes || [];
                 const sizes = product.sizes || [];
+                const agePricing = product.agePricing || null;
 
-                // Size-wise stock buttons
-                const sizeBtns = sizes.length > 0 ? sizes.map(size => {
-                    const isOOS = outOfStockSizes.includes(size);
-                    return `<button onclick="toggleSizeStock('${product.productId}', '${size}', ${isOOS})"
-                        style="padding:3px 10px; margin:2px; border-radius:6px; border:1px solid #8B0000; font-size:0.8rem; cursor:pointer;
-                        background:${isOOS ? '#dc3545' : '#28a745'}; color:white; font-weight:600;"
-                        title="${isOOS ? 'Click to mark In Stock' : 'Click to mark Out of Stock'}">
-                        ${size} ${isOOS ? '✗' : '✓'}
-                    </button>`;
-                }).join('') : '<span style="color:#999; font-size:0.8rem;">No sizes</span>';
+                // For age-based products, show age buttons; otherwise size buttons
+                let stockBtns = '';
+                if (agePricing && Object.keys(agePricing).length > 0) {
+                    // Age-based stock
+                    stockBtns = Object.keys(agePricing).map(age => {
+                        const isOOS = outOfStockSizes.includes(age);
+                        return `<button onclick="toggleSizeStock('${product.productId}', '${age}', ${isOOS})"
+                            style="padding:3px 10px; margin:2px; border-radius:6px; border:1px solid #8B0000; font-size:0.8rem; cursor:pointer;
+                            background:${isOOS ? '#dc3545' : '#28a745'}; color:white; font-weight:600;"
+                            title="${isOOS ? 'Click to mark In Stock' : 'Click to mark Out of Stock'}">
+                            ${age}Y ${isOOS ? '✗' : '✓'}
+                        </button>`;
+                    }).join('');
+                } else if (sizes.length > 0) {
+                    // Size-based stock
+                    stockBtns = sizes.map(size => {
+                        const isOOS = outOfStockSizes.includes(size);
+                        return `<button onclick="toggleSizeStock('${product.productId}', '${size}', ${isOOS})"
+                            style="padding:3px 10px; margin:2px; border-radius:6px; border:1px solid #8B0000; font-size:0.8rem; cursor:pointer;
+                            background:${isOOS ? '#dc3545' : '#28a745'}; color:white; font-weight:600;"
+                            title="${isOOS ? 'Click to mark In Stock' : 'Click to mark Out of Stock'}">
+                            ${size} ${isOOS ? '✗' : '✓'}
+                        </button>`;
+                    }).join('');
+                } else {
+                    stockBtns = '<span style="color:#999; font-size:0.8rem;">No sizes/ages</span>';
+                }
                 
                 return `
                 <tr>
@@ -364,7 +382,7 @@
                             <span class="stock-slider"></span>
                         </label>
                     </td>
-                    <td style="min-width:150px;">${sizeBtns}</td>
+                    <td style="min-width:150px;">${stockBtns}</td>
                 </tr>
                 `;
             }).join('');

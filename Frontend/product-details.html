@@ -678,13 +678,17 @@
                 const ageSection = document.getElementById('product-age');
                 
                 const ageRanges = Object.keys(product.agePricing);
-                ageContainer.innerHTML = ageRanges.map(age => `
-                    <button class="age-option px-4 py-3 border-2 border-vision-red text-vision-red rounded-lg font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-vision-red focus:ring-offset-2" 
+                const outOfStockAges = product.outOfStockSizes || [];
+                ageContainer.innerHTML = ageRanges.map(age => {
+                    const isOOS = outOfStockAges.includes(age);
+                    return `<button class="age-option px-4 py-3 border-2 rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2
+                        ${isOOS ? 'border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed line-through' : 'border-vision-red text-vision-red hover:bg-vision-red hover:text-white cursor-pointer focus:ring-vision-red'}" 
                             data-age="${age}" 
-                            onclick="selectAge('${age}')">
-                        ${age} yrs
-                    </button>
-                `).join('');
+                            onclick="${isOOS ? 'void(0)' : `selectAge('${age}')`}"
+                            ${isOOS ? 'disabled title="Out of Stock"' : ''}>
+                        ${age} yrs${isOOS ? ' ✗' : ''}
+                    </button>`;
+                }).join('');
                 
                 ageSection.classList.remove('hidden');
                 console.log('Age section hidden class removed');
