@@ -176,6 +176,7 @@ const API = {
             gender: product.gender,
             ageRange: product.ageRange,
             agePricing: product.agePricing,
+            outOfStockSizes: product.outOfStockSizes || [],
             featured: product.featured,
             whatsappMessage: `Hi! I'm interested in the ${product.name}.`
         };

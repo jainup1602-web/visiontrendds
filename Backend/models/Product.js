@@ -38,25 +38,25 @@ class Product {
         const {
             productId, name, description, category, subcategory, gender,
             price, originalPrice, discount, images, sizes, inStock,
-            featured, ageRange, agePricing
+            featured, ageRange, agePricing, outOfStockSizes
         } = productData;
 
-        // Store images as LONGTEXT (Base64 data URLs)
         const [result] = await pool.query(
             `INSERT INTO products (
                 productId, name, description, category, subcategory, gender,
                 price, originalPrice, discount, images, sizes, inStock,
-                featured, ageRange, agePricing
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                featured, ageRange, agePricing, outOfStockSizes
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 productId, name, description, category, subcategory, gender,
                 price, originalPrice, discount || 0,
-                JSON.stringify(images || []), // Base64 data URLs stored as JSON array
+                JSON.stringify(images || []),
                 JSON.stringify(sizes || []),
                 inStock !== false,
                 featured || false,
                 ageRange || null,
-                agePricing ? JSON.stringify(agePricing) : null
+                agePricing ? JSON.stringify(agePricing) : null,
+                outOfStockSizes ? JSON.stringify(outOfStockSizes) : JSON.stringify([])
             ]
         );
 
@@ -87,14 +87,15 @@ class Product {
             inStock = existing.inStock,
             featured = existing.featured,
             ageRange = existing.ageRange,
-            agePricing = existing.agePricing
+            agePricing = existing.agePricing,
+            outOfStockSizes = existing.outOfStockSizes
         } = productData;
 
         await pool.query(
             `UPDATE products SET
                 name = ?, description = ?, category = ?, subcategory = ?, gender = ?,
                 price = ?, originalPrice = ?, discount = ?, images = ?, sizes = ?,
-                inStock = ?, featured = ?, ageRange = ?, agePricing = ?
+                inStock = ?, featured = ?, ageRange = ?, agePricing = ?, outOfStockSizes = ?
             WHERE productId = ?`,
             [
                 name, description, category, subcategory, gender,
@@ -105,6 +106,7 @@ class Product {
                 featured || false,
                 ageRange || null,
                 agePricing ? JSON.stringify(agePricing) : null,
+                outOfStockSizes ? JSON.stringify(outOfStockSizes) : JSON.stringify([]),
                 productId
             ]
         );
@@ -128,6 +130,9 @@ class Product {
             agePricing: row.agePricing && typeof row.agePricing === 'string' 
                 ? JSON.parse(row.agePricing) 
                 : row.agePricing,
+            outOfStockSizes: row.outOfStockSizes && typeof row.outOfStockSizes === 'string'
+                ? JSON.parse(row.outOfStockSizes)
+                : (row.outOfStockSizes || []),
             inStock: Boolean(row.inStock),
             featured: Boolean(row.featured)
         };

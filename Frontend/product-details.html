@@ -696,14 +696,18 @@
             if (product.sizes && product.sizes.length > 0 && !product.agePricing) {
                 const sizesContainer = document.getElementById('sizes-container');
                 const sizesSection = document.getElementById('product-sizes');
+                const outOfStockSizes = product.outOfStockSizes || [];
                 
-                sizesContainer.innerHTML = product.sizes.map(size => `
-                    <button class="size-option px-4 py-3 border-2 border-vision-red text-vision-red rounded-lg font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-vision-red focus:ring-offset-2" 
+                sizesContainer.innerHTML = product.sizes.map(size => {
+                    const isOOS = outOfStockSizes.includes(size);
+                    return `<button class="size-option px-4 py-3 border-2 rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2
+                        ${isOOS ? 'border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed line-through' : 'border-vision-red text-vision-red hover:bg-vision-red hover:text-white cursor-pointer focus:ring-vision-red'}" 
                             data-size="${size}" 
-                            onclick="selectSize('${size}')">
-                        ${size}
-                    </button>
-                `).join('');
+                            onclick="${isOOS ? 'void(0)' : `selectSize('${size}')`}"
+                            ${isOOS ? 'disabled title="Out of Stock"' : ''}>
+                        ${size}${isOOS ? ' ✗' : ''}
+                    </button>`;
+                }).join('');
                 
                 sizesSection.classList.remove('hidden');
             }

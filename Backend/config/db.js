@@ -68,6 +68,11 @@ const createTables = async () => {
             )
         `);
 
+        // Add outOfStockSizes column if it doesn't exist (migration)
+        try {
+            await pool.query(`ALTER TABLE products ADD COLUMN outOfStockSizes JSON DEFAULT NULL`);
+        } catch(e) { /* column already exists */ }
+
         console.log('✅ MySQL Tables Created/Verified');
     } catch (error) {
         console.error('❌ Error creating tables:', error.message);

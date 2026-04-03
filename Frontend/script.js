@@ -411,8 +411,8 @@ const products = {
 
 // Reviews slider functionality - Infinite loop (no reverse)
 const reviews = {
-    currentIndex: 0,   // tracks position in cloned list
-    realCount: 4,      // actual number of review cards
+    currentIndex: 0,
+    realCount: 8,      // updated to match 8 review cards
     autoSlideInterval: null,
     isTransitioning: false,
 

@@ -212,6 +212,7 @@
                         <th>Price</th>
                         <th>Stock Status</th>
                         <th>Quick Toggle</th>
+                        <th>Size Stock</th>
                     </tr>
                 </thead>
                 <tbody id="stock-tbody">
@@ -319,7 +320,6 @@
         function displayProducts(products) {
             const tbody = document.getElementById('stock-tbody');
             tbody.innerHTML = products.map(product => {
-                // Handle image display
                 let imageSrc = `${FRONTEND_BASE}/product/color_logo.png`;
                 if (product.images && product.images.length > 0 && product.images[0]) {
                     const imagePath = product.images[0];
@@ -331,6 +331,20 @@
                         imageSrc = `${FRONTEND_BASE}/${imagePath}`;
                     }
                 }
+
+                const outOfStockSizes = product.outOfStockSizes || [];
+                const sizes = product.sizes || [];
+
+                // Size-wise stock buttons
+                const sizeBtns = sizes.length > 0 ? sizes.map(size => {
+                    const isOOS = outOfStockSizes.includes(size);
+                    return `<button onclick="toggleSizeStock('${product.productId}', '${size}', ${isOOS})"
+                        style="padding:3px 10px; margin:2px; border-radius:6px; border:1px solid #8B0000; font-size:0.8rem; cursor:pointer;
+                        background:${isOOS ? '#dc3545' : '#28a745'}; color:white; font-weight:600;"
+                        title="${isOOS ? 'Click to mark In Stock' : 'Click to mark Out of Stock'}">
+                        ${size} ${isOOS ? '✗' : '✓'}
+                    </button>`;
+                }).join('') : '<span style="color:#999; font-size:0.8rem;">No sizes</span>';
                 
                 return `
                 <tr>
@@ -350,9 +364,44 @@
                             <span class="stock-slider"></span>
                         </label>
                     </td>
+                    <td style="min-width:150px;">${sizeBtns}</td>
                 </tr>
                 `;
             }).join('');
+        }
+
+        // Toggle size-wise stock
+        async function toggleSizeStock(productId, size, currentlyOOS) {
+            const product = allProducts.find(p => p.productId === productId);
+            if (!product) return;
+
+            let outOfStockSizes = product.outOfStockSizes || [];
+
+            if (currentlyOOS) {
+                // Mark back in stock - remove from OOS list
+                outOfStockSizes = outOfStockSizes.filter(s => s !== size);
+            } else {
+                // Mark out of stock - add to OOS list
+                if (!outOfStockSizes.includes(size)) outOfStockSizes.push(size);
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/products/${productId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ outOfStockSizes })
+                });
+
+                if (response.ok) {
+                    product.outOfStockSizes = outOfStockSizes;
+                    applyFilters();
+                    showSuccessPopup(`Size ${size}: ${currentlyOOS ? 'In Stock' : 'Out of Stock'}`);
+                } else {
+                    showErrorPopup('Failed to update size stock');
+                }
+            } catch (error) {
+                showErrorPopup('Error updating size stock');
+            }
         }
 
         // Toggle stock status
