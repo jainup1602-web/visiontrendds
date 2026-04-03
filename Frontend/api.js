@@ -1,4 +1,4 @@
-// API Configuration
+﻿// API Configuration
 const API_CONFIG = {
     baseURL: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : 'http://localhost:5000/api',
     timeout: 60000  // 60 seconds - Render cold start can take 50s
@@ -39,7 +39,6 @@ function pingBackend() {
             fetch(base + '/health', { method: 'GET', cache: 'no-store' })
                 .then(r => {
                     if (r.ok) {
-                        console.log('✅ Backend is warm');
                         _backendReady = true;
                         resolve();
                     } else {
@@ -51,7 +50,6 @@ function pingBackend() {
 
         const retry = (attempt) => {
             const delay = Math.min(3000 + attempt * 1000, 8000);
-            console.log(`⏳ Backend waking up... retry in ${delay/1000}s`);
             setTimeout(() => tryPing(attempt + 1), delay);
         };
 
@@ -236,8 +234,6 @@ async function initializeProductsData() {
             
             PRODUCTS_DATA[product.category][product.subcategory].push(product);
         });
-        
-        console.log('Products loaded from API:', products.length);
         return PRODUCTS_DATA;
     } catch (error) {
         console.error('Error initializing products:', error);

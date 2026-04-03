@@ -428,7 +428,6 @@
                 productsData = await initializeProductsData();
                 // Use already-loaded data from initializeProductsData (no second API call)
                 allProducts = productUtils.getAllProducts();
-                console.log('Loaded products from API:', allProducts.length);
             } catch(e) {
                 console.error('API failed:', e);
                 allProducts = [];
@@ -461,7 +460,6 @@
 
         // Initialize products page - single DOMContentLoaded
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Products page initializing...');
             initProducts();
         });
         const subcategoryLabels = {
@@ -739,8 +737,6 @@
             } else {
                 filteredProducts = productUtils.getProductsByCategory(category);
             }
-            
-            console.log(`Filtering by category: ${category}, found ${filteredProducts.length} products`);
             displayProducts(filteredProducts);
             
             // Show subcategory filters
@@ -857,8 +853,6 @@
                     toggleActions: "play none none reverse"
                 }
             });
-
-            console.log('Products page GSAP animations initialized');
         });
 
         // Mobile Menu Animation Control

@@ -546,8 +546,6 @@
         let currentProduct = null;
 
         document.addEventListener('DOMContentLoaded', async function() {
-            console.log('Product details page loaded');
-            
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
 
@@ -600,9 +598,6 @@
 
         function displayProductDetails(product) {
             // Debug: Log product to check agePricing
-            console.log('Product data:', product);
-            console.log('Has agePricing:', !!product.agePricing);
-            
             // Update page title
             document.title = `${product.title} - Vision Trennds Fashion`;
             
@@ -672,9 +667,6 @@
             
             // Update age selector (for kids products)
             if (product.category === 'kids' && product.agePricing) {
-                console.log('Age selector should be visible now!');
-                console.log('Age ranges:', Object.keys(product.agePricing));
-                
                 const ageContainer = document.getElementById('age-container');
                 const ageSection = document.getElementById('product-age');
                 
@@ -692,9 +684,7 @@
                 }).join('');
                 
                 ageSection.classList.remove('hidden');
-                console.log('Age section hidden class removed');
             } else {
-                console.log('Age selector NOT shown. Category:', product.category, 'Has agePricing:', !!product.agePricing);
             }
             
             // Update sizes - hide if agePricing exists (size is auto-linked to age)
@@ -779,10 +769,6 @@
 
         function displayRelatedProducts(products) {
             const container = document.getElementById('related-products-grid');
-            
-            console.log('Related products:', products);
-            console.log('First product image:', products[0]?.image);
-            
             container.innerHTML = products.map((product, index) => {
                 // Generate WhatsApp URL for Buy button
                 const message = `Hi! I'm interested in ${product.title} - ${product.price}`;
@@ -1229,8 +1215,6 @@
                 originalDisplayProductDetails(product);
                 setTimeout(animateProductDetails, 100);
             };
-
-            console.log('Product details page GSAP animations initialized');
         });
 
         // Mobile Menu Animation Control

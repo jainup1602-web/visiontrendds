@@ -1,4 +1,4 @@
-// Vision Trennds - Clean JavaScript with proper error handling
+﻿// Vision Trennds - Clean JavaScript with proper error handling
 'use strict';
 
 // Configuration
@@ -316,7 +316,6 @@ const products = {
             });
             
             utils.hideLoading(container);
-            console.log('Featured products rendered successfully');
         } catch (error) {
             console.error('Error rendering products:', error);
             utils.showError('Failed to load products. Please refresh the page.', container);
@@ -711,10 +710,8 @@ const performanceMonitor = {
                 try {
                     const perfData = window.performance.getEntriesByType('navigation')[0];
                     if (perfData) {
-                        console.log('Page load time:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
                     }
                 } catch (error) {
-                    console.log('Performance monitoring not available:', error.message);
                 }
             }
         });
@@ -734,8 +731,6 @@ const app = {
 
     start() {
         try {
-            console.log('Vision Trennds website initializing...');
-            
             // Initialize all modules
             errorHandler.init();
             performanceMonitor.init();
@@ -744,8 +739,6 @@ const app = {
             reviews.init();
             faq.init();
             scrollEffects.init();
-            
-            console.log('Vision Trennds website initialized successfully');
         } catch (error) {
             console.error('Failed to initialize website:', error);
             errorHandler.logError(error);
