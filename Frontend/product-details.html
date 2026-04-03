@@ -622,7 +622,8 @@
             document.querySelector('meta[property="twitter:image"]').setAttribute('content', imageURL);
             
             // Update breadcrumb
-            document.getElementById('breadcrumb-category').textContent = product.category;
+            document.getElementById('breadcrumb-category').innerHTML = 
+                `<a href="products.html#${product.category}" class="hover:text-vision-red transition-colors capitalize">${product.category}</a>`;
             document.getElementById('breadcrumb-title').textContent = product.title;
             
             // Update product image
