@@ -11,7 +11,10 @@ const connectDB = async () => {
             database: process.env.DB_NAME || 'visiontrennds',
             waitForConnections: true,
             connectionLimit: 10,
-            queueLimit: 0
+            queueLimit: 0,
+            enableKeepAlive: true,
+            keepAliveInitialDelay: 10000,
+            connectTimeout: 30000
         });
 
         // Test connection
@@ -19,7 +22,15 @@ const connectDB = async () => {
         console.log('✅ MySQL Connected Successfully');
         connection.release();
 
-        // Create tables if they don't exist
+        // Keep-alive ping every 4 minutes to prevent Hostinger idle timeout
+        setInterval(async () => {
+            try {
+                await pool.query('SELECT 1');
+            } catch (e) {
+                console.warn('Keep-alive ping failed:', e.message);
+            }
+        }, 4 * 60 * 1000);
+
         await createTables();
     } catch (error) {
         console.error('❌ MySQL Connection Error:', error.message);

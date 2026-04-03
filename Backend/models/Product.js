@@ -23,8 +23,17 @@ class Product {
 
         query += ' ORDER BY createdAt DESC';
 
-        const [rows] = await pool.query(query, values);
-        return rows.map(row => this.parseJsonFields(row));
+        try {
+            const [rows] = await pool.query(query, values);
+            return rows.map(row => this.parseJsonFields(row));
+        } catch (err) {
+            if (err.code === 'ETIMEDOUT' || err.code === 'ECONNRESET' || err.code === 'PROTOCOL_CONNECTION_LOST') {
+                console.warn('DB connection lost, retrying...');
+                const [rows] = await pool.query(query, values);
+                return rows.map(row => this.parseJsonFields(row));
+            }
+            throw err;
+        }
     }
 
     static async findByProductId(productId) {
