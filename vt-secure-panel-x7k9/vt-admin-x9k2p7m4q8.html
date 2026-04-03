@@ -21,7 +21,7 @@
             background: white;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: none;
             max-width: 450px;
             width: 90%;
             overflow: hidden;
@@ -30,7 +30,8 @@
         .logo h1 { color: #8B1538; font-size: 2rem; font-weight: 700; margin-bottom: 5px; }
         .logo p { color: #666; font-size: 0.9rem; }
         #clerk-signin { margin-top: 20px; min-height: 400px; overflow: hidden; }
-        #clerk-signin > div { overflow: hidden !important; }
+        #clerk-signin > div { overflow: hidden !important; box-shadow: none !important; }
+        #clerk-signin * { box-shadow: none !important; }
         .loading { text-align: center; padding: 60px 40px; }
         .spinner {
             border: 4px solid #f3f3f3;
