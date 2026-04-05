@@ -197,6 +197,8 @@
             
             <!-- Results Grid -->
             <div id="search-results-grid" class="products-grid"></div>
+            <!-- Pagination -->
+            <div id="search-pagination" class="flex justify-center items-center gap-2 mt-12 hidden"></div>
         </div>
     </section>
 
@@ -331,111 +333,115 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="config.js"></script>
     <script src="api.js"></script>
     <script src="script.js"></script>
     <script>
-        // Search Results Page Functionality
+        const SEARCH_PER_PAGE = 12;
+        let searchResults = [];
+        let searchCurrentPage = 1;
+
         document.addEventListener('DOMContentLoaded', async function() {
             const urlParams = new URLSearchParams(window.location.search);
             const query = urlParams.get('q');
             
-            if (!query) {
-                window.location.href = 'products.html';
-                return;
-            }
+            if (!query) { window.location.href = 'products.html'; return; }
             
-            // Initialize products data from API
             await initializeProductsData();
-            
-            // Update search input
             document.getElementById('search-input').value = query;
             document.getElementById('search-query').textContent = `Showing results for "${query}"`;
-            
-            // Perform search
             performSearch(query);
         });
         
         function performSearch(query) {
             const loadingEl = document.getElementById('loading-search');
             const noResultsEl = document.getElementById('no-results');
-            const resultsGrid = document.getElementById('search-results-grid');
             
-            // Show loading
             loadingEl.style.display = 'block';
             noResultsEl.style.display = 'none';
-            resultsGrid.innerHTML = '';
+            document.getElementById('search-results-grid').innerHTML = '';
             
-            // Check if productUtils is available
             if (typeof productUtils === 'undefined') {
                 setTimeout(() => performSearch(query), 100);
                 return;
             }
             
-            // Search products
-            const results = productUtils.searchProducts(query);
-            
-            // Hide loading
+            searchResults = productUtils.searchProducts(query);
             loadingEl.style.display = 'none';
             
-            if (results.length === 0) {
+            if (searchResults.length === 0) {
                 noResultsEl.style.display = 'block';
+                document.getElementById('search-pagination').classList.add('hidden');
                 return;
             }
-            
-            // Display results
-            resultsGrid.innerHTML = results.map(product => {
-                const whatsappURL = productUtils.generateWhatsAppURL(product.whatsappMessage, product.image);
-                
+
+            document.getElementById('search-title').textContent = `${searchResults.length} Results Found`;
+            renderSearchPage(1);
+        }
+
+        function renderSearchPage(page) {
+            searchCurrentPage = page;
+            const totalPages = Math.ceil(searchResults.length / SEARCH_PER_PAGE);
+            const start = (page - 1) * SEARCH_PER_PAGE;
+            const pageProducts = searchResults.slice(start, start + SEARCH_PER_PAGE);
+            const resultsGrid = document.getElementById('search-results-grid');
+
+            resultsGrid.innerHTML = pageProducts.map(product => {
+                const whatsappURL = productUtils.generateWhatsAppURL(product);
                 return `
                     <div class="product-card-responsive cursor-pointer bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100" onclick="window.location.href='product-details.html?id=${product.id}'">
                         <div class="product-image-container relative overflow-hidden rounded-t-lg">
-                            <!-- Offer Badge -->
-                            ${product.badge ? `
-                            <div class="product-badge absolute top-2 left-2 z-10">
-                                <span class="bg-vision-red text-white px-2 py-1 rounded-full text-xs font-semibold">
-                                    ${product.badge}
-                                </span>
-                            </div>
-                            ` : ''}
-                            
-                            <!-- Product Image -->
-                            <img src="${product.image}" 
-                                 alt="${product.title}" 
-                                 class="product-image w-full object-cover hover:scale-105 transition-transform duration-300" 
-                                 loading="lazy" 
-                                 onerror="this.src='${product.fallbackImage || 'product/white_logo.png'}'; this.onerror=null;"
-                                 onload="this.style.opacity='1';"
-                                 style="opacity: 0; transition: opacity 0.3s ease;">
+                            ${product.badge ? `<div class="product-badge absolute top-2 left-2 z-10"><span class="bg-vision-red text-white px-2 py-1 rounded-full text-xs font-semibold">${product.badge}</span></div>` : ''}
+                            <img src="${product.image}" alt="${product.title}" class="product-image w-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy"
+                                 onerror="this.src='${product.fallbackImage || 'product/color_logo.png'}'; this.onerror=null;"
+                                 onload="this.style.opacity='1';" style="opacity:0;transition:opacity 0.3s ease;">
                         </div>
-                        
-                        <!-- Card Content -->
                         <div class="product-content">
-                            <!-- Product Title -->
-                            <h3 class="product-title font-serif font-semibold text-vision-dark hover:text-vision-red transition-colors duration-300">
-                                ${product.title}
-                            </h3>
-                            
-                            <!-- Price and Buy Button -->
+                            <h3 class="product-title font-serif font-semibold text-vision-dark hover:text-vision-red transition-colors duration-300">${product.title}</h3>
                             <div class="product-footer flex items-center justify-between">
                                 <div class="price-section flex items-center space-x-1">
                                     <span class="current-price font-bold text-vision-red">${product.price}</span>
                                     ${product.originalPrice ? `<span class="original-price text-gray-500 line-through">${product.originalPrice}</span>` : ''}
                                 </div>
-                                <a href="${whatsappURL}" 
-                                   target="_blank" 
-                                   rel="noopener noreferrer"
+                                <a href="${whatsappURL}" target="_blank" rel="noopener noreferrer"
                                    class="buy-button bg-vision-red text-white font-semibold hover:bg-vision-burgundy transition-colors duration-300 flex items-center gap-1 no-underline"
-                                   onclick="event.stopPropagation()"
-                                   aria-label="Buy ${product.title}"
-                                   style="text-decoration: none !important; color: white !important;">
-                                    <i class="fab fa-whatsapp buy-icon" style="color: white !important;"></i>
-                                    <span class="buy-text" style="color: white !important;">Buy</span>
+                                   onclick="event.stopPropagation()" style="text-decoration:none!important;color:white!important;">
+                                    <i class="fab fa-whatsapp buy-icon" style="color:white!important;"></i>
+                                    <span class="buy-text" style="color:white!important;">Buy</span>
                                 </a>
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }).join('');
+
+            if (page > 1) resultsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Pagination
+            const pag = document.getElementById('search-pagination');
+            if (totalPages <= 1) { pag.classList.add('hidden'); return; }
+            pag.classList.remove('hidden');
+
+            let btns = `<button onclick="renderSearchPage(${page-1})" ${page===1?'disabled':''}
+                class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
+                ${page===1?'border-gray-200 text-gray-400 cursor-not-allowed':'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
+                <i class="fas fa-chevron-left"></i></button>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i===1||i===totalPages||(i>=page-1&&i<=page+1)) {
+                    btns += `<button onclick="renderSearchPage(${i})"
+                        class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
+                        ${i===page?'bg-vision-red border-vision-red text-white':'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">${i}</button>`;
+                } else if (i===page-2||i===page+2) {
+                    btns += `<span class="px-2 py-2 text-gray-400">...</span>`;
+                }
+            }
+
+            btns += `<button onclick="renderSearchPage(${page+1})" ${page===totalPages?'disabled':''}
+                class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
+                ${page===totalPages?'border-gray-200 text-gray-400 cursor-not-allowed':'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
+                <i class="fas fa-chevron-right"></i></button>`;
+
+            pag.innerHTML = btns;
         }
     </script>
 </body>
