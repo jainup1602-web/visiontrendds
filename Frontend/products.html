@@ -243,6 +243,9 @@
             <div id="all-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
                 <!-- Products will be loaded here by JavaScript -->
             </div>
+            <!-- Pagination -->
+            <div id="pagination-container" class="flex justify-center items-center gap-2 mt-12 max-w-6xl mx-auto hidden">
+            </div>
         </div>
     </section>
 
@@ -417,7 +420,10 @@
         let currentCategory = 'all';
         let currentSubcategory = 'all';
         let allProducts = [];
-        let productsData = {}; // Will be loaded from API
+        let productsData = {};
+        let currentPage = 1;
+        const PRODUCTS_PER_PAGE = 12;
+        let currentFilteredProducts = [];
 
         // Initialize products from API
         async function initProducts() {
@@ -590,13 +596,13 @@
             displayProducts(filteredProducts);
         }
 
-        // Display products in grid
-        function displayProducts(products) {
+        // Display products in grid with pagination
+        function displayProducts(products, page = 1) {
+            currentFilteredProducts = products;
+            currentPage = page;
             const container = document.getElementById('all-products');
-            if (!container) {
-                console.error('Products container not found');
-                return;
-            }
+            const paginationContainer = document.getElementById('pagination-container');
+            if (!container) return;
 
             if (products.length === 0) {
                 container.innerHTML = `
@@ -612,13 +618,66 @@
                         </button>
                     </div>
                 `;
+                paginationContainer.classList.add('hidden');
                 return;
             }
 
-            container.innerHTML = products.map(product => createProductCard(product)).join('');
-            
-            // Add click events to product cards
+            const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
+            const start = (page - 1) * PRODUCTS_PER_PAGE;
+            const end = start + PRODUCTS_PER_PAGE;
+            const pageProducts = products.slice(start, end);
+
+            container.innerHTML = pageProducts.map(product => createProductCard(product)).join('');
             addProductClickEvents();
+
+            // Scroll to top of products
+            if (page > 1) {
+                container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // Render pagination
+            if (totalPages <= 1) {
+                paginationContainer.classList.add('hidden');
+                return;
+            }
+
+            paginationContainer.classList.remove('hidden');
+            let btns = '';
+
+            // Prev button
+            btns += `<button onclick="goToPage(${page - 1})" ${page === 1 ? 'disabled' : ''}
+                class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
+                ${page === 1 ? 'border-gray-200 text-gray-400 cursor-not-allowed' : 'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
+                <i class="fas fa-chevron-left"></i>
+            </button>`;
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= page - 1 && i <= page + 1)) {
+                    btns += `<button onclick="goToPage(${i})"
+                        class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
+                        ${i === page ? 'bg-vision-red border-vision-red text-white' : 'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
+                        ${i}
+                    </button>`;
+                } else if (i === page - 2 || i === page + 2) {
+                    btns += `<span class="px-2 py-2 text-gray-400">...</span>`;
+                }
+            }
+
+            // Next button
+            btns += `<button onclick="goToPage(${page + 1})" ${page === totalPages ? 'disabled' : ''}
+                class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
+                ${page === totalPages ? 'border-gray-200 text-gray-400 cursor-not-allowed' : 'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
+                <i class="fas fa-chevron-right"></i>
+            </button>`;
+
+            paginationContainer.innerHTML = btns;
+        }
+
+        function goToPage(page) {
+            const totalPages = Math.ceil(currentFilteredProducts.length / PRODUCTS_PER_PAGE);
+            if (page < 1 || page > totalPages) return;
+            displayProducts(currentFilteredProducts, page);
         }
 
         // Create product card HTML
