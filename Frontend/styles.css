@@ -3830,9 +3830,21 @@ img[src$="10.png"]:hover {
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 16px !important;
     margin-top: 15px !important;
+}
+
+@media (min-width: 640px) {
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .products-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
 }
 
 /* Search results page specific image styling for all screen sizes */
@@ -3880,7 +3892,7 @@ img[src$="10.png"]:hover {
     }
     
     .products-grid {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 16px !important;
     }
     
