@@ -18,6 +18,23 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css?v=11">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'vision-red': '#8B1538',
+                        'vision-burgundy': '#6B1229',
+                        'vision-gold': '#D4AF37',
+                        'vision-cream': '#F8F6F0',
+                        'vision-dark': '#2C1810'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- Header -->
@@ -196,9 +213,9 @@
             </div>
             
             <!-- Results Grid -->
-            <div id="search-results-grid" class="products-grid"></div>
+            <div id="search-results-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto"></div>
             <!-- Pagination -->
-            <div id="search-pagination" class="flex justify-center items-center flex-wrap gap-2 mt-12 pb-8 hidden"></div>
+            <div id="search-pagination" class="flex justify-center items-center flex-wrap gap-2 mt-10 pb-8 hidden"></div>
         </div>
     </section>
 
@@ -422,24 +439,25 @@
             pag.classList.remove('hidden');
 
             let btns = `<button onclick="renderSearchPage(${page-1})" ${page===1?'disabled':''}
-                class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
-                ${page===1?'border-gray-200 text-gray-400 cursor-not-allowed':'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
-                <i class="fas fa-chevron-left"></i></button>`;
+                style="padding:8px 14px;border-radius:8px;border:2px solid ${page===1?'#ddd':'#8B1538'};
+                color:${page===1?'#aaa':'#8B1538'};background:white;font-weight:600;font-size:14px;cursor:${page===1?'not-allowed':'pointer'};">
+                &#8249;</button>`;
 
             for (let i = 1; i <= totalPages; i++) {
                 if (i===1||i===totalPages||(i>=page-1&&i<=page+1)) {
                     btns += `<button onclick="renderSearchPage(${i})"
-                        class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
-                        ${i===page?'bg-vision-red border-vision-red text-white':'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">${i}</button>`;
+                        style="padding:8px 14px;border-radius:8px;border:2px solid #8B1538;
+                        background:${i===page?'#8B1538':'white'};color:${i===page?'white':'#8B1538'};
+                        font-weight:600;font-size:14px;cursor:pointer;min-width:40px;">${i}</button>`;
                 } else if (i===page-2||i===page+2) {
-                    btns += `<span class="px-2 py-2 text-gray-400">...</span>`;
+                    btns += `<span style="padding:8px 4px;color:#999;font-size:14px;">...</span>`;
                 }
             }
 
             btns += `<button onclick="renderSearchPage(${page+1})" ${page===totalPages?'disabled':''}
-                class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
-                ${page===totalPages?'border-gray-200 text-gray-400 cursor-not-allowed':'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
-                <i class="fas fa-chevron-right"></i></button>`;
+                style="padding:8px 14px;border-radius:8px;border:2px solid ${page===totalPages?'#ddd':'#8B1538'};
+                color:${page===totalPages?'#aaa':'#8B1538'};background:white;font-weight:600;font-size:14px;cursor:${page===totalPages?'not-allowed':'pointer'};">
+                &#8250;</button>`;
 
             pag.innerHTML = btns;
         }
