@@ -254,12 +254,14 @@
             }
         }
 
-        // ID prefix mapping
+        // ID prefix mapping - complete
         const ID_PREFIXES = {
             'mens': {
                 'shirts': 'ms',
                 'cordsets': 'mc',
-                'kurta': 'mk'
+                'kurta': 'mk',
+                'jacket_sets': 'mj',
+                'short_kurta': 'msk'
             },
             'womens': {
                 'kurtis': 'wk',
@@ -267,18 +269,42 @@
                 'cordsets': 'wc',
                 'dupatta_suits': 'wds',
                 'anarkali': 'wa',
-                'shirts': 'ws'
+                'shirts': 'ws',
+                'meedees': 'wm',
+                'jumpsuits': 'wj',
+                'dresses': 'wd',
+                'pant_sets': 'wps',
+                'lounge_wear': 'wlw',
+                'heavy_suits': 'whs',
+                'quilted_jackets': 'wqj'
             },
             'kids': {
-                'night_suits': 'bns',
+                'night_suits': 'kns',
                 'cordsets': 'kc',
-                'sharara': 'gs',
-                'frok': 'gf',
-                'lehnga_choli': 'gd',
-                'lounge_wear': 'gu'
+                'sharara': 'ksh',
+                'frok': 'kf',
+                'lehnga_choli': 'klc',
+                'lounge_wear': 'klw',
+                'shirts': 'ks',
+                'kurta': 'kk',
+                'jacket_sets': 'kj',
+                'dhoti_kurta': 'kdk',
+                'kurtis': 'kku',
+                'pants': 'kp',
+                'anarkali': 'kan'
             },
             'bags': {
-                'block_print': 'bh'
+                'block_print': 'bg'
+            },
+            'bedsheets': {
+                'block_print': 'bs'
+            },
+            'accessories': {
+                'dupatta': 'ad',
+                'stole': 'ast',
+                'shawl': 'ash',
+                'cotton_pants': 'acp',
+                'cotton_skirts': 'acs'
             }
         };
 
@@ -294,7 +320,9 @@
                 return;
             }
 
-            const prefix = ID_PREFIXES[category]?.[subcategory] || 'p';
+            // Generate prefix from category+subcategory if not in mapping
+            const prefix = ID_PREFIXES[category]?.[subcategory] 
+                || (category.substring(0,1) + subcategory.replace(/_/g,'').substring(0,2));
             
             try {
                 // Get existing products with this prefix
@@ -317,9 +345,10 @@
                 document.getElementById('id-hint').textContent = `✓ Generated ID: ${newId}`;
                 document.getElementById('id-hint').classList.add('generated');
             } catch (error) {
-                console.error('Error generating ID:', error);
-                document.getElementById('product-id').value = prefix + '1';
-                document.getElementById('id-hint').textContent = `Generated ID: ${prefix}1 (default)`;
+                // Use timestamp suffix to avoid duplicates
+                const fallbackId = prefix + Date.now().toString().slice(-4);
+                document.getElementById('product-id').value = fallbackId;
+                document.getElementById('id-hint').textContent = `Generated ID: ${fallbackId}`;
                 document.getElementById('id-hint').classList.add('generated');
             }
         }
