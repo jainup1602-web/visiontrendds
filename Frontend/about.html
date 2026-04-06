@@ -278,7 +278,7 @@
                     <!-- Main Large Image -->
                     <div class="relative rounded-2xl overflow-hidden shadow-xl" style="height: 420px;">
                         <img id="gallery-main-img"
-                             src="product/gallery/g1.jpg"
+                             src="product/first.webp"
                              alt="Vision Trennds Gallery"
                              class="w-full h-full object-cover"
                              style="transition: opacity 0.25s ease;"
@@ -305,62 +305,30 @@
                         <!-- Thumbnails -->
                         <div>
                             <p class="text-sm font-semibold text-vision-red mb-3 uppercase tracking-wide">Click to explore</p>
-                            <div class="grid grid-cols-4 gap-3" id="gallery-thumbs">
+                            <div class="grid grid-cols-3 gap-3" id="gallery-thumbs">
                                 <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-vision-red shadow-md active-thumb"
-                                     onclick="switchGallery(0)"
-                                     style="height: 80px;">
-                                    <img src="product/gallery/g1.jpg" alt="Gallery 1"
-                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                                         onerror="this.src='product/color_logo.png'">
+                                     onclick="switchGallery(0)" style="height: 80px;">
+                                    <img src="product/first.webp" alt="Gallery 1" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                                 <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
-                                     onclick="switchGallery(1)"
-                                     style="height: 80px;">
-                                    <img src="product/gallery/g2.jpg" alt="Gallery 2"
-                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                                         onerror="this.src='product/color_logo.png'">
+                                     onclick="switchGallery(1)" style="height: 80px;">
+                                    <img src="product/2nd.webp" alt="Gallery 2" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                                 <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
-                                     onclick="switchGallery(2)"
-                                     style="height: 80px;">
-                                    <img src="product/gallery/g3.jpg" alt="Gallery 3"
-                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                                         onerror="this.src='product/color_logo.png'">
+                                     onclick="switchGallery(2)" style="height: 80px;">
+                                    <img src="product/3rd.webp" alt="Gallery 3" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                                 <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
-                                     onclick="switchGallery(3)"
-                                     style="height: 80px;">
-                                    <img src="product/gallery/g4.jpg" alt="Gallery 4"
-                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                                         onerror="this.src='product/color_logo.png'">
+                                     onclick="switchGallery(3)" style="height: 80px;">
+                                    <img src="product/4th.webp" alt="Gallery 4" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                                 <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
-                                     onclick="switchGallery(4)"
-                                     style="height: 80px;">
-                                    <img src="product/gallery/g5.jpg" alt="Gallery 5"
-                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                                         onerror="this.src='product/color_logo.png'">
+                                     onclick="switchGallery(4)" style="height: 80px;">
+                                    <img src="product/5th.webp" alt="Gallery 5" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                                 <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
-                                     onclick="switchGallery(5)"
-                                     style="height: 80px;">
-                                    <img src="product/gallery/g6.jpg" alt="Gallery 6"
-                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                                         onerror="this.src='product/color_logo.png'">
-                                </div>
-                                <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
-                                     onclick="switchGallery(6)"
-                                     style="height: 80px;">
-                                    <img src="product/gallery/g7.jpg" alt="Gallery 7"
-                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                                         onerror="this.src='product/color_logo.png'">
-                                </div>
-                                <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
-                                     onclick="switchGallery(7)"
-                                     style="height: 80px;">
-                                    <img src="product/gallery/g8.jpg" alt="Gallery 8"
-                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                                         onerror="this.src='product/color_logo.png'">
+                                     onclick="switchGallery(5)" style="height: 80px;">
+                                    <img src="product/6th.webp" alt="Gallery 6" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                             </div>
                         </div>
@@ -371,15 +339,13 @@
     </section>
 
     <script>
-        const galleryData = [
-            { img: 'product/gallery/g1.jpg', caption: 'Premium Ethnic Collection', sub: 'Handcrafted with love and tradition' },
-            { img: 'product/gallery/g2.jpg', caption: 'Women\'s Kurti Collection', sub: 'Elegant designs for every occasion' },
-            { img: 'product/gallery/g3.jpg', caption: 'Kids Wear Collection', sub: 'Comfortable and stylish kidswear' },
-            { img: 'product/gallery/g4.jpg', caption: 'Men\'s Ethnic Wear', sub: 'Classic kurtas and cord sets' },
-            { img: 'product/gallery/g5.jpg', caption: 'Block Print Collection', sub: 'Traditional Rajasthani craftsmanship' },
-            { img: 'product/gallery/g6.jpg', caption: 'Bags & Accessories', sub: 'Handcrafted block print bags' },
-            { img: 'product/gallery/g7.jpg', caption: 'Festive Collection', sub: 'Celebrate every occasion in style' },
-            { img: 'product/gallery/g8.jpg', caption: 'Premium Bed Sheets', sub: 'Luxury cotton for your home' }
+                const galleryData = [
+            { img: 'product/first.webp', caption: 'Premium Ethnic Collection', sub: 'Handcrafted with love and tradition' },
+            { img: 'product/2nd.webp', caption: 'Women\'s Kurti Collection', sub: 'Elegant designs for every occasion' },
+            { img: 'product/3rd.webp', caption: 'Kids Wear Collection', sub: 'Comfortable and stylish kidswear' },
+            { img: 'product/4th.webp', caption: 'Men\'s Ethnic Wear', sub: 'Classic kurtas and cord sets' },
+            { img: 'product/5th.webp', caption: 'Block Print Collection', sub: 'Traditional Rajasthani craftsmanship' },
+            { img: 'product/6th.webp', caption: 'Festive Collection', sub: 'Celebrate every occasion in style' }
         ];
 
         function switchGallery(index) {
