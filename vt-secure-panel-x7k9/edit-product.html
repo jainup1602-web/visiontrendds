@@ -368,9 +368,7 @@
             const subcategorySelect = document.getElementById('subcategory');
             subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
             
-            // Handle different subcategory formats
             if (Array.isArray(subcategories)) {
-                // Simple array format (mens, womens, bags, etc.)
                 subcategories.forEach(sub => {
                     const option = document.createElement('option');
                     option.value = sub;
@@ -378,30 +376,84 @@
                     subcategorySelect.appendChild(option);
                 });
             } else if (typeof subcategories === 'object' && subcategories !== null) {
-                // Object format (kids with boys/girls)
                 Object.keys(subcategories).forEach(gender => {
                     const genderGroup = document.createElement('optgroup');
                     genderGroup.label = gender.charAt(0).toUpperCase() + gender.slice(1);
-                    
                     subcategories[gender].forEach(sub => {
                         const option = document.createElement('option');
                         option.value = sub;
                         option.textContent = sub.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                         genderGroup.appendChild(option);
                     });
-                    
                     subcategorySelect.appendChild(genderGroup);
                 });
             }
             
-            // Show/hide kids age section
             const kidsAgeSection = document.getElementById('kidsAgeSection');
             if (categoryId && categoryId.toLowerCase().includes('kids')) {
                 kidsAgeSection.style.display = 'block';
             } else {
                 kidsAgeSection.style.display = 'none';
             }
+
+            // Auto-generate new ID when category changes
+            autoGenerateId();
         });
+
+        document.getElementById('subcategory').addEventListener('change', autoGenerateId);
+
+        // ID prefix mapping (same as add-product)
+        const ID_PREFIXES = {
+            'mens': { 'shirts':'ms','cordsets':'mc','kurta':'mk','jacket_sets':'mj','short_kurta':'msk' },
+            'womens': { 'kurtis':'wk','short_kurtis':'wsk','cordsets':'wc','dupatta_suits':'wds','anarkali':'wa','shirts':'ws','meedees':'wm','jumpsuits':'wj','dresses':'wd','pant_sets':'wps','lounge_wear':'wlw','heavy_suits':'whs','quilted_jackets':'wqj' },
+            'kids': { 'night_suits':'kns','cordsets':'kc','sharara':'ksh','frok':'kf','lehnga_choli':'klc','lounge_wear':'klw','shirts':'ks','kurta':'kk','jacket_sets':'kj','dhoti_kurta':'kdk','kurtis':'kku','pants':'kp','anarkali':'kan' },
+            'bags': { 'block_print':'bg' },
+            'bedsheets': { 'block_print':'bs' },
+            'accessories': { 'dupatta':'ad','stole':'ast','shawl':'ash','cotton_pants':'acp','cotton_skirts':'acs' }
+        };
+
+        async function autoGenerateId() {
+            const category = document.getElementById('category').value;
+            const subcategory = document.getElementById('subcategory').value;
+            if (!category || !subcategory) return;
+
+            const prefix = ID_PREFIXES[category]?.[subcategory]
+                || (category.substring(0,1) + subcategory.replace(/_/g,'').substring(0,2));
+
+            try {
+                const response = await fetch(`${API_URL}/products?category=${category}&subcategory=${subcategory}`);
+                const products = await response.json();
+
+                // Find highest number for this prefix
+                let maxNum = 0;
+                products.forEach(p => {
+                    if (p.productId && p.productId.startsWith(prefix)) {
+                        const num = parseInt(p.productId.replace(prefix, ''));
+                        if (!isNaN(num) && num > maxNum) maxNum = num;
+                    }
+                });
+
+                const newId = prefix + (maxNum + 1);
+
+                // Check if this new ID conflicts with current product being edited
+                const currentId = document.getElementById('product-id').value;
+                if (newId !== currentId) {
+                    // Verify it doesn't already exist
+                    const checkRes = await fetch(`${API_URL}/products/${newId}`);
+                    if (checkRes.status === 404) {
+                        document.getElementById('product-id').value = newId;
+                        document.getElementById('product-id').style.borderColor = '#28a745';
+                    } else {
+                        // ID exists, try next number
+                        document.getElementById('product-id').value = prefix + (maxNum + 2);
+                        document.getElementById('product-id').style.borderColor = '#28a745';
+                    }
+                }
+            } catch (err) {
+                // Fallback
+                document.getElementById('product-id').value = prefix + Date.now().toString().slice(-4);
+            }
+        }
 
         document.getElementById('product-form').addEventListener('submit', async (e) => {
             e.preventDefault();
