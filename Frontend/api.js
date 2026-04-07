@@ -129,21 +129,17 @@ const API = {
         }
     },
 
-    // Get categories
+    // Get categories - no cache so order changes reflect immediately
     async getCategories() {
         try {
-            if (_cache.categories) return _cache.categories;
             const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/categories`);
             if (!response.ok) throw new Error('Failed to fetch categories');
-            const data = await response.json();
-            _cache.categories = data;
-            return data;
+            return await response.json();
         } catch (error) {
             console.error('Error fetching categories:', error);
             return [];
         }
     },
-
     // Transform product from API format to Frontend format
     transformProduct(product) {
         // Get the correct image URL

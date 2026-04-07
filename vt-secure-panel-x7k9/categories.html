@@ -521,14 +521,18 @@
             const rows = document.querySelectorAll('#categories-tbody tr[data-id]');
             const order = Array.from(rows).map(r => r.dataset.id);
             try {
-                await fetch(`${API_URL}/categories/reorder`, {
+                const res = await fetch(`${API_URL}/categories/reorder`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ order })
                 });
-                showSuccessPopup('Order saved!');
+                if (res.ok) {
+                    showSuccessPopup('Order saved!');
+                } else {
+                    showErrorPopup('Failed to save order');
+                }
             } catch(e) {
-                showErrorPopup('Failed to save order');
+                showErrorPopup('Error: ' + e.message);
             }
         }
 
