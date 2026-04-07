@@ -417,6 +417,7 @@
             try {
                 // Load categories dynamically and build filter buttons
                 const categories = await API.getCategories();
+                categoriesData = categories;
                 buildCategoryButtons(categories);
 
                 productsData = await initializeProductsData();
@@ -467,60 +468,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             initProducts();
         });
-        const subcategoryLabels = {
-            mens: {
-                shirts: 'Shirts',
-                cordsets: 'Cord Sets',
-                kurta: 'Kurta',
-                jacket_sets: 'Jacket Sets',
-                short_kurta: 'Short Kurta'
-            },
-            womens: {
-                kurtis: 'Kurtis',
-                short_kurtis: 'Short Kurtis',
-                shirts: 'Shirts',
-                meedees: 'Meedees',
-                jumpsuits: 'Jumpsuits',
-                cordsets: 'Cord Sets',
-                dresses: 'Dresses',
-                dupatta_suits: 'Dupatta Suits',
-                pant_sets: 'Pant Sets',
-                lounge_wear: 'Lounge Wear',
-                anarkali: 'Anarkali',
-                heavy_suits: 'Heavy Suits',
-                quilted_jackets: 'Quilted Jackets'
-            },
-            kids: {
-                night_suits: 'Night Suits',
-                cordsets: 'Cord Sets',
-                shirts: 'Shirts',
-                kurta: 'Kurta',
-                jacket_sets: 'Jacket Sets',
-                dhoti_kurta: 'Dhoti Kurta',
-                sharara: 'Sharara',
-                lehnga_choli: 'Lehnga Choli',
-                kurtis: 'Kurtis',
-                pants: 'Pants',
-                lounge_wear: 'Lounge Wear',
-                frok: 'Frok',
-                anarkali: 'Anarkali',
-                ethnic: 'Ethnic',
-                chaniya_choli: 'Chaniya Choli'
-            },
-            bags: {
-                block_print: 'Block Print'
-            },
-            bedsheets: {
-                block_print: 'Block Print'
-            },
-            accessories: {
-                dupatta: 'Dupatta',
-                stole: 'Stole',
-                shawl: 'Shawl',
-                cotton_pants: 'Cotton Pants',
-                cotton_skirts: 'Cotton Skirts'
-            }
-        };
+        // Categories data from API - replaces hardcoded subcategoryLabels
+        let categoriesData = [];
 
         function showSubcategoryFilters(category) {
             const subcategoryFilter = document.getElementById('subcategory-filter');
@@ -538,20 +487,11 @@
                 return;
             }
             
-            let buttonsHTML = `
-                <button class="subcategory-btn bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-all duration-300 shadow active" data-subcategory="all">
-                    All ${category.charAt(0).toUpperCase() + category.slice(1)}
-                </button>
-            `;
+            let buttonsHTML = `<button class="subcategory-btn bg-vision-red text-white px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-vision-burgundy transition-all duration-300 shadow active" data-subcategory="all">All</button>`;
             
             subcategories.forEach(subcat => {
-                const label = (subcategoryLabels[category] && subcategoryLabels[category][subcat])
-                    || subcat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                buttonsHTML += `
-                    <button class="subcategory-btn bg-white text-vision-red border-2 border-vision-red px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow" data-subcategory="${subcat}">
-                        ${label}
-                    </button>
-                `;
+                const label = subcat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                buttonsHTML += `<button class="subcategory-btn bg-white text-vision-red border border-vision-red px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow" data-subcategory="${subcat}">${label}</button>`;
             });
             
             subcategoryButtons.innerHTML = buttonsHTML;
@@ -561,22 +501,22 @@
                 btn.addEventListener('click', function() {
                     const subcategory = this.getAttribute('data-subcategory');
                     filterBySubcategory(subcategory);
-                    
                     document.querySelectorAll('.subcategory-btn').forEach(b => {
                         b.classList.remove('active', 'bg-vision-red', 'text-white');
-                        b.classList.add('bg-white', 'text-vision-red', 'border-2', 'border-vision-red');
+                        b.classList.add('bg-white', 'text-vision-red');
                     });
                     this.classList.add('active', 'bg-vision-red', 'text-white');
-                    this.classList.remove('bg-white', 'text-vision-red', 'border-2', 'border-vision-red');
+                    this.classList.remove('bg-white', 'text-vision-red');
                 });
             });
         }
         
-        // Get subcategories for a category - always from labels, not just from products
+        // Get subcategories from DB categories data
         function getSubcategoriesForCategory(category) {
-            // Use predefined labels - show all subcategories regardless of products
-            if (subcategoryLabels[category]) {
-                return Object.keys(subcategoryLabels[category]);
+            // First try from API categories data
+            const cat = categoriesData.find(c => c.id === category);
+            if (cat && cat.subcategories && cat.subcategories.length > 0) {
+                return Array.isArray(cat.subcategories) ? cat.subcategories : Object.keys(cat.subcategories);
             }
             // Fallback: from actual products data
             if (!productsData[category]) return [];
