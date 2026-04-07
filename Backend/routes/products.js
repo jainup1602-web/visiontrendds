@@ -47,7 +47,28 @@ router.post('/', async (req, res) => {
 // Update product
 router.put('/:id', async (req, res) => {
     try {
-        const product = await Product.update(req.params.id, req.body);
+        const oldId = req.params.id;
+        const newId = req.body.productId;
+
+        // If ID is being changed
+        if (newId && newId !== oldId) {
+            // Check new ID doesn't already exist
+            const existing = await Product.findByProductId(newId);
+            if (existing) {
+                return res.status(400).json({ message: `Product ID "${newId}" already exists` });
+            }
+            // Get old product data, merge with new data
+            const oldProduct = await Product.findByProductId(oldId);
+            if (!oldProduct) return res.status(404).json({ message: 'Product not found' });
+
+            const newProductData = { ...oldProduct, ...req.body, productId: newId };
+            await Product.create(newProductData);
+            await Product.delete(oldId);
+            const updated = await Product.findByProductId(newId);
+            return res.json(updated);
+        }
+
+        const product = await Product.update(oldId, req.body);
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
