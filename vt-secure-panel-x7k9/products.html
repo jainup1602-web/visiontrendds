@@ -73,6 +73,8 @@
                 <tbody id="products-tbody">
                 </tbody>
             </table>
+            <!-- Pagination -->
+            <div id="admin-pagination" style="display:flex;justify-content:center;align-items:center;gap:6px;padding:16px 0;flex-wrap:wrap;"></div>
         </div>
     </div>
 
@@ -119,6 +121,9 @@
     <script>
         let allProducts = [];
         let deleteProductId = null;
+        let currentPage = 1;
+        const PAGE_SIZE = 30;
+        let filteredProducts = [];
 
         // Popup functions
         function showSuccessPopup(message) {
