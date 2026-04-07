@@ -145,11 +145,20 @@
 
                     <!-- Age-wise Pricing -->
                     <div class="form-group">
-                        <label style="display:flex; align-items:center; justify-content:space-between;">
+                        <label style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
                             <span>Age-wise Pricing <small style="color:#666; font-weight:normal;">(price changes with age)</small></span>
-                            <button type="button" onclick="addAgePricingRow()" class="btn btn-primary" style="padding:5px 12px; font-size:0.85rem;">
-                                <i class="fas fa-plus"></i> Add Age
-                            </button>
+                            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                                <div style="display:flex; gap:4px; align-items:center;">
+                                    <input type="text" id="copyFromProductId" placeholder="Product ID (e.g. kns1)"
+                                        class="form-control" style="width:140px; padding:5px 8px; font-size:0.85rem;">
+                                    <button type="button" onclick="copyAgePricingFrom()" class="btn btn-secondary" style="padding:5px 10px; font-size:0.85rem; white-space:nowrap;">
+                                        <i class="fas fa-copy"></i> Copy
+                                    </button>
+                                </div>
+                                <button type="button" onclick="addAgePricingRow()" class="btn btn-primary" style="padding:5px 12px; font-size:0.85rem;">
+                                    <i class="fas fa-plus"></i> Add Age
+                                </button>
+                            </div>
                         </label>
                         <div id="agePricingRows" style="margin-top:8px;">
                             <!-- rows added dynamically -->
@@ -350,6 +359,36 @@
                 document.getElementById('product-id').value = fallbackId;
                 document.getElementById('id-hint').textContent = `Generated ID: ${fallbackId}`;
                 document.getElementById('id-hint').classList.add('generated');
+            }
+        }
+
+        // Copy age pricing from existing product
+        async function copyAgePricingFrom() {
+            const productId = document.getElementById('copyFromProductId').value.trim();
+            if (!productId) { alert('Please enter a Product ID'); return; }
+
+            try {
+                const response = await fetch(`${API_URL}/products/${productId}`);
+                if (!response.ok) { alert('Product not found: ' + productId); return; }
+                const product = await response.json();
+
+                if (!product.agePricing || Object.keys(product.agePricing).length === 0) {
+                    alert('This product has no age pricing data');
+                    return;
+                }
+
+                // Clear existing rows
+                document.getElementById('agePricingRows').innerHTML = '';
+
+                // Fill rows from copied product
+                Object.entries(product.agePricing).forEach(([age, data]) => {
+                    addAgePricingRow(age, data.price || '', data.size || '');
+                });
+
+                document.getElementById('copyFromProductId').value = '';
+                alert(`✓ Copied ${Object.keys(product.agePricing).length} age rows from "${product.name}"`);
+            } catch (err) {
+                alert('Error fetching product: ' + err.message);
             }
         }
 
