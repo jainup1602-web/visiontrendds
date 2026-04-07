@@ -353,13 +353,15 @@
             }
         }
 
-        // Age Pricing rows
+        // Age Pricing rows with drag-to-reorder
         function addAgePricingRow(age = '', price = '', size = '') {
             const container = document.getElementById('agePricingRows');
             const row = document.createElement('div');
             row.className = 'age-pricing-row';
-            row.style.cssText = 'display:flex; gap:8px; align-items:center; margin-bottom:8px;';
+            row.draggable = true;
+            row.style.cssText = 'display:flex; gap:8px; align-items:center; margin-bottom:8px; cursor:default;';
             row.innerHTML = `
+                <span class="drag-handle" style="cursor:grab; color:#aaa; font-size:18px; padding:0 4px; user-select:none;" title="Drag to reorder">⠿</span>
                 <input type="text" placeholder="Age (e.g. 2-3)" value="${age}"
                     class="form-control age-key" style="flex:1; min-width:90px;">
                 <input type="number" placeholder="Price (₹)" value="${price}"
@@ -372,6 +374,44 @@
                 </button>
             `;
             container.appendChild(row);
+            initDragRow(row);
+        }
+
+        // Drag-to-reorder logic
+        let dragSrc = null;
+        function initDragRow(row) {
+            row.addEventListener('dragstart', function(e) {
+                dragSrc = this;
+                this.style.opacity = '0.4';
+                e.dataTransfer.effectAllowed = 'move';
+            });
+            row.addEventListener('dragend', function() {
+                this.style.opacity = '1';
+                document.querySelectorAll('.age-pricing-row').forEach(r => r.style.border = '');
+            });
+            row.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                this.style.border = '2px dashed #8B1538';
+            });
+            row.addEventListener('dragleave', function() {
+                this.style.border = '';
+            });
+            row.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.border = '';
+                if (dragSrc !== this) {
+                    const container = document.getElementById('agePricingRows');
+                    const rows = Array.from(container.querySelectorAll('.age-pricing-row'));
+                    const srcIdx = rows.indexOf(dragSrc);
+                    const tgtIdx = rows.indexOf(this);
+                    if (srcIdx < tgtIdx) {
+                        container.insertBefore(dragSrc, this.nextSibling);
+                    } else {
+                        container.insertBefore(dragSrc, this);
+                    }
+                }
+            });
         }
 
         function getAgePricingData() {

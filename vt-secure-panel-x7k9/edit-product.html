@@ -297,41 +297,40 @@
                 // Show existing image if available
                 if (product.images && product.images.length > 0 && product.images[0]) {
                     uploadedImagePath = product.images[0];
-                    console.log('Existing image type:', uploadedImagePath.startsWith('data:') ? 'Base64' : 'Path');
                     
-                    // Check if it's Base64 data URL or file path
                     if (uploadedImagePath.startsWith('data:')) {
                         // Base64 image - use directly
                         document.getElementById('previewImg').src = uploadedImagePath;
                     } else if (uploadedImagePath.startsWith('/uploads')) {
-                        // Old file path format - convert to server URL
+                        // Old file path format
                         document.getElementById('previewImg').src = `${BACKEND_URL}${uploadedImagePath}`;
+                    } else if (uploadedImagePath.startsWith('http')) {
+                        // Full URL
+                        document.getElementById('previewImg').src = uploadedImagePath;
                     } else {
-                        // Local frontend path
-                        document.getElementById('previewImg').src = `../Frontend/${uploadedImagePath}`;
+                        // Local frontend path (e.g. product/kids/1.webp) - show from FRONTEND_BASE
+                        document.getElementById('previewImg').src = `${FRONTEND_BASE}/${uploadedImagePath}`;
                     }
                     document.getElementById('previewImg').style.display = 'block';
                     document.getElementById('removeImageBtn').style.display = 'block';
-                } else {
-                    console.log('No existing image');
                 }
 
                 await loadCategories();
                 document.getElementById('category').value = product.category || '';
                 
-                // Trigger category change
-                const event = new Event('change');
-                document.getElementById('category').dispatchEvent(event);
+                // Trigger category change to populate subcategories, then set subcategory value
+                const categorySelect = document.getElementById('category');
+                const changeEvent = new Event('change');
+                categorySelect.dispatchEvent(changeEvent);
                 
-                setTimeout(() => {
-                    document.getElementById('subcategory').value = product.subcategory || '';
-                    
-                    // Show kids age section if category is kids
-                    const categoryId = document.getElementById('category').value;
-                    if (categoryId && categoryId.toLowerCase().includes('kids')) {
-                        document.getElementById('kidsAgeSection').style.display = 'block';
-                    }
-                }, 100);
+                // Wait for subcategory options to be populated, then set value
+                await new Promise(resolve => setTimeout(resolve, 200));
+                document.getElementById('subcategory').value = product.subcategory || '';
+                
+                // Show kids age section if category is kids
+                if (product.category && product.category.toLowerCase().includes('kids')) {
+                    document.getElementById('kidsAgeSection').style.display = 'block';
+                }
 
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('form-container').style.display = 'block';
@@ -459,16 +458,15 @@
                 });
 
                 if (response.ok) {
-                    console.log('Product updated successfully');
-                    // Keep image preview visible after update
                     if (uploadedImagePath) {
                         if (uploadedImagePath.startsWith('data:')) {
-                            // Base64 image
                             document.getElementById('previewImg').src = uploadedImagePath;
                         } else if (uploadedImagePath.startsWith('/uploads')) {
                             document.getElementById('previewImg').src = `${BACKEND_URL}${uploadedImagePath}`;
+                        } else if (uploadedImagePath.startsWith('http')) {
+                            document.getElementById('previewImg').src = uploadedImagePath;
                         } else {
-                            document.getElementById('previewImg').src = `../Frontend/${uploadedImagePath}`;
+                            document.getElementById('previewImg').src = `${FRONTEND_BASE}/${uploadedImagePath}`;
                         }
                         document.getElementById('previewImg').style.display = 'block';
                         document.getElementById('removeImageBtn').style.display = 'block';
@@ -503,13 +501,15 @@
             document.getElementById('errorPopup').classList.remove('show');
         }
 
-        // Age Pricing rows
+        // Age Pricing rows with drag-to-reorder
         function addAgePricingRow(age = '', price = '', size = '') {
             const container = document.getElementById('agePricingRows');
             const row = document.createElement('div');
             row.className = 'age-pricing-row';
-            row.style.cssText = 'display:flex; gap:8px; align-items:center; margin-bottom:8px;';
+            row.draggable = true;
+            row.style.cssText = 'display:flex; gap:8px; align-items:center; margin-bottom:8px; cursor:default;';
             row.innerHTML = `
+                <span class="drag-handle" style="cursor:grab; color:#aaa; font-size:18px; padding:0 4px; user-select:none;" title="Drag to reorder">⠿</span>
                 <input type="text" placeholder="Age (e.g. 2-3)" value="${age}"
                     class="form-control age-key" style="flex:1; min-width:90px;">
                 <input type="number" placeholder="Price (₹)" value="${price}"
@@ -522,6 +522,43 @@
                 </button>
             `;
             container.appendChild(row);
+            initDragRow(row);
+        }
+
+        let dragSrc = null;
+        function initDragRow(row) {
+            row.addEventListener('dragstart', function(e) {
+                dragSrc = this;
+                this.style.opacity = '0.4';
+                e.dataTransfer.effectAllowed = 'move';
+            });
+            row.addEventListener('dragend', function() {
+                this.style.opacity = '1';
+                document.querySelectorAll('.age-pricing-row').forEach(r => r.style.border = '');
+            });
+            row.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                this.style.border = '2px dashed #8B1538';
+            });
+            row.addEventListener('dragleave', function() {
+                this.style.border = '';
+            });
+            row.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.border = '';
+                if (dragSrc !== this) {
+                    const container = document.getElementById('agePricingRows');
+                    const rows = Array.from(container.querySelectorAll('.age-pricing-row'));
+                    const srcIdx = rows.indexOf(dragSrc);
+                    const tgtIdx = rows.indexOf(this);
+                    if (srcIdx < tgtIdx) {
+                        container.insertBefore(dragSrc, this.nextSibling);
+                    } else {
+                        container.insertBefore(dragSrc, this);
+                    }
+                }
+            });
         }
 
         function getAgePricingData() {
