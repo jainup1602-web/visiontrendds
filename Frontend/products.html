@@ -204,7 +204,7 @@
     <section class="py-12 bg-vision-light">
         <div class="container mx-auto">
             <!-- Main Category Filter - dynamically loaded -->
-            <div id="category-filter-buttons" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
+            <div id="category-filter-buttons" class="flex flex-wrap justify-center gap-2 max-w-6xl mx-auto">
                 <button class="filter-btn bg-vision-red text-white px-6 py-4 rounded-full font-semibold hover:bg-vision-burgundy transition-all duration-300 shadow-lg active text-sm whitespace-nowrap" data-category="all">
                     All Products
                 </button>
@@ -435,11 +435,10 @@
             const container = document.getElementById('category-filter-buttons');
             if (!container || !categories.length) return;
 
-            // Keep "All Products" button, add rest from API
-            let btns = `<button class="filter-btn bg-vision-red text-white px-6 py-4 rounded-full font-semibold hover:bg-vision-burgundy transition-all duration-300 shadow-lg active text-sm whitespace-nowrap" data-category="all">All Products</button>`;
+            let btns = `<button class="filter-btn bg-vision-red text-white px-4 py-2 rounded-full font-semibold hover:bg-vision-burgundy transition-all duration-300 shadow-lg text-xs whitespace-nowrap active" data-category="all">All Products</button>`;
 
             categories.forEach(cat => {
-                btns += `<button class="filter-btn bg-white text-vision-red border-2 border-vision-red px-6 py-4 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow-lg text-sm whitespace-nowrap" data-category="${cat.id}">${cat.displayName}</button>`;
+                btns += `<button class="filter-btn bg-white text-vision-red border-2 border-vision-red px-4 py-2 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow-lg text-xs whitespace-nowrap" data-category="${cat.id}">${cat.displayName}</button>`;
             });
 
             container.innerHTML = btns;
@@ -504,7 +503,9 @@
                 pants: 'Pants',
                 lounge_wear: 'Lounge Wear',
                 frok: 'Frok',
-                anarkali: 'Anarkali'
+                anarkali: 'Anarkali',
+                ethnic: 'Ethnic',
+                chaniya_choli: 'Chaniya Choli'
             },
             bags: {
                 block_print: 'Block Print'
