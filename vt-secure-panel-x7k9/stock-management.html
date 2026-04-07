@@ -190,6 +190,12 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label>Filter by Subcategory</label>
+                    <select id="filter-subcategory" class="form-control">
+                        <option value="">All Subcategories</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>Search Products</label>
                     <input type="text" id="search-input" class="form-control" placeholder="Search by title or ID...">
                 </div>
@@ -218,6 +224,7 @@
                 <tbody id="stock-tbody">
                 </tbody>
             </table>
+            <div id="stock-pagination" style="display:flex;justify-content:center;align-items:center;gap:6px;padding:16px 0;flex-wrap:wrap;"></div>
         </div>
     </div>
 
@@ -249,6 +256,9 @@
     <script>
         let allProducts = [];
         let currentFilter = 'all';
+        let stockFiltered = [];
+        let stockPage = 1;
+        const STOCK_PAGE_SIZE = 30;
 
         // Popup functions
         function showSuccessPopup(message) {
@@ -304,88 +314,104 @@
             try {
                 const response = await fetch(`${API_URL}/categories`);
                 const categories = await response.json();
-                
                 const select = document.getElementById('filter-category');
                 categories.forEach(cat => {
                     const option = document.createElement('option');
                     option.value = cat.id;
                     option.textContent = cat.displayName;
+                    option.dataset.subcategories = JSON.stringify(cat.subcategories || []);
                     select.appendChild(option);
                 });
-            } catch (error) {
-                console.error('Error loading categories:', error);
-            }
+            } catch (error) {}
         }
 
+        document.getElementById('filter-category').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const subcategories = JSON.parse(selectedOption.dataset.subcategories || '[]');
+            const subSelect = document.getElementById('filter-subcategory');
+            subSelect.innerHTML = '<option value="">All Subcategories</option>';
+            if (Array.isArray(subcategories)) {
+                subcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    subSelect.appendChild(opt);
+                });
+            }
+            applyFilters();
+        });
+
         function displayProducts(products) {
+            stockFiltered = products;
+            renderStockPage(1);
+        }
+
+        function renderStockPage(page) {
+            stockPage = page;
+            const total = stockFiltered.length;
+            const totalPages = Math.ceil(total / STOCK_PAGE_SIZE);
+            const pageItems = stockFiltered.slice((page-1)*STOCK_PAGE_SIZE, page*STOCK_PAGE_SIZE);
+
             const tbody = document.getElementById('stock-tbody');
-            tbody.innerHTML = products.map(product => {
+            tbody.innerHTML = pageItems.map(product => {
                 let imageSrc = `${FRONTEND_BASE}/product/color_logo.png`;
                 if (product.images && product.images.length > 0 && product.images[0]) {
                     const imagePath = product.images[0];
-                    if (imagePath.startsWith('data:')) {
-                        imageSrc = imagePath;
-                    } else if (imagePath.startsWith('/uploads')) {
-                        imageSrc = `${BACKEND_URL}${imagePath}`;
-                    } else {
-                        imageSrc = `${FRONTEND_BASE}/${imagePath}`;
-                    }
+                    if (imagePath.startsWith('data:')) imageSrc = imagePath;
+                    else if (imagePath.startsWith('/uploads')) imageSrc = `${BACKEND_URL}${imagePath}`;
+                    else imageSrc = `${FRONTEND_BASE}/${imagePath}`;
                 }
 
                 const outOfStockSizes = product.outOfStockSizes || [];
                 const sizes = product.sizes || [];
                 const agePricing = product.agePricing || null;
 
-                // For age-based products, show age buttons; otherwise size buttons
                 let stockBtns = '';
                 if (agePricing && Object.keys(agePricing).length > 0) {
-                    // Age-based stock
                     stockBtns = Object.keys(agePricing).map(age => {
                         const isOOS = outOfStockSizes.includes(age);
                         return `<button onclick="toggleSizeStock('${product.productId}', '${age}', ${isOOS})"
-                            style="padding:3px 10px; margin:2px; border-radius:6px; border:1px solid #8B0000; font-size:0.8rem; cursor:pointer;
-                            background:${isOOS ? '#dc3545' : '#28a745'}; color:white; font-weight:600;"
-                            title="${isOOS ? 'Click to mark In Stock' : 'Click to mark Out of Stock'}">
-                            ${age}Y ${isOOS ? '✗' : '✓'}
-                        </button>`;
+                            style="padding:3px 10px;margin:2px;border-radius:6px;border:1px solid #8B0000;font-size:0.8rem;cursor:pointer;
+                            background:${isOOS?'#dc3545':'#28a745'};color:white;font-weight:600;">
+                            ${age}Y ${isOOS?'✗':'✓'}</button>`;
                     }).join('');
                 } else if (sizes.length > 0) {
-                    // Size-based stock
                     stockBtns = sizes.map(size => {
                         const isOOS = outOfStockSizes.includes(size);
                         return `<button onclick="toggleSizeStock('${product.productId}', '${size}', ${isOOS})"
-                            style="padding:3px 10px; margin:2px; border-radius:6px; border:1px solid #8B0000; font-size:0.8rem; cursor:pointer;
-                            background:${isOOS ? '#dc3545' : '#28a745'}; color:white; font-weight:600;"
-                            title="${isOOS ? 'Click to mark In Stock' : 'Click to mark Out of Stock'}">
-                            ${size} ${isOOS ? '✗' : '✓'}
-                        </button>`;
+                            style="padding:3px 10px;margin:2px;border-radius:6px;border:1px solid #8B0000;font-size:0.8rem;cursor:pointer;
+                            background:${isOOS?'#dc3545':'#28a745'};color:white;font-weight:600;">
+                            ${size} ${isOOS?'✗':'✓'}</button>`;
                     }).join('');
                 } else {
-                    stockBtns = '<span style="color:#999; font-size:0.8rem;">No sizes/ages</span>';
+                    stockBtns = '<span style="color:#999;font-size:0.8rem;">No sizes/ages</span>';
                 }
-                
-                return `
-                <tr>
+
+                return `<tr>
                     <td><img src="${imageSrc}" class="product-img" alt="${product.name}" onerror="this.src='${FRONTEND_BASE}/product/color_logo.png'"></td>
                     <td>${product.productId}</td>
                     <td>${product.name}</td>
                     <td>${product.category}</td>
                     <td>₹${product.price}</td>
-                    <td>
-                        <span class="badge ${product.inStock ? 'badge-success' : 'badge-danger'}">
-                            ${product.inStock ? 'In Stock' : 'Out of Stock'}
-                        </span>
-                    </td>
-                    <td>
-                        <label class="stock-toggle">
-                            <input type="checkbox" ${product.inStock ? 'checked' : ''} onchange="toggleStock('${product.productId}', this.checked)">
-                            <span class="stock-slider"></span>
-                        </label>
-                    </td>
+                    <td><span class="badge ${product.inStock?'badge-success':'badge-danger'}">${product.inStock?'In Stock':'Out of Stock'}</span></td>
+                    <td><label class="stock-toggle"><input type="checkbox" ${product.inStock?'checked':''} onchange="toggleStock('${product.productId}', this.checked)"><span class="stock-slider"></span></label></td>
                     <td style="min-width:150px;">${stockBtns}</td>
-                </tr>
-                `;
+                </tr>`;
             }).join('');
+
+            // Pagination
+            const pag = document.getElementById('stock-pagination');
+            if (totalPages <= 1) { pag.innerHTML = `<span style="font-size:13px;color:#666;">${total} products</span>`; return; }
+            const s = (a) => `padding:6px 12px;border-radius:6px;border:2px solid #8B1538;font-weight:600;font-size:13px;cursor:pointer;background:${a?'#8B1538':'white'};color:${a?'white':'#8B1538'};`;
+            const d = `padding:6px 12px;border-radius:6px;border:2px solid #ddd;font-weight:600;font-size:13px;cursor:not-allowed;background:white;color:#aaa;`;
+            let btns = `<button onclick="renderStockPage(${page-1})" ${page===1?'disabled':''} style="${page===1?d:s(false)}">&#8249;</button>`;
+            for (let i=1;i<=totalPages;i++) {
+                if (i===1||i===totalPages||(i>=page-1&&i<=page+1)) btns+=`<button onclick="renderStockPage(${i})" style="${s(i===page)}">${i}</button>`;
+                else if (i===page-2||i===page+2) btns+=`<span style="padding:6px 4px;color:#999;">...</span>`;
+            }
+            btns += `<button onclick="renderStockPage(${page+1})" ${page===totalPages?'disabled':''} style="${page===totalPages?d:s(false)}">&#8250;</button>`;
+            btns += `<span style="font-size:13px;color:#666;margin-left:8px;">${total} products</span>`;
+            pag.innerHTML = btns;
         }
 
         // Toggle size-wise stock
@@ -505,34 +531,21 @@
         // Apply all filters
         function applyFilters() {
             const category = document.getElementById('filter-category').value;
+            const subcategory = document.getElementById('filter-subcategory').value;
             const search = document.getElementById('search-input').value.toLowerCase();
 
             let filtered = allProducts;
-
-            // Stock filter
-            if (currentFilter === 'in-stock') {
-                filtered = filtered.filter(p => p.inStock);
-            } else if (currentFilter === 'out-of-stock') {
-                filtered = filtered.filter(p => !p.inStock);
-            }
-
-            // Category filter
-            if (category) {
-                filtered = filtered.filter(p => p.category === category);
-            }
-
-            // Search filter
-            if (search) {
-                filtered = filtered.filter(p => 
-                    p.name.toLowerCase().includes(search) || 
-                    p.productId.toLowerCase().includes(search)
-                );
-            }
+            if (currentFilter === 'in-stock') filtered = filtered.filter(p => p.inStock);
+            else if (currentFilter === 'out-of-stock') filtered = filtered.filter(p => !p.inStock);
+            if (category) filtered = filtered.filter(p => p.category === category);
+            if (subcategory) filtered = filtered.filter(p => p.subcategory === subcategory);
+            if (search) filtered = filtered.filter(p => p.name.toLowerCase().includes(search) || p.productId.toLowerCase().includes(search));
 
             displayProducts(filtered);
         }
 
         // Event listeners
+        document.getElementById('filter-subcategory').addEventListener('change', applyFilters);
         document.getElementById('filter-category').addEventListener('change', applyFilters);
         document.getElementById('search-input').addEventListener('input', applyFilters);
 
