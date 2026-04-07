@@ -278,16 +278,11 @@
                     <!-- Main Large Image -->
                     <div class="relative rounded-2xl overflow-hidden shadow-xl" style="height: 420px;">
                         <img id="gallery-main-img"
-                             src="product/first.webp"
-                             alt="Vision Trennds Gallery"
+                             src="product/1.webp"
+                             alt="Vision Trennds"
                              class="w-full h-full object-cover"
                              style="transition: opacity 0.25s ease;"
                              onerror="this.src='product/color_logo.png'">
-                        <div id="gallery-main-caption"
-                             class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                            <p id="gallery-caption-text" class="text-white font-serif text-lg font-semibold">Premium Ethnic Collection</p>
-                            <p id="gallery-caption-sub" class="text-white/80 text-sm mt-1">Handcrafted with love and tradition</p>
-                        </div>
                     </div>
 
                     <!-- Right: Description + Thumbnails -->
@@ -306,29 +301,29 @@
                         <div>
                             <p class="text-sm font-semibold text-vision-red mb-3 uppercase tracking-wide">Click to explore</p>
                             <div class="grid grid-cols-3 gap-3" id="gallery-thumbs">
-                                <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-vision-red shadow-md active-thumb"
+                                <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-vision-red shadow-md"
                                      onclick="switchGallery(0)" style="height: 80px;">
-                                    <img src="product/first.webp" alt="Gallery 1" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
+                                    <img src="product/1.webp" alt="" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                                 <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
                                      onclick="switchGallery(1)" style="height: 80px;">
-                                    <img src="product/2nd.webp" alt="Gallery 2" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
+                                    <img src="product/2.webp" alt="" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                                 <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
                                      onclick="switchGallery(2)" style="height: 80px;">
-                                    <img src="product/3rd.webp" alt="Gallery 3" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
+                                    <img src="product/3.webp" alt="" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                                 <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
                                      onclick="switchGallery(3)" style="height: 80px;">
-                                    <img src="product/4th.webp" alt="Gallery 4" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
+                                    <img src="product/4.webp" alt="" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                                 <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
                                      onclick="switchGallery(4)" style="height: 80px;">
-                                    <img src="product/5th.webp" alt="Gallery 5" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
+                                    <img src="product/5.webp" alt="" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                                 <div class="gallery-thumb cursor-pointer rounded-xl overflow-hidden border-2 border-transparent shadow-md"
                                      onclick="switchGallery(5)" style="height: 80px;">
-                                    <img src="product/6th.webp" alt="Gallery 6" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
+                                    <img src="product/6.webp" alt="" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" onerror="this.src='product/color_logo.png'">
                                 </div>
                             </div>
                         </div>
@@ -340,30 +335,24 @@
 
     <script>
                 const galleryData = [
-            { img: 'product/first.webp', caption: 'Premium Ethnic Collection', sub: 'Handcrafted with love and tradition' },
-            { img: 'product/2nd.webp', caption: 'Women\'s Kurti Collection', sub: 'Elegant designs for every occasion' },
-            { img: 'product/3rd.webp', caption: 'Kids Wear Collection', sub: 'Comfortable and stylish kidswear' },
-            { img: 'product/4th.webp', caption: 'Men\'s Ethnic Wear', sub: 'Classic kurtas and cord sets' },
-            { img: 'product/5th.webp', caption: 'Block Print Collection', sub: 'Traditional Rajasthani craftsmanship' },
-            { img: 'product/6th.webp', caption: 'Festive Collection', sub: 'Celebrate every occasion in style' }
+            { img: 'product/1.webp' },
+            { img: 'product/2.webp' },
+            { img: 'product/3.webp' },
+            { img: 'product/4.webp' },
+            { img: 'product/5.webp' },
+            { img: 'product/6.webp' }
         ];
 
         function switchGallery(index) {
             const data = galleryData[index];
             const mainImg = document.getElementById('gallery-main-img');
-            const captionText = document.getElementById('gallery-caption-text');
-            const captionSub = document.getElementById('gallery-caption-sub');
 
-            // Fade out
             mainImg.style.opacity = '0';
             setTimeout(() => {
                 mainImg.src = data.img;
-                captionText.textContent = data.caption;
-                captionSub.textContent = data.sub;
                 mainImg.style.opacity = '1';
             }, 250);
 
-            // Update thumb borders
             document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
                 thumb.classList.toggle('border-vision-red', i === index);
                 thumb.classList.toggle('border-transparent', i !== index);
