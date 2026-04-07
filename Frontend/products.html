@@ -203,26 +203,12 @@
     <!-- Category Filter -->
     <section class="py-12 bg-vision-light">
         <div class="container mx-auto">
-            <!-- Main Category Filter -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
+            <!-- Main Category Filter - dynamically loaded -->
+            <div id="category-filter-buttons" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
                 <button class="filter-btn bg-vision-red text-white px-6 py-4 rounded-full font-semibold hover:bg-vision-burgundy transition-all duration-300 shadow-lg active text-sm whitespace-nowrap" data-category="all">
                     All Products
                 </button>
-                <button class="filter-btn bg-white text-vision-red border-2 border-vision-red px-6 py-4 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow-lg text-sm whitespace-nowrap" data-category="mens">
-                    Men's
-                </button>
-                <button class="filter-btn bg-white text-vision-red border-2 border-vision-red px-6 py-4 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow-lg text-sm whitespace-nowrap" data-category="womens">
-                    Women's
-                </button>
-                <button class="filter-btn bg-white text-vision-red border-2 border-vision-red px-6 py-4 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow-lg text-sm whitespace-nowrap" data-category="kids">
-                    Kids
-                </button>
-                <button class="filter-btn bg-white text-vision-red border-2 border-vision-red px-6 py-4 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow-lg text-sm whitespace-nowrap" data-category="bags">
-                    Bags
-                </button>
-                <button class="filter-btn bg-white text-vision-red border-2 border-vision-red px-6 py-4 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow-lg text-sm whitespace-nowrap" data-category="bedsheets">
-                    Bed Sheets
-                </button>
+                <!-- More buttons loaded dynamically -->
             </div>
             
             <!-- Subcategory Filter (Hidden by default) -->
@@ -230,7 +216,6 @@
                 <div class="max-w-6xl mx-auto">
                     <h3 class="text-lg font-semibold text-vision-red mb-3 text-center">Filter by Type:</h3>
                     <div id="subcategory-buttons" class="flex flex-wrap justify-center gap-3">
-                        <!-- Subcategory buttons will be dynamically added here -->
                     </div>
                 </div>
             </div>
@@ -427,22 +412,37 @@
 
         // Initialize products from API
         async function initProducts() {
-            // Show skeleton loaders immediately - don't wait for API
             showSkeletonLoaders();
 
             try {
+                // Load categories dynamically and build filter buttons
+                const categories = await API.getCategories();
+                buildCategoryButtons(categories);
+
                 productsData = await initializeProductsData();
-                // Use already-loaded data from initializeProductsData (no second API call)
                 allProducts = productUtils.getAllProducts();
             } catch(e) {
-                console.error('API failed:', e);
                 allProducts = [];
             }
 
-            // Display products (or coming soon if empty)
             displayProducts(allProducts);
             setupFilterButtons();
             handleCategoryFromURL();
+        }
+
+        // Build category filter buttons from API
+        function buildCategoryButtons(categories) {
+            const container = document.getElementById('category-filter-buttons');
+            if (!container || !categories.length) return;
+
+            // Keep "All Products" button, add rest from API
+            let btns = `<button class="filter-btn bg-vision-red text-white px-6 py-4 rounded-full font-semibold hover:bg-vision-burgundy transition-all duration-300 shadow-lg active text-sm whitespace-nowrap" data-category="all">All Products</button>`;
+
+            categories.forEach(cat => {
+                btns += `<button class="filter-btn bg-white text-vision-red border-2 border-vision-red px-6 py-4 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow-lg text-sm whitespace-nowrap" data-category="${cat.id}">${cat.displayName}</button>`;
+            });
+
+            container.innerHTML = btns;
         }
 
         // Show skeleton loading cards
