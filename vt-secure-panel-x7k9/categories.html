@@ -342,6 +342,7 @@
             <table id="categories-table" style="display: none;">
                 <thead>
                     <tr>
+                        <th style="width:30px;"></th>
                         <th>ID</th>
                         <th>Display Name</th>
                         <th>Subcategories</th>
@@ -458,7 +459,8 @@
                 const subcategories = category.subcategories || [];
                 
                 return `
-                    <tr>
+                    <tr draggable="true" data-id="${category.id}" style="cursor:grab;">
+                        <td style="width:30px;color:#aaa;font-size:18px;text-align:center;">⠿</td>
                         <td>${category.id}</td>
                         <td>${category.displayName}</td>
                         <td>${subcategories.length} subcategories</td>
@@ -474,6 +476,60 @@
                     </tr>
                 `;
             }).join('');
+
+            initTableDrag();
+        }
+
+        // Drag-to-reorder table rows
+        let dragSrcRow = null;
+        function initTableDrag() {
+            const rows = document.querySelectorAll('#categories-tbody tr[draggable]');
+            rows.forEach(row => {
+                row.addEventListener('dragstart', function(e) {
+                    dragSrcRow = this;
+                    this.style.opacity = '0.4';
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+                row.addEventListener('dragend', function() {
+                    this.style.opacity = '1';
+                    document.querySelectorAll('#categories-tbody tr').forEach(r => r.style.border = '');
+                });
+                row.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.style.borderTop = '2px solid #8B1538';
+                });
+                row.addEventListener('dragleave', function() {
+                    this.style.border = '';
+                });
+                row.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.style.border = '';
+                    if (dragSrcRow !== this) {
+                        const tbody = document.getElementById('categories-tbody');
+                        const rows = Array.from(tbody.querySelectorAll('tr'));
+                        const srcIdx = rows.indexOf(dragSrcRow);
+                        const tgtIdx = rows.indexOf(this);
+                        if (srcIdx < tgtIdx) tbody.insertBefore(dragSrcRow, this.nextSibling);
+                        else tbody.insertBefore(dragSrcRow, this);
+                        saveOrder();
+                    }
+                });
+            });
+        }
+
+        async function saveOrder() {
+            const rows = document.querySelectorAll('#categories-tbody tr[data-id]');
+            const order = Array.from(rows).map(r => r.dataset.id);
+            try {
+                await fetch(`${API_URL}/categories/reorder`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order })
+                });
+                showSuccessPopup('Order saved!');
+            } catch(e) {
+                showErrorPopup('Failed to save order');
+            }
         }
 
         function openAddModal() {

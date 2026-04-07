@@ -84,6 +84,11 @@ const createTables = async () => {
             await pool.query(`ALTER TABLE products ADD COLUMN outOfStockSizes JSON DEFAULT NULL`);
         } catch(e) { /* column already exists */ }
 
+        // Add sortOrder column to categories if it doesn't exist
+        try {
+            await pool.query(`ALTER TABLE categories ADD COLUMN sortOrder INT DEFAULT 0`);
+        } catch(e) { /* column already exists */ }
+
         console.log('✅ MySQL Tables Created/Verified');
     } catch (error) {
         console.error('❌ Error creating tables:', error.message);

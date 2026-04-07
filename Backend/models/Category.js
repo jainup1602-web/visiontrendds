@@ -3,7 +3,7 @@ const { getPool } = require('../config/db');
 class Category {
     static async findAll() {
         const pool = getPool();
-        const [rows] = await pool.query('SELECT * FROM categories ORDER BY displayName');
+        const [rows] = await pool.query('SELECT * FROM categories ORDER BY sortOrder ASC, displayName ASC');
         return rows.map(row => ({
             ...row,
             subcategories: typeof row.subcategories === 'string' 

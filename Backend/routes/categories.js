@@ -2,6 +2,20 @@ const express = require('express');
 const router = express.Router();
 const Category = require('../models/Category');
 
+// Reorder categories
+router.post('/reorder', async (req, res) => {
+    try {
+        const { order } = req.body; // array of category IDs in new order
+        const pool = require('../config/db').getPool();
+        for (let i = 0; i < order.length; i++) {
+            await pool.query('UPDATE categories SET sortOrder = ? WHERE id = ?', [i, order[i]]);
+        }
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // Get all categories
 router.get('/', async (req, res) => {
     try {
