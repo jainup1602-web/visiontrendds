@@ -11,11 +11,14 @@ router.post('/send', async (req, res) => {
 
     try {
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: process.env.SMTP_HOST || 'mail.visiontrennds.com',
+            port: parseInt(process.env.SMTP_PORT) || 465,
+            secure: true,
             auth: {
                 user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS  // Gmail App Password
-            }
+                pass: process.env.EMAIL_PASS
+            },
+            tls: { rejectUnauthorized: false }
         });
 
         await transporter.sendMail({
