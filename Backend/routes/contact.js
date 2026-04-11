@@ -11,7 +11,7 @@ router.post('/send', async (req, res) => {
 
     try {
         const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST || 'mail.visiontrennds.com',
+            host: process.env.SMTP_HOST || 'smtp.hostinger.com',
             port: parseInt(process.env.SMTP_PORT) || 465,
             secure: true,
             auth: {
