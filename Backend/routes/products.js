@@ -11,8 +11,18 @@ router.get('/', async (req, res) => {
         if (subcategory) filters.subcategory = subcategory;
         if (page) filters.page = page;
         if (limit) filters.limit = limit;
+
+        // Cache key based on query params
+        const cacheKey = `products:${JSON.stringify(filters)}`;
+        const cached = req.app.locals.cache.get(cacheKey);
+        if (cached) {
+            res.set('X-Cache', 'HIT');
+            return res.json(cached);
+        }
         
         const result = await Product.findAll(filters);
+        req.app.locals.cache.set(cacheKey, result);
+        res.set('X-Cache', 'MISS');
         res.json(result);
     } catch (error) {
         console.error('Error fetching products:', error);
@@ -38,6 +48,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const newProduct = await Product.create(req.body);
+        req.app.locals.cache.clear('products:'); // invalidate cache
         res.status(201).json(newProduct);
     } catch (error) {
         console.error('Error creating product:', error);
@@ -73,6 +84,7 @@ router.put('/:id', async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
+        req.app.locals.cache.clear('products:');
         res.json(product);
     } catch (error) {
         console.error('Error updating product:', error);
@@ -87,6 +99,7 @@ router.delete('/:id', async (req, res) => {
         if (!deleted) {
             return res.status(404).json({ message: 'Product not found' });
         }
+        req.app.locals.cache.clear('products:');
         res.json({ message: 'Product deleted successfully' });
     } catch (error) {
         console.error('Error deleting product:', error);
