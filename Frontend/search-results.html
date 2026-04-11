@@ -44,7 +44,7 @@
                 <!-- Logo with Image and Text -->
                 <a href="index.html" class="logo">
                     <div class="logo-image-container">
-                        <img src="product/white_logo.png" alt="Vision Trennds Logo">
+                        <img decoding="async" src="product/white_logo.png" loading="eager" alt="Vision Trennds Logo">
                     </div>
                     <div class="logo-text">
                         <span class="logo-title">VISION TRENNDS</span>
@@ -100,7 +100,7 @@
                 <!-- Mobile Logo -->
                 <div class="mobile-logo">
                     <div class="logo-image-container">
-                        <img src="product/white_logo.png" alt="Vision Trennds Logo">
+                        <img decoding="async" src="product/white_logo.png" loading="eager" alt="Vision Trennds Logo">
                     </div>
                     <div class="logo-text">
                         <span class="logo-title">VISION TRENNDS</span>
@@ -227,7 +227,7 @@
                 <div class="footer-brand">
                     <div class="footer-logo">
                         <div class="logo-image-container">
-                            <img src="product/white_logo.png" alt="Vision Trennds Logo">
+                            <img decoding="async" src="product/white_logo.png" loading="eager" alt="Vision Trennds Logo">
                         </div>
                         <div class="logo-text">
                             <span class="logo-title">VISION TRENNDS</span>
@@ -409,7 +409,7 @@
                     <div class="product-card-responsive cursor-pointer bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100" onclick="window.location.href='product-details.html?id=${product.id}'">
                         <div class="product-image-container relative overflow-hidden rounded-t-lg">
                             ${product.badge ? `<div class="product-badge absolute top-2 left-2 z-10"><span class="bg-vision-red text-white px-2 py-1 rounded-full text-xs font-semibold">${product.badge}</span></div>` : ''}
-                            <img src="${product.image}" alt="${product.title}" class="product-image w-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy"
+                            <img decoding="async" src="${product.image}" alt="${product.title}" class="product-image w-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy"
                                  onerror="this.src='${product.fallbackImage || 'product/color_logo.png'}'; this.onerror=null;"
                                  onload="this.style.opacity='1';" style="opacity:0;transition:opacity 0.3s ease;">
                         </div>
