@@ -415,20 +415,100 @@
             showSkeletonLoaders();
 
             try {
-                // Load categories dynamically and build filter buttons
                 const categories = await API.getCategories();
                 categoriesData = categories;
                 buildCategoryButtons(categories);
+            } catch(e) {}
 
-                productsData = await initializeProductsData();
-                allProducts = productUtils.getAllProducts();
+            // Fetch first page from server
+            await fetchAndDisplayPage(1, 'all', 'all');
+            handleCategoryFromURL();
+        }
+
+        // Server-side paginated fetch
+        async function fetchAndDisplayPage(page, category, subcategory) {
+            showSkeletonLoaders();
+            currentCategory = category;
+            currentSubcategory = subcategory;
+
+            try {
+                const filters = { page, limit: PRODUCTS_PER_PAGE };
+                if (category !== 'all') filters.category = category;
+                if (subcategory !== 'all') filters.subcategory = subcategory;
+
+                const result = await API.getProducts(filters);
+
+                let products, totalPages, total;
+                if (result && result.products) {
+                    products = result.products;
+                    totalPages = result.totalPages;
+                    total = result.total;
+                } else {
+                    // Fallback: plain array (old backend)
+                    products = Array.isArray(result) ? result : [];
+                    totalPages = 1;
+                    total = products.length;
+                }
+
+                // Also update productsData for search/subcategory compatibility
+                if (!productsData[category]) productsData[category] = {};
+                
+                renderProductsPage(products, page, totalPages, total);
+                showSubcategoryFilters(category);
             } catch(e) {
-                allProducts = [];
+                renderProductsPage([], 1, 1, 0);
+            }
+        }
+
+        function renderProductsPage(products, page, totalPages, total) {
+            const container = document.getElementById('all-products');
+            const paginationContainer = document.getElementById('pagination-container');
+
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-20">
+                        <div class="w-32 h-32 bg-gradient-to-br from-vision-red to-vision-burgundy rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
+                            <i class="fas fa-clock text-white text-4xl"></i>
+                        </div>
+                        <h3 class="text-3xl md:text-4xl font-serif font-bold text-vision-dark mb-4">Coming Soon</h3>
+                        <p class="text-lg text-gray-600 mb-8 max-w-md mx-auto">We're working on something special for this category. Stay tuned!</p>
+                        <button onclick="fetchAndDisplayPage(1,'all','all')" class="bg-vision-gradient text-white px-8 py-3 rounded-full font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-arrow-left mr-2"></i>View All Products
+                        </button>
+                    </div>`;
+                paginationContainer.classList.add('hidden');
+                return;
             }
 
-            displayProducts(allProducts);
-            setupFilterButtons();
-            handleCategoryFromURL();
+            container.innerHTML = products.map(product => createProductCard(product)).join('');
+            addProductClickEvents();
+
+            if (page > 1) container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            if (totalPages <= 1) { paginationContainer.classList.add('hidden'); return; }
+            paginationContainer.classList.remove('hidden');
+
+            let btns = `<button onclick="fetchAndDisplayPage(${page-1},'${currentCategory}','${currentSubcategory}')" ${page===1?'disabled':''}
+                class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
+                ${page===1?'border-gray-200 text-gray-400 cursor-not-allowed':'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
+                <i class="fas fa-chevron-left"></i></button>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i===1||i===totalPages||(i>=page-1&&i<=page+1)) {
+                    btns += `<button onclick="fetchAndDisplayPage(${i},'${currentCategory}','${currentSubcategory}')"
+                        class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
+                        ${i===page?'bg-vision-red border-vision-red text-white':'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">${i}</button>`;
+                } else if (i===page-2||i===page+2) {
+                    btns += `<span class="px-2 py-2 text-gray-400">...</span>`;
+                }
+            }
+
+            btns += `<button onclick="fetchAndDisplayPage(${page+1},'${currentCategory}','${currentSubcategory}')" ${page===totalPages?'disabled':''}
+                class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
+                ${page===totalPages?'border-gray-200 text-gray-400 cursor-not-allowed':'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
+                <i class="fas fa-chevron-right"></i></button>`;
+
+            paginationContainer.innerHTML = btns;
         }
 
         // Build category filter buttons from API
@@ -525,100 +605,50 @@
         
         // Filter by subcategory
         function filterBySubcategory(subcategory) {
-            currentSubcategory = subcategory;
-            
-            let filteredProducts;
-            if (subcategory === 'all') {
-                filteredProducts = productUtils.getProductsByCategory(currentCategory);
-            } else {
-                filteredProducts = productUtils.getProductsBySubcategory(currentCategory, subcategory);
-            }
-            
-            displayProducts(filteredProducts);
+            fetchAndDisplayPage(1, currentCategory, subcategory);
         }
 
-        // Display products in grid with pagination
-        function displayProducts(products, page = 1) {
-            currentFilteredProducts = products;
-            currentPage = page;
-            const container = document.getElementById('all-products');
-            const paginationContainer = document.getElementById('pagination-container');
-            if (!container) return;
+        // Setup filter buttons - use server fetch
+        function setupFilterButtons() {
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.filter-btn');
+                if (!btn) return;
+                const category = btn.dataset.category;
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-vision-red', 'text-white', 'active');
+                    b.classList.add('bg-white', 'text-vision-red');
+                });
+                btn.classList.add('bg-vision-red', 'text-white', 'active');
+                btn.classList.remove('bg-white', 'text-vision-red');
+                fetchAndDisplayPage(1, category, 'all');
+                if (category !== 'all') window.location.hash = category;
+                else history.replaceState(null, null, window.location.pathname);
+            });
+        }
 
-            if (products.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-20">
-                        <div class="w-32 h-32 bg-gradient-to-br from-vision-red to-vision-burgundy rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
-                            <i class="fas fa-clock text-white text-4xl"></i>
-                        </div>
-                        <h3 class="text-3xl md:text-4xl font-serif font-bold text-vision-dark mb-4">Coming Soon</h3>
-                        <p class="text-lg text-gray-600 mb-8 max-w-md mx-auto">We're working on something special for this category. Stay tuned!</p>
-                        <button onclick="showAllProducts()" class="bg-vision-gradient text-white px-8 py-3 rounded-full font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                            <i class="fas fa-arrow-left mr-2"></i>
-                            View All Products
-                        </button>
-                    </div>
-                `;
-                paginationContainer.classList.add('hidden');
-                return;
-            }
+        function filterProducts(category) {
+            fetchAndDisplayPage(1, category, 'all');
+            showSubcategoryFilters(category);
+        }
 
-            const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
-            const start = (page - 1) * PRODUCTS_PER_PAGE;
-            const end = start + PRODUCTS_PER_PAGE;
-            const pageProducts = products.slice(start, end);
-
-            container.innerHTML = pageProducts.map(product => createProductCard(product)).join('');
-            addProductClickEvents();
-
-            // Scroll to top of products
-            if (page > 1) {
-                container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-
-            // Render pagination
-            if (totalPages <= 1) {
-                paginationContainer.classList.add('hidden');
-                return;
-            }
-
-            paginationContainer.classList.remove('hidden');
-            let btns = '';
-
-            // Prev button
-            btns += `<button onclick="goToPage(${page - 1})" ${page === 1 ? 'disabled' : ''}
-                class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
-                ${page === 1 ? 'border-gray-200 text-gray-400 cursor-not-allowed' : 'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
-                <i class="fas fa-chevron-left"></i>
-            </button>`;
-
-            // Page numbers
-            for (let i = 1; i <= totalPages; i++) {
-                if (i === 1 || i === totalPages || (i >= page - 1 && i <= page + 1)) {
-                    btns += `<button onclick="goToPage(${i})"
-                        class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
-                        ${i === page ? 'bg-vision-red border-vision-red text-white' : 'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
-                        ${i}
-                    </button>`;
-                } else if (i === page - 2 || i === page + 2) {
-                    btns += `<span class="px-2 py-2 text-gray-400">...</span>`;
+        function handleCategoryFromURL() {
+            const hash = window.location.hash.substring(1);
+            if (hash && hash !== 'all') {
+                fetchAndDisplayPage(1, hash, 'all');
+                const btn = document.querySelector(`[data-category="${hash}"]`);
+                if (btn) {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('bg-vision-red','text-white','active');
+                        b.classList.add('bg-white','text-vision-red');
+                    });
+                    btn.classList.add('bg-vision-red','text-white','active');
+                    btn.classList.remove('bg-white','text-vision-red');
                 }
             }
-
-            // Next button
-            btns += `<button onclick="goToPage(${page + 1})" ${page === totalPages ? 'disabled' : ''}
-                class="px-4 py-2 rounded-lg border-2 font-semibold text-sm transition-all duration-200
-                ${page === totalPages ? 'border-gray-200 text-gray-400 cursor-not-allowed' : 'border-vision-red text-vision-red hover:bg-vision-red hover:text-white'}">
-                <i class="fas fa-chevron-right"></i>
-            </button>`;
-
-            paginationContainer.innerHTML = btns;
         }
 
-        function goToPage(page) {
-            const totalPages = Math.ceil(currentFilteredProducts.length / PRODUCTS_PER_PAGE);
-            if (page < 1 || page > totalPages) return;
-            displayProducts(currentFilteredProducts, page);
+        function showAllProducts() {
+            fetchAndDisplayPage(1, 'all', 'all');
         }
 
         // Create product card HTML
@@ -694,72 +724,6 @@
                     }
                 });
             });
-        }
-
-        // Setup filter buttons
-        function setupFilterButtons() {
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const category = this.dataset.category;
-                    
-                    // Update active button
-                    filterButtons.forEach(btn => {
-                        btn.classList.remove('bg-vision-red', 'text-white', 'active');
-                        btn.classList.add('bg-white', 'text-vision-red', 'border-2', 'border-vision-red');
-                    });
-                    
-                    this.classList.remove('bg-white', 'text-vision-red', 'border-2', 'border-vision-red');
-                    this.classList.add('bg-vision-red', 'text-white', 'active');
-                    
-                    // Filter and display products
-                    filterProducts(category);
-                    
-                    // Update URL hash
-                    if (category !== 'all') {
-                        window.location.hash = category;
-                    } else {
-                        history.replaceState(null, null, window.location.pathname);
-                    }
-                });
-            });
-        }
-
-        // Filter products by category
-        function filterProducts(category) {
-            currentCategory = category;
-            currentSubcategory = 'all';
-            
-            let filteredProducts;
-            if (category === 'all') {
-                filteredProducts = allProducts;
-            } else {
-                filteredProducts = productUtils.getProductsByCategory(category);
-            }
-            displayProducts(filteredProducts);
-            
-            // Show subcategory filters
-            showSubcategoryFilters(category);
-        }
-
-        // Handle category from URL hash
-        function handleCategoryFromURL() {
-            const hash = window.location.hash.substring(1);
-            if (hash && hash !== 'all') {
-                const button = document.querySelector(`[data-category="${hash}"]`);
-                if (button) {
-                    button.click();
-                }
-            }
-        }
-
-        // Global function to show all products
-        function showAllProducts() {
-            const allButton = document.querySelector('[data-category="all"]');
-            if (allButton) {
-                allButton.click();
-            }
         }
 
         // Handle browser back/forward

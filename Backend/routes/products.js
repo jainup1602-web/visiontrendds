@@ -5,14 +5,15 @@ const Product = require('../models/Product');
 // Get all products
 router.get('/', async (req, res) => {
     try {
-        const { category, subcategory } = req.query;
+        const { category, subcategory, page, limit } = req.query;
         const filters = {};
-        
         if (category) filters.category = category;
         if (subcategory) filters.subcategory = subcategory;
+        if (page) filters.page = page;
+        if (limit) filters.limit = limit;
         
-        const products = await Product.findAll(filters);
-        res.json(products);
+        const result = await Product.findAll(filters);
+        res.json(result);
     } catch (error) {
         console.error('Error fetching products:', error);
         res.status(500).json({ message: error.message });

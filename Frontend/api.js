@@ -70,7 +70,6 @@ const API = {
     // Get all products
     async getProducts(filters = {}) {
         try {
-            // Wait for backend to be warm first
             await pingBackend();
 
             let url = `${API_CONFIG.baseURL}/products`;
@@ -78,13 +77,13 @@ const API = {
             
             if (filters.category) params.append('category', filters.category);
             if (filters.subcategory) params.append('subcategory', filters.subcategory);
+            if (filters.page) params.append('page', filters.page);
+            if (filters.limit) params.append('limit', filters.limit);
             
-            if (params.toString()) {
-                url += '?' + params.toString();
-            }
+            if (params.toString()) url += '?' + params.toString();
 
-            // Use cache for unfiltered requests - only if images are present
-            if (!filters.category && !filters.subcategory && _cache.products && 
+            // Cache only for unfiltered unpaginated requests
+            if (!filters.category && !filters.subcategory && !filters.page && _cache.products &&
                 _cache.products.length > 0 && _cache.products[0].images && _cache.products[0].images.length > 0) {
                 return _cache.products;
             }
@@ -92,14 +91,21 @@ const API = {
             const response = await fetchWithTimeout(url, 60000);
             if (!response.ok) throw new Error('Failed to fetch products');
             
-            const products = await response.json();
-            const transformed = this.transformProducts(products);
+            const data = await response.json();
 
-            // Cache unfiltered result
-            if (!filters.category && !filters.subcategory) {
-                _cache.products = transformed;
+            // Handle paginated response {products, total, page, totalPages}
+            if (data && data.products) {
+                return {
+                    ...data,
+                    products: this.transformProducts(data.products)
+                };
             }
 
+            // Plain array response
+            const transformed = this.transformProducts(data);
+            if (!filters.category && !filters.subcategory && !filters.page) {
+                _cache.products = transformed;
+            }
             return transformed;
         } catch (error) {
             console.error('Error fetching products:', error);

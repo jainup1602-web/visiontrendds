@@ -3,25 +3,47 @@ const { getPool } = require('../config/db');
 class Product {
     static async findAll(filters = {}) {
         const pool = getPool();
+        const { category, subcategory, page, limit } = filters;
+        
         let query = 'SELECT * FROM products';
         const conditions = [];
         const values = [];
 
-        if (filters.category) {
+        if (category) {
             conditions.push('category = ?');
-            values.push(filters.category);
+            values.push(category);
         }
-
-        if (filters.subcategory) {
+        if (subcategory) {
             conditions.push('subcategory = ?');
-            values.push(filters.subcategory);
+            values.push(subcategory);
         }
-
         if (conditions.length > 0) {
             query += ' WHERE ' + conditions.join(' AND ');
         }
-
         query += ' ORDER BY createdAt DESC';
+
+        // Server-side pagination
+        const pageNum = parseInt(page) || null;
+        const limitNum = parseInt(limit) || null;
+
+        if (pageNum && limitNum) {
+            const offset = (pageNum - 1) * limitNum;
+            // Get total count
+            let countQuery = 'SELECT COUNT(*) as total FROM products';
+            if (conditions.length > 0) countQuery += ' WHERE ' + conditions.join(' AND ');
+            const [countRows] = await pool.query(countQuery, values);
+            const total = countRows[0].total;
+
+            query += ` LIMIT ? OFFSET ?`;
+            const [rows] = await pool.query(query, [...values, limitNum, offset]);
+            return {
+                products: rows.map(row => this.parseJsonFields(row)),
+                total,
+                page: pageNum,
+                limit: limitNum,
+                totalPages: Math.ceil(total / limitNum)
+            };
+        }
 
         try {
             const [rows] = await pool.query(query, values);
