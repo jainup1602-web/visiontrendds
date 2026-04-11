@@ -542,6 +542,7 @@
 
         // Initialize products page - single DOMContentLoaded
         document.addEventListener('DOMContentLoaded', function() {
+            setupFilterButtons(); // Register click handler first
             initProducts();
         });
         // Categories data from API - replaces hardcoded subcategoryLabels
