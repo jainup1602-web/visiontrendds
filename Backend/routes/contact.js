@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 router.post('/send', async (req, res) => {
     const { name, email, phone, subject, message } = req.body;
@@ -10,21 +10,11 @@ router.post('/send', async (req, res) => {
     }
 
     try {
-        const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST || 'smtp.hostinger.com',
-            port: parseInt(process.env.SMTP_PORT) || 587,
-            secure: false,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            },
-            tls: { rejectUnauthorized: false },
-            family: 4  // Force IPv4
-        });
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
-        await transporter.sendMail({
-            from: `"Vision Trennds Contact" <${process.env.EMAIL_USER}>`,
-            to: process.env.EMAIL_RECEIVER || process.env.EMAIL_USER,
+        await resend.emails.send({
+            from: 'Vision Trennds <onboarding@resend.dev>',
+            to: process.env.EMAIL_RECEIVER || 'hello@visiontrennds.com',
             replyTo: email,
             subject: `Contact Form: ${subject || 'New Message'} - ${name}`,
             html: `
