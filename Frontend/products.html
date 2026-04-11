@@ -98,7 +98,7 @@
                 <!-- Logo Section -->
                 <div class="mobile-logo">
                     <div class="logo-image-container">
-                        <img decoding="async" src="product/white_logo.png" loading="eager" alt="Vision Trennds Logo">
+                        <img decoding="async" src="product/white_logo.png" loading="lazy" alt="Vision Trennds Logo">
                     </div>
                     <div class="logo-text">
                         <span class="logo-title">VISION TRENNDS</span>
@@ -242,7 +242,7 @@
                 <div class="footer-brand">
                     <div class="footer-logo">
                         <div class="logo-image-container">
-                            <img decoding="async" src="product/white_logo.png" loading="eager" alt="Vision Trennds">
+                            <img decoding="async" src="product/white_logo.png" loading="lazy" alt="Vision Trennds">
                         </div>
                         <div class="logo-text">
                             <span class="logo-title">VISION TRENNDS</span>
@@ -512,10 +512,10 @@
             const container = document.getElementById('category-filter-buttons');
             if (!container || !categories.length) return;
 
-            let btns = `<button class="filter-btn bg-vision-red text-white px-4 py-2 rounded-full font-semibold hover:bg-vision-burgundy transition-all duration-300 shadow-lg text-xs whitespace-nowrap active" data-category="all">All Products</button>`;
+            let btns = `<button class="filter-btn" data-category="all" style="padding:8px 16px;border-radius:999px;border:2px solid #8B1538;font-weight:600;font-size:12px;white-space:nowrap;cursor:pointer;background:#8B1538;color:white;transition:all 0.2s;">All Products</button>`;
 
             categories.forEach(cat => {
-                btns += `<button class="filter-btn bg-white text-vision-red border-2 border-vision-red px-4 py-2 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 shadow-lg text-xs whitespace-nowrap" data-category="${cat.id}">${cat.displayName}</button>`;
+                btns += `<button class="filter-btn" data-category="${cat.id}" style="padding:8px 16px;border-radius:999px;border:2px solid #8B1538;font-weight:600;font-size:12px;white-space:nowrap;cursor:pointer;background:white;color:#8B1538;transition:all 0.2s;">${cat.displayName}</button>`;
             });
 
             container.innerHTML = btns;
@@ -610,12 +610,15 @@
                 const btn = e.target.closest('.filter-btn');
                 if (!btn) return;
                 const category = btn.dataset.category;
+
+                // Update active styles
                 document.querySelectorAll('.filter-btn').forEach(b => {
-                    b.classList.remove('bg-vision-red', 'text-white', 'active');
-                    b.classList.add('bg-white', 'text-vision-red');
+                    b.style.background = 'white';
+                    b.style.color = '#8B1538';
                 });
-                btn.classList.add('bg-vision-red', 'text-white', 'active');
-                btn.classList.remove('bg-white', 'text-vision-red');
+                btn.style.background = '#8B1538';
+                btn.style.color = 'white';
+
                 fetchAndDisplayPage(1, category, 'all');
                 if (category !== 'all') window.location.hash = category;
                 else history.replaceState(null, null, window.location.pathname);
@@ -634,11 +637,11 @@
                 const btn = document.querySelector(`[data-category="${hash}"]`);
                 if (btn) {
                     document.querySelectorAll('.filter-btn').forEach(b => {
-                        b.classList.remove('bg-vision-red','text-white','active');
-                        b.classList.add('bg-white','text-vision-red');
+                        b.style.background = 'white';
+                        b.style.color = '#8B1538';
                     });
-                    btn.classList.add('bg-vision-red','text-white','active');
-                    btn.classList.remove('bg-white','text-vision-red');
+                    btn.style.background = '#8B1538';
+                    btn.style.color = 'white';
                 }
             }
         }
