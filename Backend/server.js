@@ -83,3 +83,6 @@ app.listen(PORT, () => {
     console.log(`📡 API: http://localhost:${PORT}/api`);
     console.log(`💾 Database: MySQL`);
 });
+
+// Export for Vercel serverless
+module.exports = app;
