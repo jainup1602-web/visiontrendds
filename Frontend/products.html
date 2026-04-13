@@ -483,7 +483,10 @@
             container.innerHTML = products.map(product => createProductCard(product)).join('');
             addProductClickEvents();
 
-            if (page > 1) container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Scroll to TOP of page on page change
+            if (page > 1) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
 
             if (totalPages <= 1) { paginationContainer.classList.add('hidden'); return; }
             paginationContainer.classList.remove('hidden');
@@ -495,10 +498,19 @@
 
             let btns = `<button onclick="fetchAndDisplayPage(${page-1},'${currentCategory}','${currentSubcategory}')" ${page===1?'disabled':''} style="${page===1?btnDisabled:btnNormal}">&#8249;</button>`;
 
+            // Show: 1 2 3 4 ... last  OR  1 ... n-1 n n+1 ... last
             for (let i = 1; i <= totalPages; i++) {
-                if (i===1||i===totalPages||(i>=page-1&&i<=page+1)) {
+                const showFirst4 = i <= 4;
+                const showLast = i === totalPages;
+                const showAroundCurrent = i >= page - 1 && i <= page + 1;
+
+                if (showFirst4 || showLast || showAroundCurrent) {
                     btns += `<button onclick="fetchAndDisplayPage(${i},'${currentCategory}','${currentSubcategory}')" style="${i===page?btnActive:btnNormal}">${i}</button>`;
-                } else if (i===page-2||i===page+2) {
+                } else if (i === 5 && page <= 4) {
+                    btns += `<span style="padding:0 4px;color:#999;font-size:13px;">...</span>`;
+                } else if (i === page - 2 && page > 5) {
+                    btns += `<span style="padding:0 4px;color:#999;font-size:13px;">...</span>`;
+                } else if (i === page + 2 && page + 2 < totalPages) {
                     btns += `<span style="padding:0 4px;color:#999;font-size:13px;">...</span>`;
                 }
             }
