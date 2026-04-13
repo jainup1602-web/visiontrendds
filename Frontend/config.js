@@ -1,7 +1,7 @@
 // ============================================
 // DEPLOYMENT CONFIG - Sirf yahan change karo
 // ============================================
-const BACKEND_URL = 'https://api-visiontrendds.onrender.com';
+const BACKEND_URL = 'https://visiontrendds.vercel.app';
 // Local development ke liye:
 // const BACKEND_URL = 'http://localhost:5000';
 // ============================================
