@@ -96,7 +96,7 @@ const API = {
             }
 
             await pingBackend();
-            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/products/${productId}`, 15000);
+            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/products/${productId}`, 60000);
             if (!response.ok) throw new Error('Product not found');
             
             const product = await response.json();
@@ -112,7 +112,7 @@ const API = {
     // Get categories - no cache so order changes reflect immediately
     async getCategories() {
         try {
-            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/categories`);
+            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/categories`, 60000);
             if (!response.ok) throw new Error('Failed to fetch categories');
             return await response.json();
         } catch (error) {
