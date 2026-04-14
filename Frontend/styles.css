@@ -769,14 +769,15 @@ body::-webkit-scrollbar-thumb:hover {
     top: 100%;
     left: 0;
     right: 0;
-    background: rgba(93, 64, 55, 0.98);
+    background: #3e2723;
     border-radius: 8px;
     margin-top: 8px;
-    max-height: 300px;
+    max-height: 60vh;
     overflow-y: auto;
-    z-index: 1000;
+    z-index: 9999;
     display: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .mobile-search-results.active {
