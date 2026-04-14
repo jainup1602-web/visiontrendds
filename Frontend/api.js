@@ -1,7 +1,7 @@
 ﻿// API Configuration
 const API_CONFIG = {
     baseURL: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : 'http://localhost:5000/api',
-    timeout: 60000  // 60 seconds - Render cold start can take 50s
+    timeout: 15000  // 15 seconds - Vercel functions respond fast
 };
 
 // In-memory cache - avoids repeat API calls within same session
@@ -10,7 +10,6 @@ const _cache = {
     categories: null,
     productDetail: {}  // keyed by productId
 };
-
 // Fetch with timeout helper
 async function fetchWithTimeout(url, timeoutMs = API_CONFIG.timeout) {
     const controller = new AbortController();
@@ -26,38 +25,20 @@ async function fetchWithTimeout(url, timeoutMs = API_CONFIG.timeout) {
 }
 
 // Wake up Render backend - waits until warm before resolving
+// Vercel is serverless - no warm-up needed, simple one-shot ping
 let _backendReady = false;
 let _backendReadyPromise = null;
 
 function pingBackend() {
-    const base = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : null;
-    if (!base) { _backendReady = true; return Promise.resolve(); }
+    if (_backendReady) return Promise.resolve();
     if (_backendReadyPromise) return _backendReadyPromise;
 
-    _backendReadyPromise = new Promise((resolve) => {
-        const tryPing = (attempt) => {
-            fetch(base + '/health', { method: 'GET', cache: 'no-store' })
-                .then(r => {
-                    if (r.ok) {
-                        _backendReady = true;
-                        resolve();
-                    } else {
-                        retry(attempt);
-                    }
-                })
-                .catch(() => retry(attempt));
-        };
+    const base = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : null;
+    if (!base) { _backendReady = true; return Promise.resolve(); }
 
-        const retry = (attempt) => {
-            const delay = Math.min(3000 + attempt * 1000, 8000);
-            setTimeout(() => tryPing(attempt + 1), delay);
-        };
-
-        tryPing(0);
-
-        // Max wait 90s then resolve anyway
-        setTimeout(() => { _backendReady = true; resolve(); }, 90000);
-    });
+    _backendReadyPromise = fetch(base + '/health', { method: 'GET', cache: 'no-store' })
+        .then(() => { _backendReady = true; })
+        .catch(() => { _backendReady = true; }); // proceed even if fails
 
     return _backendReadyPromise;
 }
@@ -122,7 +103,7 @@ const API = {
             }
 
             await pingBackend();
-            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/products/${productId}`, 60000);
+            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/products/${productId}`, 15000);
             if (!response.ok) throw new Error('Product not found');
             
             const product = await response.json();
