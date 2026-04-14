@@ -3,6 +3,9 @@ const mysql = require('mysql2/promise');
 let pool;
 
 const connectDB = async () => {
+    // Reuse existing pool (important for Vercel serverless)
+    if (pool) return pool;
+    
     try {
         pool = mysql.createPool({
             host: process.env.DB_HOST || 'localhost',
@@ -10,28 +13,19 @@ const connectDB = async () => {
             password: process.env.DB_PASSWORD || '',
             database: process.env.DB_NAME || 'visiontrennds',
             waitForConnections: true,
-            connectionLimit: 10,
+            connectionLimit: 5,  // Lower for serverless
             queueLimit: 0,
             enableKeepAlive: true,
-            keepAliveInitialDelay: 10000,
-            connectTimeout: 30000
+            keepAliveInitialDelay: 0,
+            connectTimeout: 10000  // 10s for Vercel
         });
 
-        // Test connection
         const connection = await pool.getConnection();
         console.log('✅ MySQL Connected Successfully');
         connection.release();
 
-        // Keep-alive ping every 4 minutes to prevent Hostinger idle timeout
-        setInterval(async () => {
-            try {
-                await pool.query('SELECT 1');
-            } catch (e) {
-                console.warn('Keep-alive ping failed:', e.message);
-            }
-        }, 4 * 60 * 1000);
-
         await createTables();
+        return pool;
     } catch (error) {
         console.error('❌ MySQL Connection Error:', error.message);
         process.exit(1);
