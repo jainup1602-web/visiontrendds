@@ -828,17 +828,6 @@ const searchManager = {
     }
 };
 
-// Initialize search when DOM is loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        searchManager.init();
-        mobileSearchManager.init();
-    });
-} else {
-    searchManager.init();
-    mobileSearchManager.init();
-}
-
 // Mobile Search Manager
 const mobileSearchManager = {
     init() {
@@ -916,3 +905,14 @@ const mobileSearchManager = {
         mobileSearchResults.classList.add('active');
     }
 };
+
+// Initialize search managers after both are defined
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        searchManager.init();
+        mobileSearchManager.init();
+    });
+} else {
+    searchManager.init();
+    mobileSearchManager.init();
+}
