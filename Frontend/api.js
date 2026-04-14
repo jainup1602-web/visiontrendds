@@ -1,7 +1,7 @@
 ﻿// API Configuration
 const API_CONFIG = {
     baseURL: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : 'http://localhost:5000/api',
-    timeout: 15000  // 15 seconds - Vercel functions respond fast
+    timeout: 30000  // 30 seconds
 };
 
 // In-memory cache - avoids repeat API calls within same session
