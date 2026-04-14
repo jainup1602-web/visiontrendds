@@ -25,26 +25,19 @@ async function fetchWithTimeout(url, timeoutMs = API_CONFIG.timeout) {
 }
 
 // Wake up Render backend - waits until warm before resolving
-// Vercel is serverless - no warm-up needed, simple one-shot ping
-let _backendReady = false;
-let _backendReadyPromise = null;
+// Simple backend check - fire and forget, don't block product loading
+let _backendReady = true; // Always proceed immediately on Vercel
+let _backendReadyPromise = Promise.resolve();
 
 function pingBackend() {
-    if (_backendReady) return Promise.resolve();
-    if (_backendReadyPromise) return _backendReadyPromise;
-
-    const base = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : null;
-    if (!base) { _backendReady = true; return Promise.resolve(); }
-
-    _backendReadyPromise = fetch(base + '/health', { method: 'GET', cache: 'no-store' })
-        .then(() => { _backendReady = true; })
-        .catch(() => { _backendReady = true; }); // proceed even if fails
-
     return _backendReadyPromise;
 }
 
-// Start pinging immediately on page load
-pingBackend();
+// Warm up in background (non-blocking)
+(function() {
+    const base = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : null;
+    if (base) fetch(base + '/health', { method: 'GET', cache: 'no-store' }).catch(() => {});
+})();
 
 // API Helper Functions
 const API = {
