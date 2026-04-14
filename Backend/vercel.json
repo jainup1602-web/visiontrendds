@@ -16,5 +16,10 @@
         "Access-Control-Allow-Headers": "Content-Type, Authorization"
       }
     }
-  ]
+  ],
+  "functions": {
+    "server.js": {
+      "maxDuration": 30
+    }
+  }
 }
