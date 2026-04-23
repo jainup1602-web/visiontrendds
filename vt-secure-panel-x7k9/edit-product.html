@@ -208,79 +208,7 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
-        let uploadedImages = [];
-
-        console.log('Edit Product Page Loaded - Product ID:', productId);
-
         let uploadedImages = []; // array of base64/path strings
-
-        function handleImageSelect(input) {
-            const files = Array.from(input.files);
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadedImages.push(e.target.result);
-                    renderImagePreviews();
-                };
-                reader.readAsDataURL(file);
-            });
-            input.value = '';
-        }
-
-        function renderImagePreviews() {
-            const container = document.getElementById('image-previews');
-            container.innerHTML = uploadedImages.map((img, i) => {
-                const src = img.startsWith('data:') ? img : img.startsWith('/uploads') ? `${BACKEND_URL}${img}` : `${FRONTEND_BASE}/${img}`;
-                return `<div style="position:relative;display:inline-block;" draggable="true"
-                     ondragstart="dragImgStart(${i})" ondragover="event.preventDefault()" ondrop="dropImg(${i})">
-                    <img src="${src}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;border:${i===0?'3px solid #8B1538':'2px solid #ddd'};" onerror="this.src='../Frontend/product/color_logo.png'">
-                    ${i===0?'<span style="position:absolute;bottom:2px;left:2px;background:#8B1538;color:white;font-size:9px;padding:1px 4px;border-radius:3px;">MAIN</span>':''}
-                    <button type="button" onclick="removeImg(${i})"
-                        style="position:absolute;top:-6px;right:-6px;background:#dc3545;color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;line-height:1;">×</button>
-                </div>`;
-            }).join('');
-        }
-
-        function removeImg(index) {
-            uploadedImages.splice(index, 1);
-            renderImagePreviews();
-        }
-
-        let dragSrcImg = null;
-        function dragImgStart(i) { dragSrcImg = i; }
-        function dropImg(i) {
-            if (dragSrcImg === null || dragSrcImg === i) return;
-            const moved = uploadedImages.splice(dragSrcImg, 1)[0];
-            uploadedImages.splice(i, 0, moved);
-            dragSrcImg = null;
-            renderImagePreviews();
-        }
-
-        // Upload image function - Convert to Base64
-        async function uploadImage(file) {
-            console.log('Uploading image:', file.name);
-            const formData = new FormData();
-            formData.append('image', file);
-
-            try {
-                const response = await fetch(`${API_URL}/upload/image`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Image uploaded successfully, size:', data.size, 'bytes');
-                    return data.imageData; // Returns Base64 data URL
-                } else {
-                    throw new Error('Image upload failed');
-                }
-            } catch (error) {
-                console.error('Error uploading image:', error);
-                showErrorPopup('Error uploading image: ' + error.message);
-                return null;
-            }
-        }
 
         function handleImageSelect(input) {
             const files = Array.from(input.files);
@@ -323,6 +251,22 @@
             uploadedImages.splice(i, 0, moved);
             dragSrcImg = null;
             renderImagePreviews();
+        }
+
+        // Upload image function - Convert to Base64
+        async function uploadImage(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            try {
+                const response = await fetch(`${API_URL}/upload/image`, { method: 'POST', body: formData });
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.imageData;
+                } else { throw new Error('Image upload failed'); }
+            } catch (error) {
+                showErrorPopup('Error uploading image: ' + error.message);
+                return null;
+            }
         }
 
         // Load product data
