@@ -731,14 +731,18 @@
             if (product.colors && product.colors.length > 0) {
                 const colorsContainer = document.getElementById('colors-container');
                 const colorsSection = document.getElementById('product-colors');
+                const outOfStockColors = product.outOfStockSizes || [];
                 
-                colorsContainer.innerHTML = product.colors.map(color => `
-                    <button class="color-option px-4 py-3 border-2 border-vision-red text-vision-red rounded-lg font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-vision-red focus:ring-offset-2" 
-                            data-color="${color}" 
-                            onclick="selectColor('${color}')">
-                        ${color}
-                    </button>
-                `).join('');
+                colorsContainer.innerHTML = product.colors.map(color => {
+                    const isOOS = outOfStockColors.includes(color);
+                    return `<button class="color-option px-4 py-3 border-2 rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2
+                        ${isOOS ? 'border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed line-through' : 'border-vision-red text-vision-red hover:bg-vision-red hover:text-white cursor-pointer focus:ring-vision-red'}"
+                            data-color="${color}"
+                            onclick="${isOOS ? 'void(0)' : `selectColor('${color}')`}"
+                            ${isOOS ? 'disabled title="Out of Stock"' : ''}>
+                        ${color}${isOOS ? ' ✗' : ''}
+                    </button>`;
+                }).join('');
                 
                 colorsSection.classList.remove('hidden');
             }

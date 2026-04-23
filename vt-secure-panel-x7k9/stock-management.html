@@ -375,16 +375,30 @@
                             background:${isOOS?'#dc3545':'#28a745'};color:white;font-weight:600;">
                             ${age}Y ${isOOS?'✗':'✓'}</button>`;
                     }).join('');
-                } else if (sizes.length > 0) {
-                    stockBtns = sizes.map(size => {
-                        const isOOS = outOfStockSizes.includes(size);
-                        return `<button onclick="toggleSizeStock('${product.productId}', '${size}', ${isOOS})"
-                            style="padding:3px 10px;margin:2px;border-radius:6px;border:1px solid #8B0000;font-size:0.8rem;cursor:pointer;
-                            background:${isOOS?'#dc3545':'#28a745'};color:white;font-weight:600;">
-                            ${size} ${isOOS?'✗':'✓'}</button>`;
-                    }).join('');
+                } else if (sizes.length > 0 || (product.colors && product.colors.length > 0)) {
+                    // Size buttons
+                    if (sizes.length > 0) {
+                        stockBtns += sizes.map(size => {
+                            const isOOS = outOfStockSizes.includes(size);
+                            return `<button onclick="toggleSizeStock('${product.productId}', '${size}', ${isOOS})"
+                                style="padding:3px 10px;margin:2px;border-radius:6px;border:1px solid #8B0000;font-size:0.8rem;cursor:pointer;
+                                background:${isOOS?'#dc3545':'#28a745'};color:white;font-weight:600;">
+                                ${size} ${isOOS?'✗':'✓'}</button>`;
+                        }).join('');
+                    }
+                    // Color buttons
+                    if (product.colors && product.colors.length > 0) {
+                        if (sizes.length > 0) stockBtns += '<br>';
+                        stockBtns += product.colors.map(color => {
+                            const isOOS = outOfStockSizes.includes(color);
+                            return `<button onclick="toggleSizeStock('${product.productId}', '${color}', ${isOOS})"
+                                style="padding:3px 10px;margin:2px;border-radius:6px;border:1px solid #6c757d;font-size:0.8rem;cursor:pointer;
+                                background:${isOOS?'#dc3545':'#17a2b8'};color:white;font-weight:600;">
+                                ${color} ${isOOS?'✗':'✓'}</button>`;
+                        }).join('');
+                    }
                 } else {
-                    stockBtns = '<span style="color:#999;font-size:0.8rem;">No sizes/ages</span>';
+                    stockBtns = '<span style="color:#999;font-size:0.8rem;">No sizes/ages/colors</span>';
                 }
 
                 return `<tr>
