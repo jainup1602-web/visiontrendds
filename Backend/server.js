@@ -7,8 +7,10 @@ const { connectDB } = require('./config/db');
 
 const app = express();
 
-// Connect to MySQL
-connectDB();
+// Connect to MySQL - don't crash on connection failure
+connectDB().catch(err => {
+    console.error('DB connection failed on startup:', err.message);
+});
 
 // ─── In-Memory Cache ───────────────────────────────────────────────────────
 const cache = new Map();

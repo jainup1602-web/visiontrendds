@@ -28,7 +28,8 @@ const connectDB = async () => {
         return pool;
     } catch (error) {
         console.error('❌ MySQL Connection Error:', error.message);
-        process.exit(1);
+        // Don't exit on Vercel - throw error instead so function can retry
+        throw error;
     }
 };
 
