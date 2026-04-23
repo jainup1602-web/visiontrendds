@@ -282,49 +282,42 @@ const productUtils = {
     generateWhatsAppURL(product) {
         if (!product) return `https://wa.me/${PRODUCTS_CONFIG.whatsappNumber}`;
         
-        // Create detailed message with product information
         let message = `Hi! I'm interested in the following product:\n\n`;
-        message += `📦 *Product:* ${product.title || product.name || 'Product'}\n`;
+        message += `*Product:* ${product.title || product.name || 'Product'}\n`;
+        
+        if (product.id) {
+            message += `*Product ID:* ${product.id}\n`;
+        }
         
         if (product.price) {
-            message += `💰 *Price:* ${product.price}\n`;
+            message += `*Price:* ${product.price}\n`;
         }
         
         if (product.originalPrice && product.originalPrice !== product.price) {
-            message += `🏷️ *Original Price:* ${product.originalPrice}\n`;
+            message += `*Original Price:* ${product.originalPrice}\n`;
         }
         
-        // Add selected options if available
         if (product.selectedAge || product.selectedSize || product.selectedColor) {
-            message += `\n✅ *My Selection:*\n`;
-            if (product.selectedAge) {
-                message += `👶 Age: ${product.selectedAge} years\n`;
-            }
-            if (product.selectedSize) {
-                message += `📏 Size: ${product.selectedSize}\n`;
-            }
-            if (product.selectedColor) {
-                message += `🎨 Color: ${product.selectedColor}\n`;
-            }
+            message += `\n*My Selection:*\n`;
+            if (product.selectedAge) message += `Age: ${product.selectedAge} years\n`;
+            if (product.selectedSize) message += `Size: ${product.selectedSize}\n`;
+            if (product.selectedColor) message += `Color: ${product.selectedColor}\n`;
         } else if (product.sizes && product.sizes.length > 0) {
-            message += `📏 *Available Sizes:* ${product.sizes.join(', ')}\n`;
+            message += `*Available Sizes:* ${product.sizes.join(', ')}\n`;
         }
         
         if (product.category) {
-            message += `🏷️ *Category:* ${product.category.charAt(0).toUpperCase() + product.category.slice(1)}\n`;
+            message += `*Category:* ${product.category.charAt(0).toUpperCase() + product.category.slice(1)}\n`;
         }
         
         if (product.description) {
-            message += `\n📝 *Description:* ${product.description}\n`;
+            message += `\n*Description:* ${product.description}\n`;
         }
         
-        // Add image URL if available (not Base64)
-        if (product.image && !product.image.startsWith('data:')) {
-            const baseURL = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.baseURL : window.location.origin;
-            const imageUrl = product.image.startsWith('http') 
-                ? product.image 
-                : `${baseURL}/${product.image}`;
-            message += `\n🖼️ *Product Image:* ${imageUrl}\n`;
+        // Add product page link
+        const baseURL = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.baseURL : window.location.origin;
+        if (product.id) {
+            message += `\n*Product Link:* ${baseURL}/product-details.html?id=${product.id}\n`;
         }
         
         message += `\nPlease share more details about this product.`;
