@@ -77,26 +77,17 @@
 
                 <!-- FILE UPLOAD SECTION -->
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Product Image * <span style="color: #8B0000;">(Upload from Computer)</span></label>
-                        <input type="file" id="imageFile" class="form-control" accept="image/*">
-                        <div id="imagePreview" style="margin-top: 10px; position: relative;">
-                            <img id="previewImg" src="" alt="Preview" style="max-width: 200px; display: none; border-radius: 8px; border: 2px solid #8B0000; padding: 5px;">
-                            <button type="button" id="removeImageBtn" onclick="removeImage()" style="display: none; position: absolute; top: 5px; right: 5px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px;">
-                                <i class="fas fa-times"></i>
-                            </button>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Product Images * <small style="color:#666;">(First = main image, rest = gallery. Drag to reorder)</small></label>
+                        <div id="multi-image-area" style="border:2px dashed #8B1538;border-radius:8px;padding:16px;margin-bottom:8px;">
+                            <div id="image-previews" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;"></div>
+                            <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;background:#8B1538;color:white;padding:8px 16px;border-radius:6px;font-size:0.9rem;">
+                                <i class="fas fa-plus"></i> Add Image(s)
+                                <input type="file" id="imageFile" accept="image/*" multiple style="display:none;" onchange="handleImageSelect(this)">
+                            </label>
+                            <small style="display:block;margin-top:6px;color:#666;">Current images shown above. Add more or drag to reorder.</small>
                         </div>
-                        <small style="color: #666; display: block; margin-top: 5px;">
-                            <i class="fas fa-info-circle"></i> Current image shown above. Select new file to replace.
-                        </small>
                         <input type="hidden" id="image">
-                    </div>
-                    <div class="form-group">
-                        <label>Additional Images (Optional)</label>
-                        <input type="file" id="additionalImages" class="form-control" accept="image/*" multiple>
-                        <small style="color: #666; display: block; margin-top: 5px;">
-                            <i class="fas fa-images"></i> You can select multiple images
-                        </small>
                     </div>
                 </div>
 
@@ -217,32 +208,52 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
-        let uploadedImagePath = '';
+        let uploadedImages = [];
 
         console.log('Edit Product Page Loaded - Product ID:', productId);
 
-        // Image preview
-        document.getElementById('imageFile').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                console.log('Image file selected:', file.name);
+        let uploadedImages = []; // array of base64/path strings
+
+        function handleImageSelect(input) {
+            const files = Array.from(input.files);
+            files.forEach(file => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('previewImg').src = e.target.result;
-                    document.getElementById('previewImg').style.display = 'block';
-                    document.getElementById('removeImageBtn').style.display = 'block';
+                    uploadedImages.push(e.target.result);
+                    renderImagePreviews();
                 };
                 reader.readAsDataURL(file);
-            }
-        });
+            });
+            input.value = '';
+        }
 
-        // Remove image function
-        function removeImage() {
-            document.getElementById('previewImg').src = '';
-            document.getElementById('previewImg').style.display = 'none';
-            document.getElementById('removeImageBtn').style.display = 'none';
-            document.getElementById('imageFile').value = '';
-            uploadedImagePath = '';
+        function renderImagePreviews() {
+            const container = document.getElementById('image-previews');
+            container.innerHTML = uploadedImages.map((img, i) => {
+                const src = img.startsWith('data:') ? img : img.startsWith('/uploads') ? `${BACKEND_URL}${img}` : `${FRONTEND_BASE}/${img}`;
+                return `<div style="position:relative;display:inline-block;" draggable="true"
+                     ondragstart="dragImgStart(${i})" ondragover="event.preventDefault()" ondrop="dropImg(${i})">
+                    <img src="${src}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;border:${i===0?'3px solid #8B1538':'2px solid #ddd'};" onerror="this.src='../Frontend/product/color_logo.png'">
+                    ${i===0?'<span style="position:absolute;bottom:2px;left:2px;background:#8B1538;color:white;font-size:9px;padding:1px 4px;border-radius:3px;">MAIN</span>':''}
+                    <button type="button" onclick="removeImg(${i})"
+                        style="position:absolute;top:-6px;right:-6px;background:#dc3545;color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;line-height:1;">×</button>
+                </div>`;
+            }).join('');
+        }
+
+        function removeImg(index) {
+            uploadedImages.splice(index, 1);
+            renderImagePreviews();
+        }
+
+        let dragSrcImg = null;
+        function dragImgStart(i) { dragSrcImg = i; }
+        function dropImg(i) {
+            if (dragSrcImg === null || dragSrcImg === i) return;
+            const moved = uploadedImages.splice(dragSrcImg, 1)[0];
+            uploadedImages.splice(i, 0, moved);
+            dragSrcImg = null;
+            renderImagePreviews();
         }
 
         // Upload image function - Convert to Base64
@@ -269,6 +280,49 @@
                 showErrorPopup('Error uploading image: ' + error.message);
                 return null;
             }
+        }
+
+        function handleImageSelect(input) {
+            const files = Array.from(input.files);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImages.push(e.target.result);
+                    renderImagePreviews();
+                };
+                reader.readAsDataURL(file);
+            });
+            input.value = '';
+        }
+
+        function renderImagePreviews() {
+            const container = document.getElementById('image-previews');
+            if (!container) return;
+            container.innerHTML = uploadedImages.map((img, i) => {
+                const src = img.startsWith('data:') ? img : img.startsWith('/uploads') ? `${BACKEND_URL}${img}` : `${FRONTEND_BASE}/${img}`;
+                return `<div style="position:relative;display:inline-block;" draggable="true"
+                     ondragstart="dragImgStart(${i})" ondragover="event.preventDefault()" ondrop="dropImg(${i})">
+                    <img src="${src}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;border:${i===0?'3px solid #8B1538':'2px solid #ddd'};" onerror="this.src='../Frontend/product/color_logo.png'">
+                    ${i===0?'<span style="position:absolute;bottom:2px;left:2px;background:#8B1538;color:white;font-size:9px;padding:1px 4px;border-radius:3px;">MAIN</span>':''}
+                    <button type="button" onclick="removeImg(${i})"
+                        style="position:absolute;top:-6px;right:-6px;background:#dc3545;color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;line-height:1;">×</button>
+                </div>`;
+            }).join('');
+        }
+
+        function removeImg(index) {
+            uploadedImages.splice(index, 1);
+            renderImagePreviews();
+        }
+
+        let dragSrcImg = null;
+        function dragImgStart(i) { dragSrcImg = i; }
+        function dropImg(i) {
+            if (dragSrcImg === null || dragSrcImg === i) return;
+            const moved = uploadedImages.splice(dragSrcImg, 1)[0];
+            uploadedImages.splice(i, 0, moved);
+            dragSrcImg = null;
+            renderImagePreviews();
         }
 
         // Load product data
@@ -304,26 +358,10 @@
                     });
                 }
                 
-                // Show existing image if available
-                if (product.images && product.images.length > 0 && product.images[0]) {
-                    uploadedImagePath = product.images[0];
-                    console.log('Existing image type:', uploadedImagePath.startsWith('data:') ? 'Base64' : 'Path');
-                    
-                    // Check if it's Base64 data URL or file path
-                    if (uploadedImagePath.startsWith('data:')) {
-                        // Base64 image - use directly
-                        document.getElementById('previewImg').src = uploadedImagePath;
-                    } else if (uploadedImagePath.startsWith('/uploads')) {
-                        // Old file path format - convert to server URL
-                        document.getElementById('previewImg').src = `${BACKEND_URL}${uploadedImagePath}`;
-                    } else {
-                        // Local frontend path
-                        document.getElementById('previewImg').src = `../Frontend/${uploadedImagePath}`;
-                    }
-                    document.getElementById('previewImg').style.display = 'block';
-                    document.getElementById('removeImageBtn').style.display = 'block';
-                } else {
-                    console.log('No existing image');
+                // Show existing images
+                if (product.images && product.images.length > 0) {
+                    uploadedImages = product.images.filter(img => img);
+                    renderImagePreviews();
                 }
 
                 await loadCategories();
@@ -468,20 +506,9 @@
             e.preventDefault();
             console.log('Form submitted');
 
-            // Upload image if new file selected
-            const imageFile = document.getElementById('imageFile').files[0];
-            if (imageFile) {
-                console.log('New image selected, uploading...');
-                uploadedImagePath = await uploadImage(imageFile);
-                if (!uploadedImagePath) {
-                    showErrorPopup('Image upload failed. Please try again.');
-                    return;
-                }
-            }
-
-            // Check if image exists
-            if (!uploadedImagePath) {
-                showErrorPopup('Please upload a product image');
+            // Validate images
+            if (uploadedImages.length === 0) {
+                showErrorPopup('Please add at least one image');
                 return;
             }
 
@@ -489,7 +516,7 @@
                 productId: document.getElementById('product-id').value.trim(),
                 name: document.getElementById('title').value.trim(),
                 description: document.getElementById('description').value.trim(),
-                images: [uploadedImagePath],
+                images: uploadedImages,
                 price: parseInt(document.getElementById('price').value),
                 originalPrice: parseInt(document.getElementById('originalPrice').value),
                 discount: Math.round(((parseInt(document.getElementById('originalPrice').value) - parseInt(document.getElementById('price').value)) / parseInt(document.getElementById('originalPrice').value)) * 100),
@@ -521,20 +548,7 @@
                 });
 
                 if (response.ok) {
-                    console.log('Product updated successfully');
-                    // Keep image preview visible after update
-                    if (uploadedImagePath) {
-                        if (uploadedImagePath.startsWith('data:')) {
-                            // Base64 image
-                            document.getElementById('previewImg').src = uploadedImagePath;
-                        } else if (uploadedImagePath.startsWith('/uploads')) {
-                            document.getElementById('previewImg').src = `${BACKEND_URL}${uploadedImagePath}`;
-                        } else {
-                            document.getElementById('previewImg').src = `../Frontend/${uploadedImagePath}`;
-                        }
-                        document.getElementById('previewImg').style.display = 'block';
-                        document.getElementById('removeImageBtn').style.display = 'block';
-                    }
+                    renderImagePreviews(); // refresh preview
                     showSuccessPopup('Product updated successfully!');
                 } else {
                     const error = await response.json();
