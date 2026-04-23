@@ -329,33 +329,44 @@
                 return;
             }
 
-            // Generate prefix from category+subcategory if not in mapping
             const prefix = ID_PREFIXES[category]?.[subcategory] 
                 || (category.substring(0,1) + subcategory.replace(/_/g,'').substring(0,2));
             
             try {
-                // Get existing products with this prefix
+                // Get ALL products to find max number across all pages
                 const response = await fetch(`${API_URL}/products?category=${category}&subcategory=${subcategory}`);
-                const products = await response.json();
+                const data = await response.json();
+                const products = data.products || data; // handle paginated or plain array
                 
-                // Find highest number
+                // Find highest number for this prefix
                 let maxNum = 0;
                 products.forEach(p => {
                     if (p.productId && p.productId.startsWith(prefix)) {
                         const num = parseInt(p.productId.replace(prefix, ''));
-                        if (!isNaN(num) && num > maxNum) {
-                            maxNum = num;
-                        }
+                        if (!isNaN(num) && num > maxNum) maxNum = num;
                     }
                 });
                 
-                const newId = prefix + (maxNum + 1);
+                // Find next available ID (check for conflicts)
+                let candidateNum = maxNum + 1;
+                let newId = prefix + candidateNum;
+                
+                // Verify ID doesn't exist (handles race conditions)
+                let attempts = 0;
+                while (attempts < 10) {
+                    const checkRes = await fetch(`${API_URL}/products/${newId}`);
+                    if (checkRes.status === 404) break; // ID is free
+                    candidateNum++;
+                    newId = prefix + candidateNum;
+                    attempts++;
+                }
+                
                 document.getElementById('product-id').value = newId;
                 document.getElementById('id-hint').textContent = `✓ Generated ID: ${newId}`;
                 document.getElementById('id-hint').classList.add('generated');
             } catch (error) {
-                // Use timestamp suffix to avoid duplicates
-                const fallbackId = prefix + Date.now().toString().slice(-4);
+                // Timestamp-based fallback - guaranteed unique
+                const fallbackId = prefix + Date.now().toString().slice(-6);
                 document.getElementById('product-id').value = fallbackId;
                 document.getElementById('id-hint').textContent = `Generated ID: ${fallbackId}`;
                 document.getElementById('id-hint').classList.add('generated');

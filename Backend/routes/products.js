@@ -47,11 +47,21 @@ router.get('/:id', async (req, res) => {
 // Create product
 router.post('/', async (req, res) => {
     try {
+        // Check if productId already exists
+        const existing = await Product.findByProductId(req.body.productId);
+        if (existing) {
+            return res.status(400).json({ 
+                message: `Product ID "${req.body.productId}" already exists. Please use a different ID.` 
+            });
+        }
         const newProduct = await Product.create(req.body);
         req.app.locals.cache.clear('products:'); // invalidate cache
         res.status(201).json(newProduct);
     } catch (error) {
         console.error('Error creating product:', error);
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({ message: `Duplicate product ID. Please refresh and try again.` });
+        }
         res.status(400).json({ message: error.message });
     }
 });
