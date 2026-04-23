@@ -78,6 +78,11 @@ const createTables = async () => {
             await pool.query(`ALTER TABLE products ADD COLUMN outOfStockSizes JSON DEFAULT NULL`);
         } catch(e) { /* column already exists */ }
 
+        // Add colors column if it doesn't exist (migration)
+        try {
+            await pool.query(`ALTER TABLE products ADD COLUMN colors JSON DEFAULT NULL`);
+        } catch(e) { /* column already exists */ }
+
         // Add sortOrder column to categories if it doesn't exist
         try {
             await pool.query(`ALTER TABLE categories ADD COLUMN sortOrder INT DEFAULT 0`);

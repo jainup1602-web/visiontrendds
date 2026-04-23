@@ -68,21 +68,22 @@ class Product {
         const pool = getPool();
         const {
             productId, name, description, category, subcategory, gender,
-            price, originalPrice, discount, images, sizes, inStock,
+            price, originalPrice, discount, images, sizes, colors, inStock,
             featured, ageRange, agePricing, outOfStockSizes
         } = productData;
 
         const [result] = await pool.query(
             `INSERT INTO products (
                 productId, name, description, category, subcategory, gender,
-                price, originalPrice, discount, images, sizes, inStock,
+                price, originalPrice, discount, images, sizes, colors, inStock,
                 featured, ageRange, agePricing, outOfStockSizes
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 productId, name, description, category, subcategory, gender,
                 price, originalPrice, discount || 0,
                 JSON.stringify(images || []),
                 JSON.stringify(sizes || []),
+                JSON.stringify(colors || []),
                 inStock !== false,
                 featured || false,
                 ageRange || null,
@@ -115,6 +116,7 @@ class Product {
             discount = existing.discount,
             images = existing.images,
             sizes = existing.sizes,
+            colors = existing.colors,
             inStock = existing.inStock,
             featured = existing.featured,
             ageRange = existing.ageRange,
@@ -125,7 +127,7 @@ class Product {
         await pool.query(
             `UPDATE products SET
                 name = ?, description = ?, category = ?, subcategory = ?, gender = ?,
-                price = ?, originalPrice = ?, discount = ?, images = ?, sizes = ?,
+                price = ?, originalPrice = ?, discount = ?, images = ?, sizes = ?, colors = ?,
                 inStock = ?, featured = ?, ageRange = ?, agePricing = ?, outOfStockSizes = ?
             WHERE productId = ?`,
             [
@@ -133,6 +135,7 @@ class Product {
                 price, originalPrice, discount || 0,
                 JSON.stringify(images || []),
                 JSON.stringify(sizes || []),
+                JSON.stringify(colors || []),
                 inStock !== false,
                 featured || false,
                 ageRange || null,
@@ -158,6 +161,7 @@ class Product {
             ...row,
             images: typeof row.images === 'string' ? JSON.parse(row.images) : row.images,
             sizes: typeof row.sizes === 'string' ? JSON.parse(row.sizes) : row.sizes,
+            colors: row.colors && typeof row.colors === 'string' ? JSON.parse(row.colors) : (row.colors || []),
             agePricing: row.agePricing && typeof row.agePricing === 'string' 
                 ? JSON.parse(row.agePricing) 
                 : row.agePricing,
