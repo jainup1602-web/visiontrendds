@@ -71,17 +71,17 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Product Image *</label>
-                        <input type="file" id="imageFile" class="form-control" accept="image/*" required>
-                        <div id="imagePreview" style="margin-top: 10px;">
-                            <img id="previewImg" src="" alt="Preview" style="max-width: 200px; display: none; border-radius: 8px;">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Product Images * <small style="color:#666;">(First image = main, rest = gallery thumbnails)</small></label>
+                        <div id="multi-image-area" style="border:2px dashed #8B1538;border-radius:8px;padding:16px;margin-bottom:8px;">
+                            <div id="image-previews" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;"></div>
+                            <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;background:#8B1538;color:white;padding:8px 16px;border-radius:6px;font-size:0.9rem;">
+                                <i class="fas fa-plus"></i> Add Image(s)
+                                <input type="file" id="imageFile" accept="image/*" multiple style="display:none;" onchange="handleImageSelect(this)">
+                            </label>
+                            <small style="display:block;margin-top:6px;color:#666;">Click to add multiple images. Drag to reorder.</small>
                         </div>
-                        <input type="hidden" id="image" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Additional Images (Optional)</label>
-                        <input type="file" id="additionalImages" class="form-control" accept="image/*" multiple>
+                        <input type="hidden" id="image">
                     </div>
                 </div>
 
@@ -223,42 +223,62 @@
 
     <script src="config.js"></script>
     <script>
-        let uploadedImagePath = '';
+        let uploadedImages = []; // array of base64 strings
 
-        // Image preview
-        document.getElementById('imageFile').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
+        // Handle multiple image selection
+        function handleImageSelect(input) {
+            const files = Array.from(input.files);
+            files.forEach(file => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('previewImg').src = e.target.result;
-                    document.getElementById('previewImg').style.display = 'block';
+                    uploadedImages.push(e.target.result);
+                    renderImagePreviews();
                 };
                 reader.readAsDataURL(file);
-            }
-        });
+            });
+            input.value = ''; // reset so same file can be added again
+        }
+
+        function renderImagePreviews() {
+            const container = document.getElementById('image-previews');
+            container.innerHTML = uploadedImages.map((img, i) => `
+                <div style="position:relative;display:inline-block;" draggable="true"
+                     ondragstart="dragImgStart(${i})" ondragover="event.preventDefault()" ondrop="dropImg(${i})">
+                    <img src="${img}" style="width:80px;height:80px;object-fit:cover;border-radius:6px;border:${i===0?'3px solid #8B1538':'2px solid #ddd'};">
+                    ${i===0?'<span style="position:absolute;bottom:2px;left:2px;background:#8B1538;color:white;font-size:9px;padding:1px 4px;border-radius:3px;">MAIN</span>':''}
+                    <button type="button" onclick="removeImg(${i})"
+                        style="position:absolute;top:-6px;right:-6px;background:#dc3545;color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;line-height:1;">×</button>
+                </div>
+            `).join('');
+        }
+
+        function removeImg(index) {
+            uploadedImages.splice(index, 1);
+            renderImagePreviews();
+        }
+
+        let dragSrcImg = null;
+        function dragImgStart(i) { dragSrcImg = i; }
+        function dropImg(i) {
+            if (dragSrcImg === null || dragSrcImg === i) return;
+            const moved = uploadedImages.splice(dragSrcImg, 1)[0];
+            uploadedImages.splice(i, 0, moved);
+            dragSrcImg = null;
+            renderImagePreviews();
+        }
 
         // Upload image function - Convert to Base64
         async function uploadImage(file) {
             const formData = new FormData();
             formData.append('image', file);
-
             try {
-                const response = await fetch(`${API_URL}/upload/image`, {
-                    method: 'POST',
-                    body: formData
-                });
-
+                const response = await fetch(`${API_URL}/upload/image`, { method: 'POST', body: formData });
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('Image uploaded, size:', data.size, 'bytes');
-                    return data.imageData; // Returns Base64 data URL
-                } else {
-                    throw new Error('Image upload failed');
-                }
+                    return data.imageData;
+                } else { throw new Error('Upload failed'); }
             } catch (error) {
-                console.error('Error uploading image:', error);
-                showErrorPopup('Error uploading image');
+                showErrorPopup('Error uploading image: ' + error.message);
                 return null;
             }
         }
@@ -542,21 +562,13 @@
                     : '<i class="fas fa-save"></i> Save Product';
             }
 
-            // Upload image first
-            const imageFile = document.getElementById('imageFile').files[0];
-            if (!imageFile) {
-                showErrorPopup('Please select an image');
+            // Validate images
+            if (uploadedImages.length === 0) {
+                showErrorPopup('Please add at least one image');
                 return;
             }
 
             setLoading(true);
-
-            uploadedImagePath = await uploadImage(imageFile);
-            if (!uploadedImagePath) {
-                setLoading(false);
-                showErrorPopup('Image upload failed');
-                return;
-            }
 
             const priceValue = parseInt(document.getElementById('price').value.trim());
             const originalPriceValue = parseInt(document.getElementById('originalPrice').value.trim());
@@ -565,7 +577,7 @@
                 productId: document.getElementById('product-id').value.trim(),
                 name: document.getElementById('title').value.trim(),
                 description: document.getElementById('description').value.trim(),
-                images: [uploadedImagePath],
+                images: uploadedImages,  // all images array
                 price: priceValue,
                 originalPrice: originalPriceValue,
                 discount: Math.round(((originalPriceValue - priceValue) / originalPriceValue) * 100),

@@ -269,6 +269,10 @@
                                 <!-- Badge will be inserted here -->
                             </div>
                         </div>
+                        <!-- Image Thumbnails Gallery -->
+                        <div id="image-thumbnails" class="flex gap-2 flex-wrap hidden">
+                            <!-- Thumbnails inserted by JS -->
+                        </div>
                     </div>
 
                     <!-- Product Info -->
@@ -634,6 +638,22 @@
             productImage.onload = function() {
                 initImageZoom();
             };
+
+            // Show image thumbnails if multiple images
+            const thumbContainer = document.getElementById('image-thumbnails');
+            if (product.images && product.images.length > 1) {
+                thumbContainer.classList.remove('hidden');
+                thumbContainer.innerHTML = product.images.map((img, i) => `
+                    <div onclick="switchProductImage('${img.replace(/'/g, "\\'")}', this)"
+                         style="width:70px;height:70px;border-radius:8px;overflow:hidden;cursor:pointer;border:${i===0?'2px solid #8B1538':'2px solid #ddd'};flex-shrink:0;">
+                        <img src="${img}" alt="Image ${i+1}"
+                             style="width:100%;height:100%;object-fit:cover;"
+                             onerror="this.src='product/color_logo.png'">
+                    </div>
+                `).join('');
+            } else {
+                thumbContainer.classList.add('hidden');
+            }
             
             // Update product badge
             const badgeColors = {
@@ -1058,6 +1078,19 @@
             // Open WhatsApp with product details
             const whatsappURL = productUtils.generateWhatsAppURL(productForWhatsApp);
             window.open(whatsappURL, '_blank');
+        }
+
+        // Switch main image when thumbnail clicked
+        function switchProductImage(imgSrc, thumbEl) {
+            const mainImg = document.getElementById('product-image');
+            mainImg.style.opacity = '0';
+            setTimeout(() => {
+                mainImg.src = imgSrc;
+                mainImg.style.opacity = '1';
+            }, 150);
+            // Update active border
+            document.querySelectorAll('#image-thumbnails > div').forEach(d => d.style.border = '2px solid #ddd');
+            thumbEl.style.border = '2px solid #8B1538';
         }
 
         // Image Zoom Effect - Simple cursor-based zoom
