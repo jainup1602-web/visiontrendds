@@ -13,18 +13,23 @@ const connectDB = async () => {
             password: process.env.DB_PASSWORD || '',
             database: process.env.DB_NAME || 'visiontrennds',
             waitForConnections: true,
-            connectionLimit: 5,  // Lower for serverless
+            connectionLimit: 3,
             queueLimit: 0,
             enableKeepAlive: true,
             keepAliveInitialDelay: 0,
-            connectTimeout: 10000  // 10s for Vercel
+            connectTimeout: 8000,
+            acquireTimeout: 8000
         });
 
         const connection = await pool.getConnection();
         console.log('✅ MySQL Connected Successfully');
         connection.release();
 
-        await createTables();
+        // Only run migrations once (not on every serverless invocation)
+        if (!global._dbMigrated) {
+            await createTables();
+            global._dbMigrated = true;
+        }
         return pool;
     } catch (error) {
         console.error('❌ MySQL Connection Error:', error.message);
