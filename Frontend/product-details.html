@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -747,13 +747,30 @@
                 sizesSection.classList.remove('hidden');
             }
             
-            // Update colors
-            if (product.colors && product.colors.length > 0) {
+            // Update colors - Handle all data types (array, string, object)
+            let colorsArray = [];
+            if (product.colors) {
+                if (Array.isArray(product.colors)) {
+                    colorsArray = product.colors;
+                } else if (typeof product.colors === 'string') {
+                    try {
+                        const parsed = JSON.parse(product.colors);
+                        colorsArray = Array.isArray(parsed) ? parsed : [];
+                    } catch (e) {
+                        // If it's a comma-separated string
+                        colorsArray = product.colors.split(',').map(c => c.trim()).filter(c => c);
+                    }
+                } else if (typeof product.colors === 'object') {
+                    colorsArray = Object.values(product.colors);
+                }
+            }
+            
+            if (colorsArray.length > 0) {
                 const colorsContainer = document.getElementById('colors-container');
                 const colorsSection = document.getElementById('product-colors');
                 const outOfStockColors = product.outOfStockSizes || [];
                 
-                colorsContainer.innerHTML = product.colors.map(color => {
+                colorsContainer.innerHTML = colorsArray.map(color => {
                     const isOOS = outOfStockColors.includes(color);
                     return `<button class="color-option px-4 py-3 border-2 rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2
                         ${isOOS ? 'border-gray-300 text-gray-400 bg-gray-100 cursor-not-allowed line-through' : 'border-vision-red text-vision-red hover:bg-vision-red hover:text-white cursor-pointer focus:ring-vision-red'}"
