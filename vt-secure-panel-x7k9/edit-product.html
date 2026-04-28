@@ -482,9 +482,7 @@
                 if (agePricing) productData.agePricing = agePricing;
             }
 
-            console.log('🔍 FRONTEND DEBUG - productData before sending:', productData);
-            console.log('🔍 FRONTEND DEBUG - colors field:', productData.colors);
-            console.log('🔍 FRONTEND DEBUG - colors type:', typeof productData.colors, Array.isArray(productData.colors));
+            console.log('Updating product:', productData);
 
             try {
                 const response = await fetch(`${API_URL}/products/${productId}`, {

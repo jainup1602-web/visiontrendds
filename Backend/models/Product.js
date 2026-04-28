@@ -104,34 +104,24 @@ class Product {
             throw new Error('Product not found');
         }
         
-        // DEBUG: Log incoming colors data
-        console.log('🔍 UPDATE DEBUG - productData.colors:', productData.colors);
-        console.log('🔍 UPDATE DEBUG - existing.colors:', existing.colors);
-        
         // Merge with existing data (only update provided fields)
-        const {
-            name = existing.name,
-            description = existing.description,
-            category = existing.category,
-            subcategory = existing.subcategory,
-            gender = existing.gender,
-            price = existing.price,
-            originalPrice = existing.originalPrice,
-            discount = existing.discount,
-            images = existing.images,
-            sizes = existing.sizes,
-            colors = existing.colors,
-            inStock = existing.inStock,
-            featured = existing.featured,
-            ageRange = existing.ageRange,
-            agePricing = existing.agePricing,
-            outOfStockSizes = existing.outOfStockSizes
-        } = productData;
+        const name = productData.name !== undefined ? productData.name : existing.name;
+        const description = productData.description !== undefined ? productData.description : existing.description;
+        const category = productData.category !== undefined ? productData.category : existing.category;
+        const subcategory = productData.subcategory !== undefined ? productData.subcategory : existing.subcategory;
+        const gender = productData.gender !== undefined ? productData.gender : existing.gender;
+        const price = productData.price !== undefined ? productData.price : existing.price;
+        const originalPrice = productData.originalPrice !== undefined ? productData.originalPrice : existing.originalPrice;
+        const discount = productData.discount !== undefined ? productData.discount : existing.discount;
+        const images = productData.images !== undefined ? productData.images : existing.images;
+        const sizes = productData.sizes !== undefined ? productData.sizes : existing.sizes;
+        const colors = productData.colors !== undefined ? productData.colors : existing.colors;
+        const inStock = productData.inStock !== undefined ? productData.inStock : existing.inStock;
+        const featured = productData.featured !== undefined ? productData.featured : existing.featured;
+        const ageRange = productData.ageRange !== undefined ? productData.ageRange : existing.ageRange;
+        const agePricing = productData.agePricing !== undefined ? productData.agePricing : existing.agePricing;
+        const outOfStockSizes = productData.outOfStockSizes !== undefined ? productData.outOfStockSizes : existing.outOfStockSizes;
 
-        // DEBUG: Log final colors value before SQL
-        const colorsToSave = JSON.stringify(colors || []);
-        console.log('🔍 UPDATE DEBUG - colors to save (stringified):', colorsToSave);
-        
         await pool.query(
             `UPDATE products SET
                 name = ?, description = ?, category = ?, subcategory = ?, gender = ?,
@@ -143,7 +133,7 @@ class Product {
                 price, originalPrice, discount || 0,
                 JSON.stringify(images || []),
                 JSON.stringify(sizes || []),
-                colorsToSave,
+                JSON.stringify(colors || []),
                 inStock !== false,
                 featured || false,
                 ageRange || null,
@@ -152,8 +142,6 @@ class Product {
                 productId
             ]
         );
-        
-        console.log('✅ UPDATE DEBUG - SQL executed successfully');
 
         return await this.findByProductId(productId);
     }
