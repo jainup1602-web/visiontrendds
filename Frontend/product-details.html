@@ -605,31 +605,39 @@
         }
 
         function displayProductDetails(product) {
-            // Debug: Log product to check agePricing
-            // Update page title
-            document.title = `${product.title} | Buy Ethnic Wear Jaipur | Vision Trennds`;
+            // 🎯 SEO: Update page title with product name + location keywords
+            const categoryKeywords = {
+                mens: "Men's Ethnic Wear Jaipur",
+                womens: "Women's Ethnic Wear Jaipur",
+                kids: "Kids Ethnic Wear Jaipur",
+                bags: "Block Print Bags Jaipur",
+                bedsheets: "Cotton Bedsheets Jaipur"
+            };
             
-            // Update canonical URL
+            const categoryKeyword = categoryKeywords[product.category] || "Ethnic Fashion Jaipur";
+            document.title = `${product.title} | Buy ${categoryKeyword} | Vision Trennds`;
+            
+            // 🎯 SEO: Update canonical URL
             const canonicalEl = document.getElementById('canonical-url');
             if (canonicalEl) canonicalEl.setAttribute('href', window.location.href);
 
-            // Update meta description with keywords
+            // 🎯 SEO: Update meta description with rich keywords
             const metaDesc = document.querySelector('meta[name="description"]');
-            if (metaDesc) metaDesc.setAttribute('content', `${product.title} - ${product.description || 'Premium ethnic fashion from Vision Trennds, Nirman Nagar, Jaipur. Designer clothes, buy ethnic wear online via WhatsApp.'}`);
+            const seoDescription = `Buy ${product.title} in Jaipur at Vision Trennds, Nirman Nagar. ${product.description || 'Premium ethnic fashion'} - Best price, quality assured, free delivery. Order via WhatsApp: 9829639639. ${categoryKeyword} near me.`;
+            if (metaDesc) metaDesc.setAttribute('content', seoDescription);
 
-            // Update Open Graph meta tags for WhatsApp preview
+            // 🎯 SEO: Update Open Graph meta tags for WhatsApp/social preview
             const currentURL = window.location.href;
-            const imageURL = window.location.origin + '/' + product.image;
+            const imageURL = product.image.startsWith('http') ? product.image : window.location.origin + '/' + product.image;
             
-            // Update or create Open Graph tags
             document.querySelector('meta[property="og:url"]').setAttribute('content', currentURL);
-            document.querySelector('meta[property="og:title"]').setAttribute('content', product.title);
-            document.querySelector('meta[property="og:description"]').setAttribute('content', product.description || 'Premium fashion from Vision Trennds');
+            document.querySelector('meta[property="og:title"]').setAttribute('content', `${product.title} | ${categoryKeyword}`);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', seoDescription);
             document.querySelector('meta[property="og:image"]').setAttribute('content', imageURL);
             
             document.querySelector('meta[property="twitter:url"]').setAttribute('content', currentURL);
-            document.querySelector('meta[property="twitter:title"]').setAttribute('content', product.title);
-            document.querySelector('meta[property="twitter:description"]').setAttribute('content', product.description || 'Premium fashion from Vision Trennds');
+            document.querySelector('meta[property="twitter:title"]').setAttribute('content', `${product.title} | ${categoryKeyword}`);
+            document.querySelector('meta[property="twitter:description"]').setAttribute('content', seoDescription);
             document.querySelector('meta[property="twitter:image"]').setAttribute('content', imageURL);
             
             // Update breadcrumb
