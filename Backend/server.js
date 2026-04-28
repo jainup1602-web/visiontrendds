@@ -50,10 +50,6 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // ─── HTTP Cache Headers for GET requests ──────────────────────────────────
 app.use((req, res, next) => {
     if (req.method === 'GET') {
-        // Products/categories: cache 2 min in browser, 5 min on CDN
-        if (req.path.startsWith('/api/products') || req.path.startsWith('/api/categories')) {
-            res.set('Cache-Control', 'public, max-age=120, s-maxage=300');
-        }
         // Health check: no cache
         if (req.path === '/api/health') {
             res.set('Cache-Control', 'no-store');

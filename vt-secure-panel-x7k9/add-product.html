@@ -582,6 +582,7 @@
                 originalPrice: originalPriceValue,
                 discount: Math.round(((originalPriceValue - priceValue) / originalPriceValue) * 100),
                 sizes: document.getElementById('sizes').value.split(',').map(s => s.trim()).filter(s => s),
+                colors: document.getElementById('colors').value.split(',').map(s => s.trim()).filter(s => s),
                 inStock: document.getElementById('inStock').checked,
                 category: document.getElementById('category').value,
                 subcategory: document.getElementById('subcategory').value,

@@ -1,4 +1,4 @@
-﻿// API Configuration
+// API Configuration
 const API_CONFIG = {
     baseURL: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : 'http://localhost:5000/api',
     timeout: 30000  // 30 seconds
@@ -144,6 +144,7 @@ const API = {
             badge: product.discount ? `${product.discount}% OFF` : '',
             badgeType: 'sale',
             sizes: product.sizes || [],
+            colors: product.colors || [],
             inStock: product.inStock,
             category: product.category,
             subcategory: product.subcategory,
