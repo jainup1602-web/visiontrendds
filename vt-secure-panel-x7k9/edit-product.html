@@ -284,7 +284,25 @@
                 document.getElementById('price').value = product.price || '';
                 document.getElementById('originalPrice').value = product.originalPrice || '';
                 document.getElementById('sizes').value = product.sizes ? product.sizes.join(', ') : '';
-                document.getElementById('colors').value = product.colors ? product.colors.join(', ') : '';
+                
+                // Handle colors - can be array, string, or null
+                let colorsValue = '';
+                if (product.colors) {
+                    if (Array.isArray(product.colors)) {
+                        colorsValue = product.colors.join(', ');
+                    } else if (typeof product.colors === 'string') {
+                        try {
+                            const parsed = JSON.parse(product.colors);
+                            colorsValue = Array.isArray(parsed) ? parsed.join(', ') : product.colors;
+                        } catch (e) {
+                            colorsValue = product.colors;
+                        }
+                    } else if (typeof product.colors === 'object') {
+                        colorsValue = Object.values(product.colors).join(', ');
+                    }
+                }
+                document.getElementById('colors').value = colorsValue;
+                
                 document.getElementById('inStock').checked = product.inStock || false;
                 document.getElementById('featured').checked = product.featured || false;
                 
