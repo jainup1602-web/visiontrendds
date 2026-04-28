@@ -104,6 +104,10 @@ class Product {
             throw new Error('Product not found');
         }
         
+        // DEBUG: Log incoming colors data
+        console.log('🔍 UPDATE DEBUG - productData.colors:', productData.colors);
+        console.log('🔍 UPDATE DEBUG - existing.colors:', existing.colors);
+        
         // Merge with existing data (only update provided fields)
         const {
             name = existing.name,
@@ -124,6 +128,10 @@ class Product {
             outOfStockSizes = existing.outOfStockSizes
         } = productData;
 
+        // DEBUG: Log final colors value before SQL
+        const colorsToSave = JSON.stringify(colors || []);
+        console.log('🔍 UPDATE DEBUG - colors to save (stringified):', colorsToSave);
+        
         await pool.query(
             `UPDATE products SET
                 name = ?, description = ?, category = ?, subcategory = ?, gender = ?,
@@ -135,7 +143,7 @@ class Product {
                 price, originalPrice, discount || 0,
                 JSON.stringify(images || []),
                 JSON.stringify(sizes || []),
-                JSON.stringify(colors || []),
+                colorsToSave,
                 inStock !== false,
                 featured || false,
                 ageRange || null,
@@ -144,6 +152,8 @@ class Product {
                 productId
             ]
         );
+        
+        console.log('✅ UPDATE DEBUG - SQL executed successfully');
 
         return await this.findByProductId(productId);
     }
