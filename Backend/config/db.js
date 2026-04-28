@@ -13,12 +13,13 @@ const connectDB = async () => {
             password: process.env.DB_PASSWORD || '',
             database: process.env.DB_NAME || 'visiontrennds',
             waitForConnections: true,
-            connectionLimit: 3,
+            connectionLimit: 5,
             queueLimit: 0,
             enableKeepAlive: true,
             keepAliveInitialDelay: 0,
-            connectTimeout: 8000,
-            acquireTimeout: 8000
+            connectTimeout: 30000,
+            idleTimeout: 60000,
+            maxIdle: 5
         });
 
         const connection = await pool.getConnection();
@@ -33,6 +34,9 @@ const connectDB = async () => {
         return pool;
     } catch (error) {
         console.error('❌ MySQL Connection Error:', error.message);
+        console.error('❌ DB_HOST:', process.env.DB_HOST);
+        console.error('❌ DB_USER:', process.env.DB_USER);
+        console.error('❌ DB_NAME:', process.env.DB_NAME);
         // Don't exit on Vercel - throw error instead so function can retry
         throw error;
     }
