@@ -132,6 +132,22 @@ const API = {
         if (!imageURL || imageURL === 'undefined') {
             imageURL = 'product/color_logo.png';
         }
+
+        // Safely parse colors - can be array, JSON string, or null
+        let colorsArray = [];
+        if (product.colors) {
+            if (Array.isArray(product.colors)) {
+                colorsArray = product.colors;
+            } else if (typeof product.colors === 'string') {
+                try {
+                    const parsed = JSON.parse(product.colors);
+                    colorsArray = Array.isArray(parsed) ? parsed : [];
+                } catch (e) {
+                    colorsArray = product.colors.split(',').map(c => c.trim()).filter(c => c);
+                }
+            }
+        }
+
         return {
             id: product.productId,
             title: product.name,
@@ -144,7 +160,7 @@ const API = {
             badge: product.discount ? `${product.discount}% OFF` : '',
             badgeType: 'sale',
             sizes: product.sizes || [],
-            colors: product.colors || [],
+            colors: colorsArray,
             inStock: product.inStock,
             category: product.category,
             subcategory: product.subcategory,
