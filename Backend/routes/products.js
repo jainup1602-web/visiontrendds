@@ -33,6 +33,11 @@ router.get('/', async (req, res) => {
 // Get single product
 router.get('/:id', async (req, res) => {
     try {
+        // Disable caching for single product requests
+        res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+        res.set('Pragma', 'no-cache');
+        res.set('Expires', '0');
+        
         const product = await Product.findByProductId(req.params.id);
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
@@ -71,6 +76,9 @@ router.put('/:id', async (req, res) => {
     try {
         const oldId = req.params.id;
         const newId = req.body.productId;
+        
+        // Clear cache immediately for this product
+        req.app.locals.cache.clear('products:');
 
         // If ID is being changed
         if (newId && newId !== oldId) {
@@ -94,7 +102,6 @@ router.put('/:id', async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
-        req.app.locals.cache.clear('products:');
         res.json(product);
     } catch (error) {
         console.error('Error updating product:', error);

@@ -175,17 +175,29 @@ class Product {
     static parseJsonFields(row) {
         if (!row) return null;
         
+        // Helper function to safely parse JSON fields
+        const safeJsonParse = (field, defaultValue = []) => {
+            if (!field) return defaultValue;
+            if (Array.isArray(field)) return field;
+            if (typeof field === 'object') return field;
+            if (typeof field === 'string') {
+                try {
+                    return JSON.parse(field);
+                } catch (e) {
+                    console.error('JSON parse error for field:', field, e);
+                    return defaultValue;
+                }
+            }
+            return defaultValue;
+        };
+        
         return {
             ...row,
-            images: typeof row.images === 'string' ? JSON.parse(row.images) : row.images,
-            sizes: typeof row.sizes === 'string' ? JSON.parse(row.sizes) : row.sizes,
-            colors: row.colors && typeof row.colors === 'string' ? JSON.parse(row.colors) : (row.colors || []),
-            agePricing: row.agePricing && typeof row.agePricing === 'string' 
-                ? JSON.parse(row.agePricing) 
-                : row.agePricing,
-            outOfStockSizes: row.outOfStockSizes && typeof row.outOfStockSizes === 'string'
-                ? JSON.parse(row.outOfStockSizes)
-                : (row.outOfStockSizes || []),
+            images: safeJsonParse(row.images, []),
+            sizes: safeJsonParse(row.sizes, []),
+            colors: safeJsonParse(row.colors, []),
+            agePricing: safeJsonParse(row.agePricing, null),
+            outOfStockSizes: safeJsonParse(row.outOfStockSizes, []),
             inStock: Boolean(row.inStock),
             featured: Boolean(row.featured)
         };
