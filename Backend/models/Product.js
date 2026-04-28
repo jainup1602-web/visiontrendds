@@ -98,11 +98,19 @@ class Product {
     static async update(productId, productData) {
         const pool = getPool();
         
+        console.log('=== UPDATE METHOD CALLED ===');
+        console.log('productId:', productId);
+        console.log('productData received:', JSON.stringify(productData, null, 2));
+        
         // First, get the existing product
         const existing = await this.findByProductId(productId);
         if (!existing) {
             throw new Error('Product not found');
         }
+        
+        console.log('existing.colors:', existing.colors);
+        console.log('productData.colors:', productData.colors);
+        console.log('productData.colors !== undefined:', productData.colors !== undefined);
         
         // Merge with existing data (only update provided fields)
         const name = productData.name !== undefined ? productData.name : existing.name;
@@ -122,26 +130,38 @@ class Product {
         const agePricing = productData.agePricing !== undefined ? productData.agePricing : existing.agePricing;
         const outOfStockSizes = productData.outOfStockSizes !== undefined ? productData.outOfStockSizes : existing.outOfStockSizes;
 
+        console.log('colors after merge:', colors);
+        console.log('colors type:', typeof colors, Array.isArray(colors));
+        
+        const colorsJson = JSON.stringify(colors || []);
+        console.log('colors JSON string:', colorsJson);
+
+        const queryParams = [
+            name, description, category, subcategory, gender,
+            price, originalPrice, discount || 0,
+            JSON.stringify(images || []),
+            JSON.stringify(sizes || []),
+            colorsJson,
+            inStock !== false,
+            featured || false,
+            ageRange || null,
+            agePricing ? JSON.stringify(agePricing) : null,
+            outOfStockSizes ? JSON.stringify(outOfStockSizes) : JSON.stringify([]),
+            productId
+        ];
+        
+        console.log('SQL params[10] (colors):', queryParams[10]);
+
         await pool.query(
             `UPDATE products SET
                 name = ?, description = ?, category = ?, subcategory = ?, gender = ?,
                 price = ?, originalPrice = ?, discount = ?, images = ?, sizes = ?, colors = ?,
                 inStock = ?, featured = ?, ageRange = ?, agePricing = ?, outOfStockSizes = ?
             WHERE productId = ?`,
-            [
-                name, description, category, subcategory, gender,
-                price, originalPrice, discount || 0,
-                JSON.stringify(images || []),
-                JSON.stringify(sizes || []),
-                JSON.stringify(colors || []),
-                inStock !== false,
-                featured || false,
-                ageRange || null,
-                agePricing ? JSON.stringify(agePricing) : null,
-                outOfStockSizes ? JSON.stringify(outOfStockSizes) : JSON.stringify([]),
-                productId
-            ]
+            queryParams
         );
+        
+        console.log('=== UPDATE QUERY EXECUTED ===');
 
         return await this.findByProductId(productId);
     }
