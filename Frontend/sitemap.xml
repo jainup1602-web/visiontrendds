@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Homepage — CRITICAL (Tier-1 Nirman Nagar + Best Brand Jaipur) -->
+  <url>
+    <loc>https://visiontrennds.com/</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Products — CRITICAL (Ethnic Fashion Store Jaipur, Buy Ethnic Clothes) -->
+  <url>
+    <loc>https://visiontrennds.com/products.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- About — HIGH (Clothing Brand Nirman Nagar, Jaipur Clothing Boutique) -->
+  <url>
+    <loc>https://visiontrennds.com/about.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Why Vision Trennds — HIGH (Quality Assured, Authentic Ethnic Clothes Jaipur) -->
+  <url>
+    <loc>https://visiontrennds.com/why-vision-trennds.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Contact — HIGH (Clothing Store Near Me Jaipur, Fashion Boutique Nirman Nagar) -->
+  <url>
+    <loc>https://visiontrennds.com/contact.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Product Details — Dynamic pages -->
+  <url>
+    <loc>https://visiontrennds.com/product-details.html</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>

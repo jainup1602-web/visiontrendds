@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details - Vision Trennds Fashion</title>
-    <meta name="description" content="View detailed information about Vision Trennds premium fashion products.">
-    
+    <meta name="description" content="View and buy premium ethnic fashion products at Vision Trennds. Designer clothes in Nirman Nagar, Jaipur. Kurta, anarkali, suits & more. Order via WhatsApp.">
+    <meta name="robots" content="index, follow">
+
+    <!-- SEO: Canonical (dynamic) -->
+    <link rel="canonical" id="canonical-url" href="https://visiontrennds.com/product-details.html">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="product">
     <meta property="og:url" content="">
@@ -603,8 +607,16 @@
         function displayProductDetails(product) {
             // Debug: Log product to check agePricing
             // Update page title
-            document.title = `${product.title} - Vision Trennds Fashion`;
+            document.title = `${product.title} | Buy Ethnic Wear Jaipur | Vision Trennds`;
             
+            // Update canonical URL
+            const canonicalEl = document.getElementById('canonical-url');
+            if (canonicalEl) canonicalEl.setAttribute('href', window.location.href);
+
+            // Update meta description with keywords
+            const metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) metaDesc.setAttribute('content', `${product.title} - ${product.description || 'Premium ethnic fashion from Vision Trennds, Nirman Nagar, Jaipur. Designer clothes, buy ethnic wear online via WhatsApp.'}`);
+
             // Update Open Graph meta tags for WhatsApp preview
             const currentURL = window.location.href;
             const imageURL = window.location.origin + '/' + product.image;

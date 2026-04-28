@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Block admin panel from indexing
+Disallow: /vt-secure-panel-x7k9/
+Disallow: /uploads/
+
+# Block internal/test pages
+Disallow: /test-age-selector.html
+Disallow: /search-results.html
+
+# Sitemap location
+Sitemap: https://visiontrennds.com/sitemap.xml
