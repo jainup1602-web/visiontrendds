@@ -98,70 +98,51 @@ class Product {
     static async update(productId, productData) {
         const pool = getPool();
         
-        console.log('=== UPDATE METHOD CALLED ===');
-        console.log('productId:', productId);
-        console.log('productData received:', JSON.stringify(productData, null, 2));
-        
-        // First, get the existing product
         const existing = await this.findByProductId(productId);
-        if (!existing) {
-            throw new Error('Product not found');
-        }
-        
-        console.log('existing.colors:', existing.colors);
-        console.log('productData.colors:', productData.colors);
-        console.log('productData.colors !== undefined:', productData.colors !== undefined);
-        
-        // Merge with existing data (only update provided fields)
-        const name = productData.name !== undefined ? productData.name : existing.name;
-        const description = productData.description !== undefined ? productData.description : existing.description;
-        const category = productData.category !== undefined ? productData.category : existing.category;
-        const subcategory = productData.subcategory !== undefined ? productData.subcategory : existing.subcategory;
-        const gender = productData.gender !== undefined ? productData.gender : existing.gender;
-        const price = productData.price !== undefined ? productData.price : existing.price;
-        const originalPrice = productData.originalPrice !== undefined ? productData.originalPrice : existing.originalPrice;
-        const discount = productData.discount !== undefined ? productData.discount : existing.discount;
-        const images = productData.images !== undefined ? productData.images : existing.images;
-        const sizes = productData.sizes !== undefined ? productData.sizes : existing.sizes;
-        const colors = productData.colors !== undefined ? productData.colors : existing.colors;
-        const inStock = productData.inStock !== undefined ? productData.inStock : existing.inStock;
-        const featured = productData.featured !== undefined ? productData.featured : existing.featured;
-        const ageRange = productData.ageRange !== undefined ? productData.ageRange : existing.ageRange;
-        const agePricing = productData.agePricing !== undefined ? productData.agePricing : existing.agePricing;
-        const outOfStockSizes = productData.outOfStockSizes !== undefined ? productData.outOfStockSizes : existing.outOfStockSizes;
+        if (!existing) throw new Error('Product not found');
 
-        console.log('colors after merge:', colors);
-        console.log('colors type:', typeof colors, Array.isArray(colors));
-        
-        const colorsJson = JSON.stringify(colors || []);
-        console.log('colors JSON string:', colorsJson);
+        // Helper to safely get value
+        const val = (key) => productData[key] !== undefined ? productData[key] : existing[key];
 
-        const queryParams = [
-            name, description, category, subcategory, gender,
-            price, originalPrice, discount || 0,
-            JSON.stringify(images || []),
-            JSON.stringify(sizes || []),
-            colorsJson,
-            inStock !== false,
-            featured || false,
-            ageRange || null,
-            agePricing ? JSON.stringify(agePricing) : null,
-            outOfStockSizes ? JSON.stringify(outOfStockSizes) : JSON.stringify([]),
-            productId
-        ];
-        
-        console.log('SQL params[10] (colors):', queryParams[10]);
+        // Helper to safely stringify JSON fields
+        const toJson = (v) => {
+            if (v === null || v === undefined) return JSON.stringify([]);
+            if (Array.isArray(v)) return JSON.stringify(v);
+            if (typeof v === 'string') {
+                try { JSON.parse(v); return v; } catch(e) { return JSON.stringify([]); }
+            }
+            return JSON.stringify([]);
+        };
+
+        const name = val('name');
+        const description = val('description');
+        const category = val('category');
+        const subcategory = val('subcategory');
+        const gender = val('gender');
+        const price = val('price');
+        const originalPrice = val('originalPrice');
+        const discount = val('discount') || 0;
+        const images = toJson(val('images'));
+        const sizes = toJson(val('sizes'));
+        const colors = toJson(val('colors'));
+        const inStock = val('inStock') !== false;
+        const featured = val('featured') || false;
+        const ageRange = val('ageRange') || null;
+        const agePricingRaw = val('agePricing');
+        const agePricing = agePricingRaw ? (typeof agePricingRaw === 'string' ? agePricingRaw : JSON.stringify(agePricingRaw)) : null;
+        const outOfStockSizes = toJson(val('outOfStockSizes'));
 
         await pool.query(
             `UPDATE products SET
-                name = ?, description = ?, category = ?, subcategory = ?, gender = ?,
-                price = ?, originalPrice = ?, discount = ?, images = ?, sizes = ?, colors = ?,
-                inStock = ?, featured = ?, ageRange = ?, agePricing = ?, outOfStockSizes = ?
-            WHERE productId = ?`,
-            queryParams
+                name=?, description=?, category=?, subcategory=?, gender=?,
+                price=?, originalPrice=?, discount=?, images=?, sizes=?, colors=?,
+                inStock=?, featured=?, ageRange=?, agePricing=?, outOfStockSizes=?
+            WHERE productId=?`,
+            [name, description, category, subcategory, gender,
+             price, originalPrice, discount, images, sizes, colors,
+             inStock, featured, ageRange, agePricing, outOfStockSizes,
+             productId]
         );
-        
-        console.log('=== UPDATE QUERY EXECUTED ===');
 
         return await this.findByProductId(productId);
     }
