@@ -82,12 +82,10 @@ router.put('/:id', async (req, res) => {
 
         // If ID is being changed
         if (newId && newId !== oldId) {
-            // Check new ID doesn't already exist
             const existing = await Product.findByProductId(newId);
             if (existing) {
                 return res.status(400).json({ message: `Product ID "${newId}" already exists` });
             }
-            // Get old product data, merge with new data
             const oldProduct = await Product.findByProductId(oldId);
             if (!oldProduct) return res.status(404).json({ message: 'Product not found' });
 
@@ -106,6 +104,48 @@ router.put('/:id', async (req, res) => {
     } catch (error) {
         console.error('Error updating product:', error);
         res.status(400).json({ message: error.message });
+    }
+});
+
+// Update colors only - dedicated endpoint
+router.put('/:id/colors', async (req, res) => {
+    try {
+        const pool = require('../config/db').getPool();
+        const { colors } = req.body;
+        const productId = req.params.id;
+
+        // Parse colors - handle array or string
+        let colorsArray = [];
+        if (Array.isArray(colors)) {
+            colorsArray = colors;
+        } else if (typeof colors === 'string') {
+            try { colorsArray = JSON.parse(colors); } catch(e) {
+                colorsArray = colors.split(',').map(c => c.trim()).filter(c => c);
+            }
+        }
+
+        const colorsJson = JSON.stringify(colorsArray);
+        await pool.query('UPDATE products SET colors = ? WHERE productId = ?', [colorsJson, productId]);
+        
+        req.app.locals.cache.clear('products:');
+        
+        // Return updated product
+        const [rows] = await pool.query('SELECT productId, name, colors FROM products WHERE productId = ?', [productId]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Product not found' });
+        
+        const row = rows[0];
+        let savedColors = [];
+        if (row.colors) {
+            if (Array.isArray(row.colors)) savedColors = row.colors;
+            else if (typeof row.colors === 'string') {
+                try { savedColors = JSON.parse(row.colors); } catch(e) { savedColors = []; }
+            }
+        }
+        
+        res.json({ success: true, productId, colors: savedColors });
+    } catch (error) {
+        console.error('Error updating colors:', error);
+        res.status(500).json({ message: error.message });
     }
 });
 

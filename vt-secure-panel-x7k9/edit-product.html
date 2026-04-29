@@ -503,21 +503,33 @@
             console.log('Updating product:', productData);
 
             try {
+                // Step 1: Update main product data
                 const response = await fetch(`${API_URL}/products/${productId}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(productData)
                 });
 
-                if (response.ok) {
-                    renderImagePreviews(); // refresh preview
-                    showSuccessPopup('Product updated successfully!');
-                } else {
+                if (!response.ok) {
                     const error = await response.json();
                     showErrorPopup('Error: ' + error.message);
+                    return;
                 }
+
+                // Step 2: Save colors separately via dedicated endpoint
+                const colorsValue = document.getElementById('colors').value;
+                const colorsArray = colorsValue.split(',').map(s => s.trim()).filter(s => s);
+                const targetId = productData.productId || productId;
+                
+                await fetch(`${API_URL}/products/${targetId}/colors`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ colors: colorsArray })
+                });
+
+                renderImagePreviews();
+                showSuccessPopup('Product updated successfully!');
+
             } catch (error) {
                 console.error('Error:', error);
                 showErrorPopup('Error updating product: ' + error.message);
