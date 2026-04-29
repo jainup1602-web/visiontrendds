@@ -21,9 +21,26 @@ router.get('/', async (req, res) => {
         }
         
         const result = await Product.findAll(filters);
-        req.app.locals.cache.set(cacheKey, result);
+        
+        // Force parse colors for all products
+        const parseColors = (products) => {
+            if (!Array.isArray(products)) return products;
+            return products.map(p => {
+                if (p.colors && typeof p.colors === 'string') {
+                    try { p.colors = JSON.parse(p.colors); } catch(e) { p.colors = []; }
+                }
+                if (!Array.isArray(p.colors)) p.colors = [];
+                return p;
+            });
+        };
+        
+        const finalResult = result && result.products 
+            ? { ...result, products: parseColors(result.products) }
+            : parseColors(result);
+        
+        req.app.locals.cache.set(cacheKey, finalResult);
         res.set('X-Cache', 'MISS');
-        res.json(result);
+        res.json(finalResult);
     } catch (error) {
         console.error('Error fetching products:', error);
         res.status(500).json({ message: error.message });
@@ -33,7 +50,6 @@ router.get('/', async (req, res) => {
 // Get single product
 router.get('/:id', async (req, res) => {
     try {
-        // Disable caching for single product requests
         res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
         res.set('Pragma', 'no-cache');
         res.set('Expires', '0');
@@ -42,6 +58,13 @@ router.get('/:id', async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
+        
+        // Force parse colors before sending response
+        if (product.colors && typeof product.colors === 'string') {
+            try { product.colors = JSON.parse(product.colors); } catch(e) { product.colors = []; }
+        }
+        if (!Array.isArray(product.colors)) product.colors = [];
+        
         res.json(product);
     } catch (error) {
         console.error('Error fetching product:', error);
