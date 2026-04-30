@@ -272,10 +272,8 @@
         // Load product data
         async function loadProduct() {
             try {
-                console.log('Loading product:', productId);
                 const response = await fetch(`${API_URL}/products/${productId}`);
                 const product = await response.json();
-                console.log('Product loaded:', product);
 
                 // Fill form
                 document.getElementById('product-id').value = product.productId || '';
@@ -467,7 +465,6 @@
 
         document.getElementById('product-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            console.log('Form submitted');
 
             // Validate images
             if (uploadedImages.length === 0) {
@@ -499,8 +496,6 @@
                 const agePricing = getAgePricingData();
                 if (agePricing) productData.agePricing = agePricing;
             }
-
-            console.log('Updating product:', productData);
 
             try {
                 // Update product - colors array bhi saath mein jayega

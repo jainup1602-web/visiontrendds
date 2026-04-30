@@ -278,8 +278,20 @@
         async function performDelete(id) {
             try {
                 const response = await fetch(`${API_URL}/products/${id}`, { method: 'DELETE' });
-                if (response.ok) showSuccessPopup('Product deleted successfully!');
-                else showErrorPopup('Error deleting product');
+                if (response.ok) {
+                    // Remove from local array immediately - no reload needed
+                    allProducts = allProducts.filter(p => p.productId !== id);
+                    currentFiltered = currentFiltered.filter(p => p.productId !== id);
+                    renderPage(currentPage);
+                    // Show brief success toast
+                    const toast = document.createElement('div');
+                    toast.textContent = 'Product deleted!';
+                    toast.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#28a745;color:white;padding:12px 24px;border-radius:8px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 2500);
+                } else {
+                    showErrorPopup('Error deleting product');
+                }
             } catch (error) { showErrorPopup('Error deleting product'); }
         }
 
