@@ -343,11 +343,11 @@ const products = {
         card.innerHTML = `
             <div class="product-image-container relative overflow-hidden rounded-t-lg">
                 <!-- Offer Badge -->
-                <div class="product-badge absolute top-2 left-2 z-10">
+                ${product.badge ? `<div class="product-badge absolute top-2 left-2 z-10">
                     <span class="bg-vision-red text-white px-2 py-1 rounded-full text-xs font-semibold">
                         ${product.badge}
                     </span>
-                </div>
+                </div>` : ''}
                 
                 <!-- Product Image -->
                 <img src="${product.image}" 

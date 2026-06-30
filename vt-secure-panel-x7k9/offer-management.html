@@ -113,16 +113,23 @@
                 <input type="hidden" id="offer-product-id">
                 <input type="hidden" id="offer-current-mrp">
                 
-                <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 14px;">
-                    <strong>MRP (Original Price):</strong> ₹<span id="display-mrp"></span><br>
-                    <strong>Current Sale Price:</strong> ₹<span id="display-sale-price"></span>
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 14px;">
+                    <strong>MRP (Original Price):</strong> &#8377;<span id="display-mrp"></span><br>
+                    <strong>Current Sale Price:</strong> &#8377;<span id="display-sale-price"></span>
+                </div>
+
+                <!-- Live Preview Box -->
+                <div id="live-preview" style="display:none; background: #fff3cd; padding: 12px; border-radius: 6px; margin-bottom: 15px; border: 2px solid #ffc107; font-size: 14px;">
+                    <strong style="color: #856404;">&#9889; Live Preview:</strong><br>
+                    <span style="color: #333;">New Sale Price: <strong style="font-size:18px; color:#28a745;">&#8377;<span id="preview-new-price">0</span></strong></span><br>
+                    <span style="color: #666; font-size: 12px;">Customer saves: &#8377;<span id="preview-savings">0</span></span>
                 </div>
 
                 <div class="form-group">
                     <label>Discount Type</label>
                     <select id="discountType" required>
                         <option value="percentage">Percentage (%)</option>
-                        <option value="flat">Flat Amount (₹)</option>
+                        <option value="flat">Flat Amount (&#8377;)</option>
                     </select>
                 </div>
 
@@ -205,7 +212,7 @@
 
             filteredProducts = allProducts.filter(p => {
                 let matchesSearch = p.name.toLowerCase().includes(search) || p.productId.toLowerCase().includes(search);
-                let isSale = p.discount && p.discount !== '' && p.discount !== '0';
+                let isSale = p.discount && p.discount !== '' && p.discount !== '0' && p.discount !== 0;
                 
                 if (!matchesSearch) return false;
                 if (filterSale === 'sale' && !isSale) return false;
@@ -213,9 +220,8 @@
                 return true;
             });
 
-            // Update stats
             document.getElementById('total-products').textContent = allProducts.length;
-            document.getElementById('sale-products').textContent = allProducts.filter(p => p.discount && p.discount !== '' && p.discount !== '0').length;
+            document.getElementById('sale-products').textContent = allProducts.filter(p => p.discount && p.discount !== '' && p.discount !== '0' && p.discount !== 0).length;
 
             renderPage(1);
         }
@@ -237,14 +243,14 @@
                 }
 
                 const mrp = (product.originalPrice && product.originalPrice !== product.price) ? product.originalPrice : product.price;
-                const isSale = product.discount && product.discount !== '' && product.discount !== '0';
+                const isSale = product.discount && product.discount !== '' && product.discount !== '0' && product.discount !== 0;
 
                 return `<tr>
                     <td><img src="${imageSrc}" class="product-img" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" alt=""></td>
                     <td>${product.productId}</td>
                     <td>${product.name}</td>
-                    <td>₹${mrp}</td>
-                    <td>₹${product.price}</td>
+                    <td>\u20b9${mrp}</td>
+                    <td>\u20b9${product.price}</td>
                     <td>${isSale ? `<span class="badge badge-sale">${product.discount}</span>` : '-'}</td>
                     <td>
                         <button onclick="openModal('${product.productId}')" class="btn btn-primary" style="padding: 5px 10px; font-size: 13px;">Manage Offer</button>
@@ -270,6 +276,7 @@
         document.getElementById('search-input').addEventListener('input', applyFilters);
         document.getElementById('filter-sale').addEventListener('change', applyFilters);
 
+        // ========== OPEN MODAL ==========
         function openModal(productId) {
             const product = allProducts.find(p => p.productId === productId);
             if (!product) return;
@@ -281,16 +288,14 @@
             document.getElementById('offer-current-mrp').value = mrp;
             document.getElementById('display-mrp').textContent = mrp;
             document.getElementById('display-sale-price').textContent = product.price;
-            
-            document.getElementById('discountValue').addEventListener('input', updateBadgePreview);
-            document.getElementById('discountType').addEventListener('change', updateBadgePreview);
+            document.getElementById('live-preview').style.display = 'none';
+            document.getElementById('discountValue').value = '';
 
-            if (product.discount && product.discount !== '' && product.discount !== '0') {
+            if (product.discount && product.discount !== '' && product.discount !== '0' && product.discount !== 0) {
                 document.getElementById('badgeText').value = product.discount;
                 document.getElementById('removeOfferBtn').style.display = 'block';
             } else {
                 document.getElementById('badgeText').value = '';
-                document.getElementById('discountValue').value = '';
                 document.getElementById('removeOfferBtn').style.display = 'none';
             }
 
@@ -299,25 +304,54 @@
 
         function closeModal() { document.getElementById('offerModal').classList.remove('active'); }
 
-        function updateBadgePreview() {
-            const val = document.getElementById('discountValue').value;
+        // ========== LIVE PREVIEW (instant calculation) ==========
+        function updateLivePreview() {
+            const val = parseFloat(document.getElementById('discountValue').value);
             const type = document.getElementById('discountType').value;
-            if (!val) return;
-            
+            const mrp = parseFloat(document.getElementById('offer-current-mrp').value);
+            const previewBox = document.getElementById('live-preview');
+
+            if (!val || val <= 0 || !mrp) {
+                previewBox.style.display = 'none';
+                return;
+            }
+
+            let newPrice = mrp;
             if (type === 'percentage') {
+                if (val >= 100) { previewBox.style.display = 'none'; return; }
+                newPrice = Math.round(mrp * (1 - (val / 100)));
                 document.getElementById('badgeText').value = `${val}% OFF`;
             } else {
-                document.getElementById('badgeText').value = `FLAT ₹${val} OFF`;
+                if (val >= mrp) { previewBox.style.display = 'none'; return; }
+                newPrice = Math.max(0, mrp - val);
+                document.getElementById('badgeText').value = `FLAT \u20b9${val} OFF`;
             }
+
+            document.getElementById('preview-new-price').textContent = newPrice;
+            document.getElementById('preview-savings').textContent = (mrp - newPrice);
+            previewBox.style.display = 'block';
         }
 
+        // Attach event listeners ONCE (not inside openModal - that was causing duplicates)
+        document.getElementById('discountValue').addEventListener('input', updateLivePreview);
+        document.getElementById('discountType').addEventListener('change', updateLivePreview);
+
+        // ========== APPLY OFFER ==========
         document.getElementById('offerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const productId = document.getElementById('offer-product-id').value;
+            const product = allProducts.find(p => p.productId === productId);
+            if (!product) { showErrorPopup('Product not found'); return; }
+
             const mrp = parseFloat(document.getElementById('offer-current-mrp').value);
             const type = document.getElementById('discountType').value;
             const val = parseFloat(document.getElementById('discountValue').value);
             const badge = document.getElementById('badgeText').value;
+
+            if (!val || val <= 0) {
+                showErrorPopup('Please enter a valid discount value');
+                return;
+            }
 
             let newSalePrice = mrp;
             if (type === 'percentage') {
@@ -326,18 +360,17 @@
                 newSalePrice = Math.max(0, mrp - val);
             }
             
+            // Handle age pricing for kids products
             let newAgePricing = product.agePricing ? JSON.parse(JSON.stringify(product.agePricing)) : null;
             if (newAgePricing) {
                 for (let age in newAgePricing) {
                     let ageMrp = newAgePricing[age].originalPrice || newAgePricing[age].price;
-                    
                     let ageSalePrice = ageMrp;
                     if (type === 'percentage') {
                         ageSalePrice = Math.round(ageMrp * (1 - (val / 100)));
                     } else {
                         ageSalePrice = Math.max(0, ageMrp - val);
                     }
-                    
                     newAgePricing[age].price = ageSalePrice;
                     newAgePricing[age].originalPrice = ageMrp;
                 }
@@ -353,13 +386,14 @@
             await updateProduct(productId, payload);
         });
 
+        // ========== REMOVE OFFER ==========
         document.getElementById('removeOfferBtn').addEventListener('click', async () => {
             if (!confirm('Are you sure you want to remove the offer from this product?')) return;
             const productId = document.getElementById('offer-product-id').value;
             const mrp = parseFloat(document.getElementById('offer-current-mrp').value);
             
             const product = allProducts.find(p => p.productId === productId);
-            let newAgePricing = product.agePricing ? JSON.parse(JSON.stringify(product.agePricing)) : null;
+            let newAgePricing = (product && product.agePricing) ? JSON.parse(JSON.stringify(product.agePricing)) : null;
             if (newAgePricing) {
                 for (let age in newAgePricing) {
                     if (newAgePricing[age].originalPrice) {
@@ -379,9 +413,10 @@
             await updateProduct(productId, payload);
         });
 
+        // ========== UPDATE PRODUCT API ==========
         async function updateProduct(productId, payload) {
+            const btn = document.querySelector('#offerForm button[type="submit"]');
             try {
-                const btn = document.querySelector('#offerForm button[type="submit"]');
                 const origText = btn.textContent;
                 btn.textContent = 'Saving...';
                 btn.disabled = true;
@@ -395,7 +430,7 @@
                 if (response.ok) {
                     showSuccessPopup('Offer updated successfully!');
                     closeModal();
-                    await loadProducts(); // Reload to get fresh data
+                    await loadProducts();
                 } else {
                     showErrorPopup('Failed to update product');
                 }
@@ -404,6 +439,8 @@
                 btn.disabled = false;
             } catch (error) {
                 showErrorPopup('Error connecting to server');
+                btn.textContent = 'Apply Offer';
+                btn.disabled = false;
             }
         }
 

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
@@ -1033,11 +1033,11 @@
                 <div class="product-card-responsive cursor-pointer bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100" data-product-id="${product.id}">
                     <div class="product-image-container relative overflow-hidden rounded-t-lg">
                         <!-- Offer Badge -->
-                        <div class="product-badge absolute top-2 left-2 z-10">
+                        ${product.badge ? `<div class="product-badge absolute top-2 left-2 z-10">
                             <span class="bg-vision-red text-white px-2 py-1 rounded-full text-xs font-semibold">
-                                ${product.badge || 'NEW'}
+                                ${product.badge}
                             </span>
-                        </div>
+                        </div>` : ''}
                         
                         <!-- Product Image -->
                         <img decoding="async" src="${imageUrl}" 
