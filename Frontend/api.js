@@ -1,4 +1,4 @@
-﻿// API Configuration
+// API Configuration
 const API_CONFIG = {
     baseURL: typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.apiURL : 'http://localhost:5000/api',
     timeout: 30000  // 30 seconds
@@ -10,6 +10,8 @@ const _cache = {
     categories: null,
     productDetail: {}  // keyed by productId
 };
+
+let _saleSettings = null;
 // Fetch with timeout helper
 async function fetchWithTimeout(url, timeoutMs = API_CONFIG.timeout) {
     const controller = new AbortController();
@@ -41,10 +43,27 @@ function pingBackend() {
 
 // API Helper Functions
 const API = {
+    async getSaleSettings() {
+        if (_saleSettings !== null) return _saleSettings;
+        try {
+            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/settings/sale?_t=${new Date().getTime()}`, 5000);
+            if (response.ok) {
+                _saleSettings = await response.json();
+                window.currentSaleSettings = _saleSettings; // Expose for UI
+            } else {
+                _saleSettings = { active: false };
+            }
+        } catch (e) {
+            _saleSettings = { active: false };
+        }
+        return _saleSettings;
+    },
+
     // Get all products
     async getProducts(filters = {}) {
         try {
             await pingBackend();
+            const saleSettings = await this.getSaleSettings();
 
             let url = `${API_CONFIG.baseURL}/products`;
             const params = new URLSearchParams();
@@ -71,12 +90,12 @@ const API = {
             if (data && data.products) {
                 return {
                     ...data,
-                    products: this.transformProducts(data.products)
+                    products: this.transformProducts(data.products, saleSettings)
                 };
             }
 
             // Plain array response
-            const transformed = this.transformProducts(data);
+            const transformed = this.transformProducts(data, saleSettings);
             if (!filters.category && !filters.subcategory && !filters.page) {
                 _cache.products = transformed;
             }
@@ -96,11 +115,12 @@ const API = {
             }
 
             await pingBackend();
+            const saleSettings = await this.getSaleSettings();
             const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/products/${productId}`, 60000);
             if (!response.ok) throw new Error('Product not found');
             
             const product = await response.json();
-            const transformed = this.transformProduct(product);
+            const transformed = this.transformProduct(product, saleSettings);
             _cache.productDetail[productId] = transformed;
             return transformed;
         } catch (error) {
@@ -121,7 +141,7 @@ const API = {
         }
     },
     // Transform product from API format to Frontend format
-    transformProduct(product) {
+    transformProduct(product, saleSettings = null) {
         // Get the correct image URL
         let imageURL = 'product/color_logo.png';
         if (product.images && product.images.length > 0 && product.images[0]) {
@@ -148,6 +168,20 @@ const API = {
             }
         }
 
+        // Sale Logic
+        let displayPrice = product.price;
+        let displayOriginal = product.originalPrice || product.price;
+        
+        let badgeText = '';
+        if (product.discount) {
+            // Check if it's purely a number, if so add % OFF, otherwise use as is
+            if (!isNaN(product.discount) && product.discount !== '') {
+                badgeText = `${product.discount}% OFF`;
+            } else {
+                badgeText = product.discount;
+            }
+        }
+
         return {
             id: product.productId,
             title: product.name,
@@ -155,9 +189,9 @@ const API = {
             image: imageURL,
             images: product.images ? product.images.map(img => this.getImageURL(img)).filter(img => img && img !== 'undefined') : [],
             fallbackImage: 'product/color_logo.png',
-            price: `₹${product.price}`,
-            originalPrice: product.originalPrice ? `₹${product.originalPrice}` : '',
-            badge: product.discount ? `${product.discount}% OFF` : '',
+            price: `₹${displayPrice}`,
+            originalPrice: displayOriginal !== displayPrice ? `₹${displayOriginal}` : '',
+            badge: badgeText,
             badgeType: 'sale',
             sizes: product.sizes || [],
             colors: colorsArray,
@@ -174,8 +208,8 @@ const API = {
     },
 
     // Transform multiple products
-    transformProducts(products) {
-        return products.map(p => this.transformProduct(p));
+    transformProducts(products, saleSettings = null) {
+        return products.map(p => this.transformProduct(p, saleSettings));
     },
 
     // Get image URL

@@ -1,4 +1,4 @@
-﻿// Vision Trennds - Clean JavaScript with proper error handling
+// Vision Trennds - Clean JavaScript with proper error handling
 'use strict';
 
 // Configuration
@@ -915,4 +915,34 @@ if (document.readyState === 'loading') {
 } else {
     searchManager.init();
     mobileSearchManager.init();
+}
+
+// Global Sale Banner initialization
+async function initGlobalSaleBanner() {
+    if (typeof API !== 'undefined' && API.getSaleSettings) {
+        const settings = await API.getSaleSettings();
+        if (settings && settings.active && settings.bannerText) {
+            const banner = document.createElement('div');
+            banner.id = 'global-sale-banner';
+            banner.style.backgroundColor = '#800000'; // Deep Red
+            banner.style.color = '#fff';
+            banner.style.textAlign = 'center';
+            banner.style.padding = '10px';
+            banner.style.fontSize = '15px';
+            banner.style.fontWeight = '600';
+            banner.style.letterSpacing = '1px';
+            banner.style.zIndex = '9999';
+            banner.style.position = 'relative';
+            banner.style.textTransform = 'uppercase';
+            banner.innerHTML = settings.bannerText;
+            
+            document.body.insertBefore(banner, document.body.firstChild);
+        }
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGlobalSaleBanner);
+} else {
+    initGlobalSaleBanner();
 }

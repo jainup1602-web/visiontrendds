@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
@@ -967,7 +967,6 @@
                 btn.classList.remove('bg-vision-red', 'text-white');
                 btn.classList.add('text-vision-red');
             });
-            
             document.querySelector(`[data-age="${age}"]`).classList.add('bg-vision-red', 'text-white');
             document.querySelector(`[data-age="${age}"]`).classList.remove('text-vision-red');
             
@@ -977,9 +976,12 @@
             // Update price based on age
             if (currentProduct && currentProduct.agePricing && currentProduct.agePricing[age]) {
                 const ageData = currentProduct.agePricing[age];
-                const newPrice = `₹${ageData.price}`;
-                const originalPrice = Math.round(ageData.price * 1.35);
-                const newOriginalPrice = `₹${originalPrice}`;
+                
+                let displayPrice = ageData.price;
+                let displayOriginal = ageData.originalPrice || Math.round(displayPrice * 1.35); // fallback
+                
+                const newPrice = `₹${displayPrice}`;
+                const newOriginalPrice = `₹${displayOriginal}`;
                 
                 // Update price display
                 document.getElementById('dynamic-price').textContent = newPrice;

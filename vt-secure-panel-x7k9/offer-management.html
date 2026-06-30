@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offer Management - Vision Trennds Admin</title>
+    <link rel="icon" type="image/png" href="../Frontend/product/color_logo.png">
+    <link rel="shortcut icon" type="image/png" href="../Frontend/product/color_logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        .badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+        .badge-sale { background-color: #ffc107; color: #000; }
+        
+        /* Modal Styles */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h2 { margin: 0; }
+        .close-btn { cursor: pointer; font-size: 20px; border: none; background: none; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; border-bottom: 4px solid #8B0000; }
+        .stat-card h3 { margin: 0 0 10px 0; color: #666; font-size: 14px; text-transform: uppercase; }
+        .stat-card .number { font-size: 24px; font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <h2>VISION TRENNDS</h2>
+            <p>Admin Panel</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+            <li><a href="categories.html"><i class="fas fa-tags"></i> Categories</a></li>
+            <li><a href="stock-management.html"><i class="fas fa-warehouse"></i> Stock Management</a></li>
+            <li><a href="add-product.html"><i class="fas fa-plus"></i> Add Product</a></li>
+            <li><a href="offer-management.html" class="active"><i class="fas fa-percent"></i> Offer Management</a></li>
+            <li><a href="sale-settings.html"><i class="fas fa-tags"></i> Sale Banner</a></li>
+        </ul>
+        <div id="user-info" style="padding: 20px; border-top: 1px solid rgba(255,255,255,0.2); margin-top: auto;"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1><i class="fas fa-percent"></i> Offer Management</h1>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Products</h3>
+                <div class="number" id="total-products">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Products on Sale</h3>
+                <div class="number" id="sale-products">0</div>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="form-container" style="margin-bottom: 20px; display: flex; gap: 15px;">
+            <input type="text" id="search-input" class="form-control" placeholder="Search by title or ID..." style="flex: 1;">
+            <select id="filter-sale" class="form-control" style="width: 200px;">
+                <option value="all">All Products</option>
+                <option value="sale">Only on Sale</option>
+                <option value="no-sale">Not on Sale</option>
+            </select>
+        </div>
+
+        <!-- Products Table -->
+        <div class="table-container">
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading products...</p>
+            </div>
+            <table id="products-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Price (MRP)</th>
+                        <th>Sale Price</th>
+                        <th>Offer Badge</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="products-tbody">
+                </tbody>
+            </table>
+            <div id="pagination" style="display:flex;justify-content:center;align-items:center;gap:6px;padding:16px 0;flex-wrap:wrap;"></div>
+        </div>
+    </div>
+
+    <!-- Offer Modal -->
+    <div class="modal" id="offerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Offer for <span id="modal-product-id"></span></h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form id="offerForm">
+                <input type="hidden" id="offer-product-id">
+                <input type="hidden" id="offer-current-mrp">
+                
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 14px;">
+                    <strong>MRP (Original Price):</strong> ₹<span id="display-mrp"></span><br>
+                    <strong>Current Sale Price:</strong> ₹<span id="display-sale-price"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Discount Type</label>
+                    <select id="discountType" required>
+                        <option value="percentage">Percentage (%)</option>
+                        <option value="flat">Flat Amount (₹)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Discount Value</label>
+                    <input type="number" id="discountValue" placeholder="e.g. 50" min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Badge Text to Display</label>
+                    <input type="text" id="badgeText" placeholder="e.g. 50% OFF" required>
+                    <small style="color: #666; display: block; margin-top: 5px;">This text will show on the product card badge.</small>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Apply Offer</button>
+                    <button type="button" class="btn btn-danger" id="removeOfferBtn" style="flex: 1;">Remove Offer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div class="success-popup" id="successPopup">
+        <div class="success-popup-content">
+            <div class="success-popup-icon"><i class="fas fa-check"></i></div>
+            <h3>Success!</h3>
+            <p id="successMessage">Offer updated successfully!</p>
+            <button class="success-popup-btn" onclick="closeSuccessPopup()">OK</button>
+        </div>
+    </div>
+
+    <!-- Error Popup -->
+    <div class="success-popup" id="errorPopup">
+        <div class="success-popup-content">
+            <div class="success-popup-icon" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                <i class="fas fa-times"></i>
+            </div>
+            <h3 style="color: #dc3545;">Error!</h3>
+            <p id="errorMessage">Something went wrong!</p>
+            <button class="success-popup-btn" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);" onclick="closeErrorPopup()">OK</button>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        let allProducts = [];
+        let filteredProducts = [];
+        let currentPage = 1;
+        const PAGE_SIZE = 30;
+
+        function showSuccessPopup(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successPopup').classList.add('show');
+        }
+        function closeSuccessPopup() { document.getElementById('successPopup').classList.remove('show'); }
+        function showErrorPopup(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorPopup').classList.add('show');
+        }
+        function closeErrorPopup() { document.getElementById('errorPopup').classList.remove('show'); }
+
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${API_URL}/products`);
+                allProducts = await response.json();
+                applyFilters();
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('products-table').style.display = 'table';
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').innerHTML = '<p style="color: red;">Error loading products.</p>';
+            }
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const filterSale = document.getElementById('filter-sale').value;
+
+            filteredProducts = allProducts.filter(p => {
+                let matchesSearch = p.name.toLowerCase().includes(search) || p.productId.toLowerCase().includes(search);
+                let isSale = p.discount && p.discount !== '' && p.discount !== '0';
+                
+                if (!matchesSearch) return false;
+                if (filterSale === 'sale' && !isSale) return false;
+                if (filterSale === 'no-sale' && isSale) return false;
+                return true;
+            });
+
+            // Update stats
+            document.getElementById('total-products').textContent = allProducts.length;
+            document.getElementById('sale-products').textContent = allProducts.filter(p => p.discount && p.discount !== '' && p.discount !== '0').length;
+
+            renderPage(1);
+        }
+
+        function renderPage(page) {
+            currentPage = page;
+            const total = filteredProducts.length;
+            const totalPages = Math.ceil(total / PAGE_SIZE);
+            const items = filteredProducts.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
+
+            const tbody = document.getElementById('products-tbody');
+            tbody.innerHTML = items.map(product => {
+                let imageSrc = `${FRONTEND_BASE}/product/color_logo.png`;
+                if (product.images && product.images.length > 0 && product.images[0]) {
+                    const img = product.images[0];
+                    if (img.startsWith('data:')) imageSrc = img;
+                    else if (img.startsWith('/uploads')) imageSrc = `${BACKEND_URL}${img}`;
+                    else imageSrc = `${FRONTEND_BASE}/${img}`;
+                }
+
+                const mrp = (product.originalPrice && product.originalPrice !== product.price) ? product.originalPrice : product.price;
+                const isSale = product.discount && product.discount !== '' && product.discount !== '0';
+
+                return `<tr>
+                    <td><img src="${imageSrc}" class="product-img" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" alt=""></td>
+                    <td>${product.productId}</td>
+                    <td>${product.name}</td>
+                    <td>₹${mrp}</td>
+                    <td>₹${product.price}</td>
+                    <td>${isSale ? `<span class="badge badge-sale">${product.discount}</span>` : '-'}</td>
+                    <td>
+                        <button onclick="openModal('${product.productId}')" class="btn btn-primary" style="padding: 5px 10px; font-size: 13px;">Manage Offer</button>
+                    </td>
+                </tr>`;
+            }).join('');
+
+            // Pagination
+            const pag = document.getElementById('pagination');
+            if (totalPages <= 1) { pag.innerHTML = `<span style="font-size:13px;color:#666;">${total} products</span>`; return; }
+            const s = (a) => `padding:6px 12px;border-radius:6px;border:2px solid #8B1538;font-weight:600;font-size:13px;cursor:pointer;background:${a?'#8B1538':'white'};color:${a?'white':'#8B1538'};`;
+            const d = `padding:6px 12px;border-radius:6px;border:2px solid #ddd;font-weight:600;font-size:13px;cursor:not-allowed;background:white;color:#aaa;`;
+            let btns = `<button onclick="renderPage(${page-1})" ${page===1?'disabled':''} style="${page===1?d:s(false)}">&#8249;</button>`;
+            for (let i=1;i<=totalPages;i++) {
+                if (i===1||i===totalPages||(i>=page-1&&i<=page+1)) btns+=`<button onclick="renderPage(${i})" style="${s(i===page)}">${i}</button>`;
+                else if (i===page-2||i===page+2) btns+=`<span style="padding:6px 4px;color:#999;">...</span>`;
+            }
+            btns += `<button onclick="renderPage(${page+1})" ${page===totalPages?'disabled':''} style="${page===totalPages?d:s(false)}">&#8250;</button>`;
+            btns += `<span style="font-size:13px;color:#666;margin-left:8px;">${total} products</span>`;
+            pag.innerHTML = btns;
+        }
+
+        document.getElementById('search-input').addEventListener('input', applyFilters);
+        document.getElementById('filter-sale').addEventListener('change', applyFilters);
+
+        function openModal(productId) {
+            const product = allProducts.find(p => p.productId === productId);
+            if (!product) return;
+
+            const mrp = (product.originalPrice && product.originalPrice !== product.price) ? product.originalPrice : product.price;
+
+            document.getElementById('modal-product-id').textContent = productId;
+            document.getElementById('offer-product-id').value = productId;
+            document.getElementById('offer-current-mrp').value = mrp;
+            document.getElementById('display-mrp').textContent = mrp;
+            document.getElementById('display-sale-price').textContent = product.price;
+            
+            document.getElementById('discountValue').addEventListener('input', updateBadgePreview);
+            document.getElementById('discountType').addEventListener('change', updateBadgePreview);
+
+            if (product.discount && product.discount !== '' && product.discount !== '0') {
+                document.getElementById('badgeText').value = product.discount;
+                document.getElementById('removeOfferBtn').style.display = 'block';
+            } else {
+                document.getElementById('badgeText').value = '';
+                document.getElementById('discountValue').value = '';
+                document.getElementById('removeOfferBtn').style.display = 'none';
+            }
+
+            document.getElementById('offerModal').classList.add('active');
+        }
+
+        function closeModal() { document.getElementById('offerModal').classList.remove('active'); }
+
+        function updateBadgePreview() {
+            const val = document.getElementById('discountValue').value;
+            const type = document.getElementById('discountType').value;
+            if (!val) return;
+            
+            if (type === 'percentage') {
+                document.getElementById('badgeText').value = `${val}% OFF`;
+            } else {
+                document.getElementById('badgeText').value = `FLAT ₹${val} OFF`;
+            }
+        }
+
+        document.getElementById('offerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const productId = document.getElementById('offer-product-id').value;
+            const mrp = parseFloat(document.getElementById('offer-current-mrp').value);
+            const type = document.getElementById('discountType').value;
+            const val = parseFloat(document.getElementById('discountValue').value);
+            const badge = document.getElementById('badgeText').value;
+
+            let newSalePrice = mrp;
+            if (type === 'percentage') {
+                newSalePrice = Math.round(mrp * (1 - (val / 100)));
+            } else {
+                newSalePrice = Math.max(0, mrp - val);
+            }
+            
+            let newAgePricing = product.agePricing ? JSON.parse(JSON.stringify(product.agePricing)) : null;
+            if (newAgePricing) {
+                for (let age in newAgePricing) {
+                    let ageMrp = newAgePricing[age].originalPrice || newAgePricing[age].price;
+                    
+                    let ageSalePrice = ageMrp;
+                    if (type === 'percentage') {
+                        ageSalePrice = Math.round(ageMrp * (1 - (val / 100)));
+                    } else {
+                        ageSalePrice = Math.max(0, ageMrp - val);
+                    }
+                    
+                    newAgePricing[age].price = ageSalePrice;
+                    newAgePricing[age].originalPrice = ageMrp;
+                }
+            }
+
+            const payload = {
+                price: newSalePrice,
+                originalPrice: mrp,
+                discount: badge,
+                agePricing: newAgePricing
+            };
+
+            await updateProduct(productId, payload);
+        });
+
+        document.getElementById('removeOfferBtn').addEventListener('click', async () => {
+            if (!confirm('Are you sure you want to remove the offer from this product?')) return;
+            const productId = document.getElementById('offer-product-id').value;
+            const mrp = parseFloat(document.getElementById('offer-current-mrp').value);
+            
+            const product = allProducts.find(p => p.productId === productId);
+            let newAgePricing = product.agePricing ? JSON.parse(JSON.stringify(product.agePricing)) : null;
+            if (newAgePricing) {
+                for (let age in newAgePricing) {
+                    if (newAgePricing[age].originalPrice) {
+                        newAgePricing[age].price = newAgePricing[age].originalPrice;
+                        delete newAgePricing[age].originalPrice;
+                    }
+                }
+            }
+
+            const payload = {
+                price: mrp,
+                originalPrice: mrp,
+                discount: null,
+                agePricing: newAgePricing
+            };
+
+            await updateProduct(productId, payload);
+        });
+
+        async function updateProduct(productId, payload) {
+            try {
+                const btn = document.querySelector('#offerForm button[type="submit"]');
+                const origText = btn.textContent;
+                btn.textContent = 'Saving...';
+                btn.disabled = true;
+
+                const response = await fetch(`${API_URL}/products/${productId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    showSuccessPopup('Offer updated successfully!');
+                    closeModal();
+                    await loadProducts(); // Reload to get fresh data
+                } else {
+                    showErrorPopup('Failed to update product');
+                }
+                
+                btn.textContent = origText;
+                btn.disabled = false;
+            } catch (error) {
+                showErrorPopup('Error connecting to server');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+    <script src="auth.js"></script>
+    <script src="admin-mobile.js"></script>
+</body>
+</html>

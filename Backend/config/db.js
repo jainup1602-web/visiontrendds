@@ -98,6 +98,30 @@ const createTables = async () => {
             await pool.query(`ALTER TABLE categories ADD COLUMN sortOrder INT DEFAULT 0`);
         } catch(e) { /* column already exists */ }
 
+        // Change discount column to VARCHAR to support text like "50% OFF" or "₹200 OFF"
+        try {
+            await pool.query(`ALTER TABLE products MODIFY COLUMN discount VARCHAR(50) DEFAULT NULL`);
+        } catch(e) { /* error migrating */ }
+
+        // Create settings table
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS settings (
+                id VARCHAR(50) PRIMARY KEY,
+                value JSON,
+                updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )
+        `);
+        
+        // Insert default sale settings if not exists
+        try {
+            await pool.query(`
+                INSERT IGNORE INTO settings (id, value) 
+                VALUES ('sale', '{"active": false, "bannerText": "SALE IS LIVE 1 july se 7 july tak!"}')
+            `);
+        } catch (e) {
+            console.error('Error inserting default settings:', e.message);
+        }
+
         console.log('✅ MySQL Tables Created/Verified');
     } catch (error) {
         console.error('❌ Error creating tables:', error.message);
