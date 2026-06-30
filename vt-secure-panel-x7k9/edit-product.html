@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 
@@ -208,6 +208,7 @@
     </div>
 
     <script src="config.js"></script>
+    <script src="admin-popup.js"></script>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
@@ -545,22 +546,22 @@
         // Copy age pricing from existing product
         async function copyAgePricingFrom() {
             const fromId = document.getElementById('copyFromProductId').value.trim();
-            if (!fromId) { alert('Please enter a Product ID'); return; }
+            if (!fromId) { showPopup('Please enter a Product ID', 'error'); return; }
             try {
                 const response = await fetch(`${API_URL}/products/${fromId}`);
-                if (!response.ok) { alert('Product not found: ' + fromId); return; }
+                if (!response.ok) { showPopup('Product not found: ' + fromId, 'error'); return; }
                 const product = await response.json();
                 if (!product.agePricing || Object.keys(product.agePricing).length === 0) {
-                    alert('This product has no age pricing data'); return;
+                    showPopup('This product has no age pricing data', 'warning'); return;
                 }
                 document.getElementById('agePricingRows').innerHTML = '';
                 Object.entries(product.agePricing).forEach(([age, data]) => {
                     addAgePricingRow(age, data.price || '', data.size || '');
                 });
                 document.getElementById('copyFromProductId').value = '';
-                alert(`✓ Copied ${Object.keys(product.agePricing).length} age rows from "${product.name}"`);
+                showPopup(`✓ Copied ${Object.keys(product.agePricing).length} age rows from "${product.name}"`, 'success');
             } catch (err) {
-                alert('Error: ' + err.message);
+                showPopup('Error: ' + err.message, 'error');
             }
         }
 

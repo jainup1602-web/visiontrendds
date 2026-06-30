@@ -63,7 +63,6 @@ const API = {
     async getProducts(filters = {}) {
         try {
             await pingBackend();
-            const saleSettings = await this.getSaleSettings();
 
             let url = `${API_CONFIG.baseURL}/products`;
             const params = new URLSearchParams();
@@ -90,12 +89,12 @@ const API = {
             if (data && data.products) {
                 return {
                     ...data,
-                    products: this.transformProducts(data.products, saleSettings)
+                    products: this.transformProducts(data.products)
                 };
             }
 
             // Plain array response
-            const transformed = this.transformProducts(data, saleSettings);
+            const transformed = this.transformProducts(data);
             if (!filters.category && !filters.subcategory && !filters.page) {
                 _cache.products = transformed;
             }
@@ -115,12 +114,11 @@ const API = {
             }
 
             await pingBackend();
-            const saleSettings = await this.getSaleSettings();
             const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/products/${productId}`, 60000);
             if (!response.ok) throw new Error('Product not found');
             
             const product = await response.json();
-            const transformed = this.transformProduct(product, saleSettings);
+            const transformed = this.transformProduct(product);
             _cache.productDetail[productId] = transformed;
             return transformed;
         } catch (error) {
@@ -141,7 +139,7 @@ const API = {
         }
     },
     // Transform product from API format to Frontend format
-    transformProduct(product, saleSettings = null) {
+    transformProduct(product) {
         // Get the correct image URL
         let imageURL = 'product/color_logo.png';
         if (product.images && product.images.length > 0 && product.images[0]) {
@@ -207,9 +205,8 @@ const API = {
         };
     },
 
-    // Transform multiple products
-    transformProducts(products, saleSettings = null) {
-        return products.map(p => this.transformProduct(p, saleSettings));
+    transformProducts(products) {
+        return products.map(p => this.transformProduct(p));
     },
 
     // Get image URL

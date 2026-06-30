@@ -28,11 +28,9 @@ router.put('/sale', async (req, res) => {
         const pool = getPool();
         const newSettings = req.body;
         
-        // Ensure values are correct types
+        // Save whatever the frontend sends (flexible for future fields)
         const settingsToSave = {
             active: Boolean(newSettings.active),
-            discountType: newSettings.discountType === 'flat' ? 'flat' : 'percentage',
-            discountValue: Number(newSettings.discountValue) || 0,
             bannerText: newSettings.bannerText || ''
         };
 

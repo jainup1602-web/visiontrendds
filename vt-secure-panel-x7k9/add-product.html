@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 
@@ -223,6 +223,7 @@
     </div>
 
     <script src="config.js"></script>
+    <script src="admin-popup.js"></script>
     <script>
         let uploadedImages = []; // array of base64 strings
 
@@ -397,15 +398,15 @@
         // Copy age pricing from existing product
         async function copyAgePricingFrom() {
             const productId = document.getElementById('copyFromProductId').value.trim();
-            if (!productId) { alert('Please enter a Product ID'); return; }
+            if (!productId) { showPopup('Please enter a Product ID', 'error'); return; }
 
             try {
                 const response = await fetch(`${API_URL}/products/${productId}`);
-                if (!response.ok) { alert('Product not found: ' + productId); return; }
+                if (!response.ok) { showPopup('Product not found: ' + productId, 'error'); return; }
                 const product = await response.json();
 
                 if (!product.agePricing || Object.keys(product.agePricing).length === 0) {
-                    alert('This product has no age pricing data');
+                    showPopup('This product has no age pricing data', 'warning');
                     return;
                 }
 
@@ -418,9 +419,9 @@
                 });
 
                 document.getElementById('copyFromProductId').value = '';
-                alert(`✓ Copied ${Object.keys(product.agePricing).length} age rows from "${product.name}"`);
+                showPopup(`✓ Copied ${Object.keys(product.agePricing).length} age rows from "${product.name}"`, 'success');
             } catch (err) {
-                alert('Error fetching product: ' + err.message);
+                showPopup('Error fetching product: ' + err.message, 'error');
             }
         }
 

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 
@@ -256,6 +256,7 @@
     </div>
 
     <script src="config.js"></script>
+    <script src="admin-popup.js"></script>
     <script>
         let allProducts = [];
         let currentFilter = 'all';
@@ -492,7 +493,8 @@
 
         // Mark all in stock
         async function markAllInStock() {
-            if (!confirm('Mark all products as IN STOCK?')) return;
+            const confirmed = await showConfirm('Mark all products as IN STOCK?', 'Yes, Mark All', 'Cancel');
+            if (!confirmed) return;
             
             try {
                 const promises = allProducts.map(p => 
@@ -513,7 +515,8 @@
 
         // Mark all out of stock
         async function markAllOutOfStock() {
-            if (!confirm('Mark all products as OUT OF STOCK?')) return;
+            const confirmed = await showConfirm('Mark all products as OUT OF STOCK?', 'Yes, Mark All', 'Cancel');
+            if (!confirmed) return;
             
             try {
                 const promises = allProducts.map(p => 

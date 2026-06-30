@@ -175,6 +175,7 @@
     </div>
 
     <script src="config.js"></script>
+    <script src="admin-popup.js"></script>
     <script>
         let allProducts = [];
         let filteredProducts = [];
@@ -388,7 +389,8 @@
 
         // ========== REMOVE OFFER ==========
         document.getElementById('removeOfferBtn').addEventListener('click', async () => {
-            if (!confirm('Are you sure you want to remove the offer from this product?')) return;
+            const confirmed = await showConfirm('Are you sure you want to remove the offer from this product?', 'Yes, Remove', 'Cancel');
+            if (!confirmed) return;
             const productId = document.getElementById('offer-product-id').value;
             const mrp = parseFloat(document.getElementById('offer-current-mrp').value);
             
