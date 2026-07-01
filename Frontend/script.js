@@ -936,7 +936,18 @@ async function initGlobalSaleBanner() {
             banner.style.textTransform = 'uppercase';
             banner.innerHTML = settings.bannerText;
             
-            document.body.insertBefore(banner, document.body.firstChild);
+            const header = document.querySelector('.header');
+            if (header) {
+                header.insertBefore(banner, header.firstChild);
+                // Wait for render to get height
+                setTimeout(() => {
+                    const bannerHeight = banner.offsetHeight;
+                    const currentPadding = parseInt(window.getComputedStyle(document.body).paddingTop || '0');
+                    document.body.style.paddingTop = (currentPadding + bannerHeight) + 'px';
+                }, 10);
+            } else {
+                document.body.insertBefore(banner, document.body.firstChild);
+            }
         }
     }
 }

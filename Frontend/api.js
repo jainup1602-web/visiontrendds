@@ -46,7 +46,7 @@ const API = {
     async getSaleSettings() {
         if (_saleSettings !== null) return _saleSettings;
         try {
-            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/settings/sale?_t=${new Date().getTime()}`, 5000);
+            const response = await fetchWithTimeout(`${API_CONFIG.baseURL}/settings/sale?_t=${new Date().getTime()}`, API_CONFIG.timeout);
             if (response.ok) {
                 _saleSettings = await response.json();
                 window.currentSaleSettings = _saleSettings; // Expose for UI

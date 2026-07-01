@@ -1,20 +1,21 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2422FMML07"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-2422FMML07');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-2422FMML07');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vision Trennds - Fashion with a Touch of Class</title>
     <!-- Clerk admin redirect interceptor -->
     <script>
-        (function() {
+        (function () {
             // If Clerk redirected here from admin login, send back to admin panel
             const search = window.location.search;
             const hash = window.location.hash;
@@ -28,26 +29,30 @@
                 window.location.replace('/vt-secure-panel-x7k9/index.html');
             }
         })();
-    </script> 
-    <meta name="description" content="Discover premium ethnic and contemporary fashion at Vision Trennds. Quality clothing for men, women, and kids with authentic craftsmanship.">
-    <meta name="keywords" content="fashion, ethnic wear, contemporary clothing, kurta, anarkali, kids wear, bags, bed sheets">
-    
+    </script>
+    <meta name="description"
+        content="Discover premium ethnic and contemporary fashion at Vision Trennds. Quality clothing for men, women, and kids with authentic craftsmanship.">
+    <meta name="keywords"
+        content="fashion, ethnic wear, contemporary clothing, kurta, anarkali, kids wear, bags, bed sheets">
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="product/color_logo.png">
     <link rel="shortcut icon" type="image/png" href="product/color_logo.png">
-    
+
     <!-- Preconnect to external domains for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://api-visiontrendds.onrender.com">
-    
+
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -73,14 +78,15 @@
             }
         }
     </script>
-    
+
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css?v=11">
 </head>
+
 <body class="overflow-x-hidden">
     <!-- Header -->
     <header class="header">
@@ -96,7 +102,7 @@
                         <span class="logo-tagline">Fashion with a Touch of Class</span>
                     </div>
                 </a>
-                
+
                 <!-- Search Bar (Center) -->
                 <div class="search-container">
                     <input type="text" id="search-input" class="search-input" placeholder="Search products...">
@@ -105,7 +111,7 @@
                     </button>
                     <div class="search-results" id="search-results"></div>
                 </div>
-                
+
                 <!-- Desktop Navigation (Right) -->
                 <ul class="nav-menu">
                     <li><a href="index.html" class="nav-link active">Home</a></li>
@@ -125,7 +131,7 @@
                     <li><a href="why-vision-trennds.html" class="nav-link">Why Vision Trennds</a></li>
                     <li><a href="contact.html" class="nav-link">Contact</a></li>
                 </ul>
-                
+
                 <!-- Mobile Menu Button -->
                 <button class="hamburger" id="hamburger">
                     <span class="bar"></span>
@@ -134,13 +140,13 @@
                 </button>
             </div>
         </nav>
-        
+
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobile-menu">
             <button class="mobile-menu-close" id="mobile-menu-close">
                 <i class="fas fa-times"></i>
             </button>
-            
+
             <div class="mobile-menu-content">
                 <!-- Logo Section -->
                 <div class="mobile-logo">
@@ -152,16 +158,17 @@
                         <span class="logo-tagline">Fashion with a Touch of Class</span>
                     </div>
                 </div>
-                
+
                 <!-- Mobile Search Bar -->
                 <div class="mobile-search-container">
-                    <input type="text" id="mobile-search-input" class="mobile-search-input" placeholder="Search products...">
+                    <input type="text" id="mobile-search-input" class="mobile-search-input"
+                        placeholder="Search products...">
                     <button class="mobile-search-btn" id="mobile-search-btn">
                         <i class="fas fa-search"></i>
                     </button>
                     <div class="mobile-search-results" id="mobile-search-results"></div>
                 </div>
-                
+
                 <!-- Navigation Links -->
                 <ul class="mobile-nav-links">
                     <li>
@@ -195,7 +202,7 @@
                         </a>
                     </li>
                 </ul>
-                
+
                 <!-- Product Categories -->
                 <div class="mobile-categories">
                     <h3>Shop Categories</h3>
@@ -207,7 +214,7 @@
                         <li><a href="products.html#bedsheets">Bed Sheets</a></li>
                     </ul>
                 </div>
-                
+
                 <!-- Contact Info -->
                 <div class="mobile-contact">
                     <div class="contact-item">
@@ -216,20 +223,23 @@
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-envelope"></i>
-                        <a href="mailto:hello@visiontrennds.com" style="color:inherit;text-decoration:none;">hello@visiontrennds.com</a>
+                        <a href="mailto:hello@visiontrennds.com"
+                            style="color:inherit;text-decoration:none;">hello@visiontrennds.com</a>
                     </div>
                 </div>
-                
+
                 <!-- Social Links -->
                 <div class="mobile-social">
-                    <a href="https://www.facebook.com/p/Vision-100063741198016/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                    <a href="https://www.facebook.com/p/Vision-100063741198016/" target="_blank"
+                        rel="noopener noreferrer" aria-label="Facebook">
                         <i class="fab fa-facebook"></i>
                     </a>
-                    <a href="https://www.instagram.com/visiontrennds/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <a href="https://www.instagram.com/visiontrennds/" target="_blank" rel="noopener noreferrer"
+                        aria-label="Instagram">
                         <i class="fab fa-instagram"></i>
                     </a>
                     <a href="https://wa.me/919829639639" aria-label="WhatsApp">
-                        <i class="fab fa-whatsapp"></i> 
+                        <i class="fab fa-whatsapp"></i>
                     </a>
                 </div>
             </div>
@@ -243,47 +253,52 @@
             <div class="absolute top-20 left-10 w-32 h-32 bg-white rounded-full blur-3xl"></div>
             <div class="absolute bottom-20 right-20 w-40 h-40 bg-vision-gold rounded-full blur-3xl"></div>
         </div>
-        
+
         <!-- Decorative pattern -->
         <div class="absolute right-5 top-1/2 transform -translate-y-1/2 opacity-10 w-20 h-80">
             <svg viewBox="0 0 80 320" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M40 0C40 0 24 16 40 32C56 16 40 0 40 0Z" fill="white"/>
-                <path d="M40 32C40 32 24 48 40 64C56 48 40 32 40 32Z" fill="white"/>
-                <path d="M40 64C40 64 24 80 40 96C56 80 40 64 40 64Z" fill="white"/>
-                <path d="M40 96C40 96 24 112 40 128C56 112 40 96 40 96Z" fill="white"/>
-                <path d="M40 128C40 128 24 144 40 160C56 144 40 128 40 128Z" fill="white"/>
-                <path d="M40 160C40 160 24 176 40 192C56 176 40 160 40 160Z" fill="white"/>
-                <path d="M40 192C40 192 24 208 40 224C56 208 40 192 40 192Z" fill="white"/>
-                <path d="M40 224C40 224 24 240 40 256C56 240 40 224 40 224Z" fill="white"/>
-                <path d="M40 256C40 256 24 272 40 288C56 272 40 256 40 256Z" fill="white"/>
-                <path d="M40 288C40 288 24 304 40 320C56 304 40 288 40 288Z" fill="white"/>
+                <path d="M40 0C40 0 24 16 40 32C56 16 40 0 40 0Z" fill="white" />
+                <path d="M40 32C40 32 24 48 40 64C56 48 40 32 40 32Z" fill="white" />
+                <path d="M40 64C40 64 24 80 40 96C56 80 40 64 40 64Z" fill="white" />
+                <path d="M40 96C40 96 24 112 40 128C56 112 40 96 40 96Z" fill="white" />
+                <path d="M40 128C40 128 24 144 40 160C56 144 40 128 40 128Z" fill="white" />
+                <path d="M40 160C40 160 24 176 40 192C56 176 40 160 40 160Z" fill="white" />
+                <path d="M40 192C40 192 24 208 40 224C56 208 40 192 40 192Z" fill="white" />
+                <path d="M40 224C40 224 24 240 40 256C56 240 40 224 40 224Z" fill="white" />
+                <path d="M40 256C40 256 24 272 40 288C56 272 40 256 40 256Z" fill="white" />
+                <path d="M40 288C40 288 24 304 40 320C56 304 40 288 40 288Z" fill="white" />
             </svg>
         </div>
-        
+
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-4xl mx-auto">
                 <!-- Hero Logo -->
                 <div class="flex justify-center mb-1">
-                    <img decoding="async" src="product/maroon_logo.png" loading="eager" alt="Vision Trennds Logo" class="hero-logo-image">
+                    <img decoding="async" src="product/maroon_logo.png" loading="eager" alt="Vision Trennds Logo"
+                        class="hero-logo-image">
                 </div>
-                
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-1 text-vision-red">VISION TRENNDS</h1>
+
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-1 text-vision-red">VISION TRENNDS
+                </h1>
                 <p class="text-xl md:text-2xl opacity-90 mb-3 text-vision-red">fashion with a touch of class</p>
                 <div class="w-32 h-1 bg-vision-red mx-auto mt-3 mb-5 rounded-full"></div>
                 <p class="text-lg md:text-xl opacity-80 max-w-3xl mx-auto leading-relaxed mb-10 text-vision-red">
-                    Discover the finest collection of ethnic and contemporary fashion that celebrates your unique style and heritage
+                    Discover the finest collection of ethnic and contemporary fashion that celebrates your unique style
+                    and heritage
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="products.html" class="bg-vision-red text-white px-8 py-4 rounded-full font-semibold hover:bg-vision-burgundy transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    <a href="products.html"
+                        class="bg-vision-red text-white px-8 py-4 rounded-full font-semibold hover:bg-vision-burgundy transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                         Explore Collection
                     </a>
-                    <a href="about.html" class="border-2 border-vision-red text-vision-red px-8 py-4 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 transform hover:-translate-y-1">
+                    <a href="about.html"
+                        class="border-2 border-vision-red text-vision-red px-8 py-4 rounded-full font-semibold hover:bg-vision-red hover:text-white transition-all duration-300 transform hover:-translate-y-1">
                         Our Story
                     </a>
                 </div>
             </div>
         </div>
-        
+
         <!-- Scroll indicator -->
         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white opacity-60 animate-bounce">
             <i class="fas fa-chevron-down text-2xl"></i>
@@ -300,64 +315,79 @@
                     Explore our curated collections designed for every member of your family
                 </p>
             </div>
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 max-w-6xl mx-auto">
                 <!-- Men's Collection -->
-                <div class="category-card bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center cursor-pointer" data-category="mens">
-                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                <div class="category-card bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center cursor-pointer"
+                    data-category="mens">
+                    <div
+                        class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-tshirt text-white text-2xl"></i>
                     </div>
                     <h3 class="text-lg font-serif font-semibold text-vision-dark mb-2">Men's Collection</h3>
                     <p class="text-gray-600 text-sm mb-4">Kurtas, Shirts, Jackets & More</p>
-                    <button class="bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-colors duration-300">
+                    <button
+                        class="bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-colors duration-300">
                         Explore Now
                     </button>
                 </div>
-                
+
                 <!-- Women's Collection -->
-                <div class="category-card bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center cursor-pointer" data-category="womens">
-                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                <div class="category-card bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center cursor-pointer"
+                    data-category="womens">
+                    <div
+                        class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-female text-white text-2xl"></i>
                     </div>
                     <h3 class="text-lg font-serif font-semibold text-vision-dark mb-2">Women's Collection</h3>
                     <p class="text-gray-600 text-sm mb-4">Kurtis, Suits, Dresses & More</p>
-                    <button class="bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-colors duration-300">
+                    <button
+                        class="bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-colors duration-300">
                         Explore Now
                     </button>
                 </div>
-                
+
                 <!-- Kids Collection -->
-                <div class="category-card bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center cursor-pointer" data-category="kids">
-                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                <div class="category-card bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center cursor-pointer"
+                    data-category="kids">
+                    <div
+                        class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-child text-white text-2xl"></i>
                     </div>
                     <h3 class="text-lg font-serif font-semibold text-vision-dark mb-2">Kids Collection</h3>
                     <p class="text-gray-600 text-sm mb-4">Comfortable & Stylish Kidswear</p>
-                    <button class="bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-colors duration-300">
+                    <button
+                        class="bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-colors duration-300">
                         Explore Now
                     </button>
                 </div>
-                
+
                 <!-- Bags & Accessories -->
-                <div class="category-card bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center cursor-pointer" data-category="bags">
-                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                <div class="category-card bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center cursor-pointer"
+                    data-category="bags">
+                    <div
+                        class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-shopping-bag text-white text-2xl"></i>
                     </div>
                     <h3 class="text-lg font-serif font-semibold text-vision-dark mb-2">Bags & Accessories</h3>
                     <p class="text-gray-600 text-sm mb-4">Block Print & Designer Collection</p>
-                    <button class="bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-colors duration-300">
+                    <button
+                        class="bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-colors duration-300">
                         Explore Now
                     </button>
                 </div>
 
                 <!-- Bed Sheets -->
-                <div class="category-card bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center cursor-pointer" data-category="bedsheets">
-                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                <div class="category-card bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 text-center cursor-pointer"
+                    data-category="bedsheets">
+                    <div
+                        class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-bed text-white text-2xl"></i>
                     </div>
                     <h3 class="text-lg font-serif font-semibold text-vision-dark mb-2">Bed Sheets</h3>
                     <p class="text-gray-600 text-sm mb-4">Premium Cotton & Block Print</p>
-                    <button class="bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-colors duration-300">
+                    <button
+                        class="bg-vision-red text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-vision-burgundy transition-colors duration-300">
                         Explore Now
                     </button>
                 </div>
@@ -392,7 +422,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto" id="featured-products">
                 <!-- Products will be loaded here by JavaScript -->
             </div>
@@ -404,134 +434,197 @@
         <div class="container mx-auto px-4">
             <div class="max-w-5xl mx-auto">
                 <div class="text-center mb-16">
-                    <div class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+                    <div
+                        class="w-16 h-16 bg-vision-gradient rounded-full flex items-center justify-center mx-auto mb-6">
                         <i class="fas fa-quote-left text-white text-2xl"></i>
                     </div>
-                    <h2 class="text-4xl md:text-5xl font-serif font-bold text-vision-dark mb-6">What Our Customers Say</h2>
+                    <h2 class="text-4xl md:text-5xl font-serif font-bold text-vision-dark mb-6">What Our Customers Say
+                    </h2>
                     <div class="w-24 h-1 bg-vision-red mx-auto mb-6 rounded-full"></div>
                     <p class="text-xl text-gray-600 max-w-3xl mx-auto">
                         Discover why thousands of customers trust Vision Trennds for their fashion needs
                     </p>
                 </div>
-                
+
                 <!-- Reviews Slider Container -->
                 <div class="relative overflow-hidden">
                     <div class="flex gap-6 transition-transform duration-500 ease-in-out" id="reviews-container">
                         <!-- Review 1 -->
                         <div class="flex-shrink-0 w-80 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                             <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">P</div>
+                                <div
+                                    class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">
+                                    P</div>
                                 <div>
                                     <h4 class="font-semibold text-vision-dark">Priya Sharma</h4>
                                     <p class="text-sm text-gray-600">Mumbai • Verified</p>
                                 </div>
                             </div>
                             <div class="flex gap-1 mb-4">
-                                <i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i>
+                                <i class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i>
                             </div>
-                            <p class="text-gray-600 leading-relaxed">"Amazing quality! The cotton kurta I ordered is so comfortable and the block print is beautiful. Fast delivery and excellent service."</p>
+                            <p class="text-gray-600 leading-relaxed">"Amazing quality! The cotton kurta I ordered is so
+                                comfortable and the block print is beautiful. Fast delivery and excellent service."</p>
                         </div>
                         <!-- Review 2 -->
                         <div class="flex-shrink-0 w-80 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                             <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">R</div>
+                                <div
+                                    class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">
+                                    R</div>
                                 <div>
                                     <h4 class="font-semibold text-vision-dark">Rajesh Kumar</h4>
                                     <p class="text-sm text-gray-600">Delhi • Verified</p>
                                 </div>
                             </div>
                             <div class="flex gap-1 mb-4">
-                                <i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i>
+                                <i class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i>
                             </div>
-                            <p class="text-gray-600 leading-relaxed">"Perfect fit and premium quality! Ordered bed sheets and they exceeded my expectations. The fabric is soft and colors are vibrant."</p>
+                            <p class="text-gray-600 leading-relaxed">"Perfect fit and premium quality! Ordered bed
+                                sheets and they exceeded my expectations. The fabric is soft and colors are vibrant."
+                            </p>
                         </div>
                         <!-- Review 3 -->
                         <div class="flex-shrink-0 w-80 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                             <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">A</div>
+                                <div
+                                    class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">
+                                    A</div>
                                 <div>
                                     <h4 class="font-semibold text-vision-dark">Anita Patel</h4>
                                     <p class="text-sm text-gray-600">Ahmedabad • Verified</p>
                                 </div>
                             </div>
                             <div class="flex gap-1 mb-4">
-                                <i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="far fa-star text-vision-gold"></i>
+                                <i class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="far fa-star text-vision-gold"></i>
                             </div>
-                            <p class="text-gray-600 leading-relaxed">"Love the traditional designs! The anarkali suit is gorgeous and fits perfectly. Great value for money and authentic craftsmanship."</p>
+                            <p class="text-gray-600 leading-relaxed">"Love the traditional designs! The anarkali suit is
+                                gorgeous and fits perfectly. Great value for money and authentic craftsmanship."</p>
                         </div>
                         <!-- Review 4 -->
                         <div class="flex-shrink-0 w-80 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                             <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">S</div>
+                                <div
+                                    class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">
+                                    S</div>
                                 <div>
                                     <h4 class="font-semibold text-vision-dark">Suresh Gupta</h4>
                                     <p class="text-sm text-gray-600">Jaipur • Verified</p>
                                 </div>
                             </div>
                             <div class="flex gap-1 mb-4">
-                                <i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i>
+                                <i class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i>
                             </div>
-                            <p class="text-gray-600 leading-relaxed">"Excellent service! Ordered kids wear and the quality is outstanding. My daughter loves her new ethnic dress. Fast shipping!"</p>
+                            <p class="text-gray-600 leading-relaxed">"Excellent service! Ordered kids wear and the
+                                quality is outstanding. My daughter loves her new ethnic dress. Fast shipping!"</p>
                         </div>
                         <!-- Review 5 -->
                         <div class="flex-shrink-0 w-80 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                             <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">N</div>
+                                <div
+                                    class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">
+                                    N</div>
                                 <div>
                                     <h4 class="font-semibold text-vision-dark">Neha Verma</h4>
                                     <p class="text-sm text-gray-600">Pune • Verified</p>
                                 </div>
                             </div>
                             <div class="flex gap-1 mb-4">
-                                <i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star-half-alt text-vision-gold"></i>
+                                <i class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star-half-alt text-vision-gold"></i>
                             </div>
-                            <p class="text-gray-600 leading-relaxed">"Ordered a dupatta suit for my sister's wedding and it was absolutely stunning! The embroidery work is exquisite and delivery was on time."</p>
+                            <p class="text-gray-600 leading-relaxed">"Ordered a dupatta suit for my sister's wedding and
+                                it was absolutely stunning! The embroidery work is exquisite and delivery was on time."
+                            </p>
                         </div>
                         <!-- Review 6 -->
                         <div class="flex-shrink-0 w-80 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                             <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">M</div>
+                                <div
+                                    class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">
+                                    M</div>
                                 <div>
                                     <h4 class="font-semibold text-vision-dark">Mohit Agarwal</h4>
                                     <p class="text-sm text-gray-600">Surat • Verified</p>
                                 </div>
                             </div>
                             <div class="flex gap-1 mb-4">
-                                <i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="far fa-star text-vision-gold"></i>
+                                <i class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="far fa-star text-vision-gold"></i>
                             </div>
-                            <p class="text-gray-600 leading-relaxed">"Bought a cord set for my son and the quality is top notch. The fabric is breathable and perfect for summer. Will definitely order again!"</p>
+                            <p class="text-gray-600 leading-relaxed">"Bought a cord set for my son and the quality is
+                                top notch. The fabric is breathable and perfect for summer. Will definitely order
+                                again!"</p>
                         </div>
                         <!-- Review 7 -->
                         <div class="flex-shrink-0 w-80 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                             <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">K</div>
+                                <div
+                                    class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">
+                                    K</div>
                                 <div>
                                     <h4 class="font-semibold text-vision-dark">Kavita Singh</h4>
                                     <p class="text-sm text-gray-600">Lucknow • Verified</p>
                                 </div>
                             </div>
                             <div class="flex gap-1 mb-4">
-                                <i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i>
+                                <i class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i>
                             </div>
-                            <p class="text-gray-600 leading-relaxed">"The block print bags are so unique and stylish! Got so many compliments. The stitching quality is excellent and the colors are vibrant."</p>
+                            <p class="text-gray-600 leading-relaxed">"The block print bags are so unique and stylish!
+                                Got so many compliments. The stitching quality is excellent and the colors are vibrant."
+                            </p>
                         </div>
                         <!-- Review 8 -->
                         <div class="flex-shrink-0 w-80 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                             <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">D</div>
+                                <div
+                                    class="w-12 h-12 bg-vision-gradient rounded-full flex items-center justify-center text-white font-semibold">
+                                    D</div>
                                 <div>
                                     <h4 class="font-semibold text-vision-dark">Deepak Joshi</h4>
                                     <p class="text-sm text-gray-600">Indore • Verified</p>
                                 </div>
                             </div>
                             <div class="flex gap-1 mb-4">
-                                <i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star text-vision-gold"></i><i class="fas fa-star-half-alt text-vision-gold"></i>
+                                <i class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star text-vision-gold"></i><i
+                                    class="fas fa-star-half-alt text-vision-gold"></i>
                             </div>
-                            <p class="text-gray-600 leading-relaxed">"Ordered kurta for Diwali and it arrived perfectly on time. The fabric quality is premium and the fit is exactly as described. Highly recommend!"</p>
+                            <p class="text-gray-600 leading-relaxed">"Ordered kurta for Diwali and it arrived perfectly
+                                on time. The fabric quality is premium and the fit is exactly as described. Highly
+                                recommend!"</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Navigation Dots -->
                 <div class="flex justify-center gap-3 mt-8" id="review-dots">
                     <button class="w-3 h-3 rounded-full bg-vision-red review-dot active" data-index="0"></button>
@@ -543,7 +636,7 @@
                     <button class="w-3 h-3 rounded-full bg-gray-300 review-dot" data-index="6"></button>
                     <button class="w-3 h-3 rounded-full bg-gray-300 review-dot" data-index="7"></button>
                 </div>
-                
+
                 <!-- Trust Indicators -->
                 <div class="flex flex-wrap justify-center gap-8 mt-12 pt-8 border-t border-gray-200">
                     <div class="flex items-center gap-2 text-gray-600">
@@ -567,70 +660,83 @@
     <section class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-serif font-bold text-vision-dark mb-6">Frequently Asked Questions</h2>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-vision-dark mb-6">Frequently Asked Questions
+                </h2>
                 <div class="w-24 h-1 bg-vision-red mx-auto mb-6 rounded-full"></div>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
                     Find answers to common questions about our products and services
                 </p>
             </div>
-            
+
             <div class="max-w-3xl mx-auto space-y-4">
                 <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
-                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                    <div
+                        class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
                         <h3 class="text-lg font-semibold text-vision-dark">How do I place an order?</h3>
                         <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
                     </div>
                     <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
                         <div class="p-6 pt-0">
-                            <p class="text-gray-600 leading-relaxed">You can place an order by browsing our products and clicking on the WhatsApp button. This will redirect you to WhatsApp where you can send us your order details directly.</p>
+                            <p class="text-gray-600 leading-relaxed">You can place an order by browsing our products and
+                                clicking on the WhatsApp button. This will redirect you to WhatsApp where you can send
+                                us your order details directly.</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
-                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                    <div
+                        class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
                         <h3 class="text-lg font-semibold text-vision-dark">What are your delivery charges?</h3>
                         <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
                     </div>
                     <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
                         <div class="p-6 pt-0">
-                            <p class="text-gray-600 leading-relaxed">We offer free delivery on orders above ₹999. For orders below ₹999, delivery charges of ₹99 apply within India.</p>
+                            <p class="text-gray-600 leading-relaxed">We offer free delivery on orders above ₹999. For
+                                orders below ₹999, delivery charges of ₹99 apply within India.</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
-                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                    <div
+                        class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
                         <h3 class="text-lg font-semibold text-vision-dark">Do you have a return policy?</h3>
                         <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
                     </div>
                     <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
                         <div class="p-6 pt-0">
-                            <p class="text-gray-600 leading-relaxed">Yes, we have a 7-day return policy. Items must be unused, unwashed, and in original condition with tags attached.</p>
+                            <p class="text-gray-600 leading-relaxed">Yes, we have a 7-day return policy. Items must be
+                                unused, unwashed, and in original condition with tags attached.</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
-                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                    <div
+                        class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
                         <h3 class="text-lg font-semibold text-vision-dark">How can I track my order?</h3>
                         <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
                     </div>
                     <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
                         <div class="p-6 pt-0">
-                            <p class="text-gray-600 leading-relaxed">Once your order is shipped, we'll send you a tracking number via WhatsApp. You can use this to track your order on the courier's website.</p>
+                            <p class="text-gray-600 leading-relaxed">Once your order is shipped, we'll send you a
+                                tracking number via WhatsApp. You can use this to track your order on the courier's
+                                website.</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="faq-item bg-vision-cream rounded-2xl overflow-hidden shadow-sm">
-                    <div class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
+                    <div
+                        class="faq-question p-6 cursor-pointer flex justify-between items-center hover:bg-white transition-colors duration-300">
                         <h3 class="text-lg font-semibold text-vision-dark">What payment methods do you accept?</h3>
                         <i class="fas fa-plus text-vision-red transition-transform duration-300"></i>
                     </div>
                     <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
                         <div class="p-6 pt-0">
-                            <p class="text-gray-600 leading-relaxed">We accept UPI, bank transfers, and cash on delivery (COD) for orders within India. Payment details will be shared via WhatsApp.</p>
+                            <p class="text-gray-600 leading-relaxed">We accept UPI, bank transfers, and cash on delivery
+                                (COD) for orders within India. Payment details will be shared via WhatsApp.</p>
                         </div>
                     </div>
                 </div>
@@ -654,13 +760,16 @@
                         </div>
                     </div>
                     <p class="footer-description">
-                        Your trusted destination for premium ethnic and contemporary fashion. We celebrate style, quality, and the rich heritage of Indian craftsmanship.
+                        Your trusted destination for premium ethnic and contemporary fashion. We celebrate style,
+                        quality, and the rich heritage of Indian craftsmanship.
                     </p>
                     <div class="footer-social">
-                        <a href="https://www.facebook.com/p/Vision-100063741198016/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <a href="https://www.facebook.com/p/Vision-100063741198016/" target="_blank"
+                            rel="noopener noreferrer" aria-label="Facebook">
                             <i class="fab fa-facebook"></i>
                         </a>
-                        <a href="https://www.instagram.com/visiontrennds/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <a href="https://www.instagram.com/visiontrennds/" target="_blank" rel="noopener noreferrer"
+                            aria-label="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
                         <a href="https://wa.me/919829639639" aria-label="WhatsApp">
@@ -668,7 +777,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Quick Links -->
                 <div class="footer-links">
                     <h4>Quick Links</h4>
@@ -679,7 +788,7 @@
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
                 </div>
-                
+
                 <!-- Categories - Hidden on Mobile -->
                 <div class="footer-links footer-categories">
                     <h4>Categories</h4>
@@ -691,7 +800,7 @@
                         <li><a href="products.html#bedsheets">Bed Sheets</a></li>
                     </ul>
                 </div>
-                
+
                 <!-- Right Side - Quick Links and Contact (Mobile Only) -->
                 <div class="footer-right-section">
                     <!-- Categories -->
@@ -705,7 +814,7 @@
                             <li><a href="products.html#bedsheets">Bed Sheets</a></li>
                         </ul>
                     </div>
-                    
+
                     <!-- Quick Links -->
                     <div class="footer-links">
                         <h4>Quick Links</h4>
@@ -716,7 +825,7 @@
                             <li><a href="contact.html">Contact</a></li>
                         </ul>
                     </div>
-                    
+
                     <!-- Contact Info -->
                     <div class="footer-contact">
                         <h4>Contact Info</h4>
@@ -727,7 +836,8 @@
                                 </div>
                                 <div class="contact-details">
                                     <p>Call Us</p>
-                                    <a href="tel:+919829639639" style="color:inherit;text-decoration:none;">9829639639</a>
+                                    <a href="tel:+919829639639"
+                                        style="color:inherit;text-decoration:none;">9829639639</a>
                                 </div>
                             </div>
                             <div class="contact-item">
@@ -736,7 +846,8 @@
                                 </div>
                                 <div class="contact-details">
                                     <p>Email Us</p>
-                                    <a href="mailto:hello@visiontrennds.com" style="color:inherit;text-decoration:none;">hello@visiontrennds.com</a>
+                                    <a href="mailto:hello@visiontrennds.com"
+                                        style="color:inherit;text-decoration:none;">hello@visiontrennds.com</a>
                                 </div>
                             </div>
                             <div class="contact-item">
@@ -745,13 +856,16 @@
                                 </div>
                                 <div class="contact-details">
                                     <p>Visit Us</p>
-                                    <a href="https://maps.app.goo.gl/awHq8KEqgjL4268D8" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;">394, Block A, Brijlalpura, Near Chhabra Restaurant, Jan Path, Nirman Nagar, Jaipur-302019, Rajasthan</a>
+                                    <a href="https://maps.app.goo.gl/awHq8KEqgjL4268D8" target="_blank"
+                                        rel="noopener noreferrer" style="color:inherit;text-decoration:none;">394, Block
+                                        A, Brijlalpura, Near Chhabra Restaurant, Jan Path, Nirman Nagar, Jaipur-302019,
+                                        Rajasthan</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Contact Info (Desktop Only) -->
                 <div class="footer-contact footer-contact-desktop">
                     <h4>Contact Info</h4>
@@ -770,7 +884,8 @@
                         </div>
                         <div class="contact-details">
                             <p>Email Us</p>
-                            <a href="mailto:hello@visiontrennds.com" style="color:inherit;text-decoration:none;">hello@visiontrennds.com</a>
+                            <a href="mailto:hello@visiontrennds.com"
+                                style="color:inherit;text-decoration:none;">hello@visiontrennds.com</a>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -779,29 +894,36 @@
                         </div>
                         <div class="contact-details">
                             <p>Visit Us</p>
-                            <a href="https://maps.app.goo.gl/awHq8KEqgjL4268D8" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;">394, Block A, Brijlalpura, Near Chhabra Restaurant, Jan Path, Nirman Nagar, Jaipur-302019, Rajasthan</a>
+                            <a href="https://maps.app.goo.gl/awHq8KEqgjL4268D8" target="_blank"
+                                rel="noopener noreferrer" style="color:inherit;text-decoration:none;">394, Block A,
+                                Brijlalpura, Near Chhabra Restaurant, Jan Path, Nirman Nagar, Jaipur-302019,
+                                Rajasthan</a>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Copyright -->
             <div class="footer-bottom">
                 <!-- Desktop Version -->
                 <p class="copyright-desktop">© 2026 Vision Trennds. All rights reserved.</p>
-                <p class="copyright-desktop" style="margin-top: 4px; font-size: 0.8rem; opacity: 0.7;">Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">JAINUP | Digital Growth System</a></p>
+                <p class="copyright-desktop" style="margin-top: 4px; font-size: 0.8rem; opacity: 0.7;">Powered by <a
+                        href="https://jainup.in/" target="_blank" rel="noopener noreferrer"
+                        style="color: inherit; text-decoration: none;">JAINUP | Digital Growth System</a></p>
                 <!-- Mobile Version -->
                 <p class="copyright-mobile">© 2026 Vision Trennds. All rights reserved.</p>
-                <p class="copyright-mobile" style="margin-top: 4px; font-size: 0.8rem; opacity: 0.7;">Powered by <a href="https://jainup.in/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">JAINUP | Digital Growth System</a></p>
+                <p class="copyright-mobile" style="margin-top: 4px; font-size: 0.8rem; opacity: 0.7;">Powered by <a
+                        href="https://jainup.in/" target="_blank" rel="noopener noreferrer"
+                        style="color: inherit; text-decoration: none;">JAINUP | Digital Growth System</a></p>
             </div>
         </div>
     </footer>
 
     <!-- Scripts -->
     <script src="config.js"></script>
-    <script src="api.js?v=3" defer></script>
-    <script src="script.js?v=12" defer></script>
-    
+    <script src="api.js?v=4" defer></script>
+    <script src="script.js?v=13" defer></script>
+
     <script>
         // Load Featured Products from API
         async function loadFeaturedProducts() {
@@ -811,13 +933,13 @@
             try {
                 // Use already-loaded products data (no second API call)
                 const products = productUtils.getAllProducts();
-                
+
                 let featuredProducts = products.filter(p => p.featured);
                 if (featuredProducts.length === 0) {
                     featuredProducts = products.slice(0, 4);
                 }
                 featuredProducts = featuredProducts.slice(0, 4);
-                
+
                 if (featuredProducts.length > 0) {
                     container.innerHTML = featuredProducts.map(product => `
                         <div class="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-gray-100"
@@ -889,10 +1011,10 @@
             initializeProductsData().then(() => loadFeaturedProducts());
         });
     </script>
-    
+
     <script>
         // Initialize GSAP animations - Scroll-Based (Mobile Optimized)
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             gsap.registerPlugin(ScrollTrigger);
 
             // Detect mobile
@@ -926,7 +1048,7 @@
 
             // 3. Hero Section Animation - Sequential (No Scroll)
             const heroTl = gsap.timeline({ delay: 0.5 });
-            
+
             heroTl.fromTo(".hero-content .logo-image-container", {
                 scale: 0.5,
                 opacity: 0
@@ -936,33 +1058,33 @@
                 duration: 1.2,
                 ease: "back.out(1.7)"
             })
-            .fromTo(".hero-content h1", {
-                y: isMobile ? 50 : 80,
-                opacity: 0
-            }, {
-                y: 0,
-                opacity: 1,
-                duration: 1,
-                ease: "power3.out"
-            }, "-=0.6")
-            .fromTo(".hero-content p", {
-                y: isMobile ? 30 : 50,
-                opacity: 0
-            }, {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                ease: "power2.out"
-            }, "-=0.5")
-            .fromTo(".hero-content .flex", {
-                y: isMobile ? 20 : 30,
-                opacity: 0
-            }, {
-                y: 0,
-                opacity: 1,
-                duration: 0.8,
-                ease: "power2.out"
-            }, "-=0.4");
+                .fromTo(".hero-content h1", {
+                    y: isMobile ? 50 : 80,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power3.out"
+                }, "-=0.6")
+                .fromTo(".hero-content p", {
+                    y: isMobile ? 30 : 50,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power2.out"
+                }, "-=0.5")
+                .fromTo(".hero-content .flex", {
+                    y: isMobile ? 20 : 30,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power2.out"
+                }, "-=0.4");
 
             // 4. Section Headings - WITH SCROLL
             gsap.utils.toArray("section:not(.hero) h2").forEach((heading) => {
@@ -1061,7 +1183,7 @@
             });
         });
     </script>
-    
-</body>
-</html>
 
+</body>
+
+</html>
